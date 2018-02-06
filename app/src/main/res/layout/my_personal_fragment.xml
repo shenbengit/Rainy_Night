@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackGrey"
+    android:orientation="vertical"
+    tools:context=".fragment.mine_frag.frag.personal.MyPersonalFragment">
+
+    <include layout="@layout/toolbar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/tab_unselect"></View>
+
+    <RelativeLayout
+        android:id="@+id/rela_person_head"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/colorWhite">
+
+        <TextView
+            style="@style/MyPersonalTextStyle"
+            android:text="@string/head_img" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_person_head"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/image1"/>
+
+        <ImageView
+            android:id="@+id/image1"
+            style="@style/Img_Go"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp" />
+    </RelativeLayout>
+
+    <View style="@style/ViewStyle"></View>
+
+    <RelativeLayout
+        android:id="@+id/rela_person_petName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorWhite">
+
+
+        <TextView
+            style="@style/MyPersonalTextStyle"
+            android:text="@string/pet_name" />
+
+        <TextView
+            android:id="@+id/tv_person_petName"
+            style="@style/TextHint"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/image2" />
+
+        <ImageView
+            android:id="@+id/image2"
+            style="@style/Img_Go"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp" />
+    </RelativeLayout>
+
+    <View style="@style/ViewStyle"></View>
+
+    <RelativeLayout
+        android:id="@+id/rela_person_sex"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorWhite">
+
+
+        <TextView
+            style="@style/MyPersonalTextStyle"
+            android:text="@string/user_sex" />
+
+        <TextView
+            android:id="@+id/tv_person_sex"
+            style="@style/TextHint"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/image3" />
+
+        <ImageView
+            android:id="@+id/image3"
+            style="@style/Img_Go"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp" />
+    </RelativeLayout>
+
+    <View style="@style/ViewStyle"></View>
+
+    <RelativeLayout
+        android:id="@+id/rela_person_birth"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorWhite">
+
+
+        <TextView
+            style="@style/MyPersonalTextStyle"
+            android:text="@string/birthday" />
+
+        <TextView
+            android:id="@+id/tv_person_birth"
+            style="@style/TextHint"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/image4" />
+
+        <ImageView
+            android:id="@+id/image4"
+            style="@style/Img_Go"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp" />
+    </RelativeLayout>
+
+    <View style="@style/ViewStyle"></View>
+
+    <RelativeLayout
+        android:id="@+id/rela_person_email"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorWhite">
+
+
+        <TextView
+            style="@style/MyPersonalTextStyle"
+            android:text="@string/email_address" />
+
+        <TextView
+            android:id="@+id/tv_person_email"
+            style="@style/TextHint"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/image5" />
+
+        <ImageView
+            android:id="@+id/image5"
+            style="@style/Img_Go"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp" />
+    </RelativeLayout>
+
+    <View style="@style/ViewStyle"></View>
+
+    <Button
+        android:id="@+id/btn_personal_save"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/button_style"
+        android:text="@string/save"
+        android:textColor="@color/white"
+        android:textSize="18dp" />
+</LinearLayout>

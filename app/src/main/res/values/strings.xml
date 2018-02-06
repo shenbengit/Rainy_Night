@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">雨眠</string>
+
+    <string name="save">保存</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="register_success">注册成功</string>
+    <string name="register_failed">注册失败</string>
+    <string name="register_user">注册新用户</string>
+    <string name="forget_pwd">忘记密码</string>
+    <string name="login_register">登陆/注册</string>
+    <string name="personal_information">个人资料</string>
+    <string name="head_img">头像</string>
+    <string name="pet_name">昵称</string>
+    <string name="change_nickname">修改昵称</string>
+    <string name="sex">男</string>
+    <string name="user_sex">性别</string>
+    <string name="birthday">出生日期</string>
+    <string name="birth">1997-02-21</string>
+    <string name="phone_number">手机号</string>
+    <string name="phone">15150570952</string>
+    <string name="email_address">邮箱</string>
+    <string name="change_email">修改邮箱</string>
+    <string name="email">714081644@qq.com</string>
+</resources>
