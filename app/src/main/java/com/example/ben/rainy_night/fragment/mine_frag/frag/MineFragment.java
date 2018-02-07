@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
+import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
@@ -16,6 +17,7 @@ import com.example.ben.rainy_night.fragment.mine_frag.frag.personal.MyPersonalFr
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IMineView;
+import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -24,6 +26,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -94,6 +97,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
         super.onSupportVisible();
         EventBus.getDefault().register(this);
         objectId = String.valueOf(getSharedPreferences(SharedPreferencesUtil.USER_OBJECT_ID, ""));
+        LoggerUtil.e(objectId);
         if (TextUtils.equals(objectId, "")) {
             civMineHead.setImageDrawable(getResources().getDrawable(R.mipmap.ic_head));
             tvMineName.setText(getString(R.string.login_register));

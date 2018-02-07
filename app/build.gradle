@@ -44,7 +44,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'me.yokeyword:fragmentation-swipeback:1.2.4'
     compile 'me.yokeyword:eventbus-activity-scope:1.1.0'
-    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'org.greenrobot:eventbus:3.1.1'
     compile 'com.jakewharton:butterknife:8.8.1'
     compile 'com.github.bumptech.glide:glide:4.5.0'
     compile 'cn.bmob.android:bmob-sdk:3.5.5'

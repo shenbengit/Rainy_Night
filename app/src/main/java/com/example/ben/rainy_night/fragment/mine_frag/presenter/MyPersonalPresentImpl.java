@@ -15,6 +15,7 @@ import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IMyPersonalView;
+import com.example.ben.rainy_night.util.CompressPictureUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.example.ben.rainy_night.util.ToastUtil;
 import com.nanchen.compresshelper.CompressHelper;
@@ -191,16 +192,7 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
      * 更新用户资料,包括头像
      */
     private void updateIncludeImage() {
-        //图片压缩
-        File file = new CompressHelper.Builder(view.getFragAct())
-                //压缩质量[0-100]
-                .setQuality(100)
-                //格式
-                .setCompressFormat(Bitmap.CompressFormat.JPEG)
-                .build()
-                //旧文件地址
-                .compressToFile(mFile);
-        final BmobFile bmobFile = new BmobFile(file);
+        final BmobFile bmobFile = new BmobFile(CompressPictureUtil.getInstance().compress(view.getFragAct(), mFile));
         bmobFile.uploadblock(new UploadFileListener() {
             @Override
             public void done(BmobException e) {
