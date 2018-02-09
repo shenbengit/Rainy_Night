@@ -1,6 +1,9 @@
 package com.example.ben.rainy_night.bean;
 
+import java.util.List;
+
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobRelation;
 
 /**
@@ -24,14 +27,17 @@ public class PostBean extends BmobObject {
      */
     private BmobRelation likes;
 
+    private List<BmobFile> pictures;
+
     public PostBean() {
 
     }
 
-    public PostBean(String content, UserBean user, BmobRelation likes) {
+    public PostBean(String content, UserBean user, BmobRelation likes, List<BmobFile> pictures) {
         this.content = content;
         this.user = user;
         this.likes = likes;
+        this.pictures = pictures;
     }
 
     public String getContent() {
@@ -58,12 +64,21 @@ public class PostBean extends BmobObject {
         this.likes = likes;
     }
 
+    public List<BmobFile> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<BmobFile> pictures) {
+        this.pictures = pictures;
+    }
+
     @Override
     public String toString() {
         return "PostBean{" +
                 "content='" + content + '\'' +
                 ", user=" + user +
                 ", likes=" + likes +
+                ", pictures=" + pictures +
                 '}';
     }
 }

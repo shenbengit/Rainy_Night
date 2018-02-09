@@ -1,9 +1,5 @@
 package com.example.ben.rainy_night.base;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-
 /**
  * @author Ben
  * @date 2018/1/22
