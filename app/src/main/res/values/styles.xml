@@ -6,7 +6,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentOverlay">@null</item>
         <!--<item name="android:windowAnimationStyle">@style/FadeAnimationStyle</item>-->
+    </style>
+
+    <style name="TranslucentTheme" parent="AppTheme">
+
     </style>
 
     <style name="FadeAnimationStyle" parent="@android:style/Animation.Activity">

@@ -2,6 +2,7 @@ package com.example.ben.rainy_night.fragment.mine_frag.frag.personal;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,7 +13,6 @@ import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.EmailPresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.EmailPresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IEmailView;
-import com.example.ben.rainy_night.util.LoggerUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,6 +47,8 @@ public class EmailFragment extends BaseBackFragment<EmailPresenter> implements I
                 break;
         }
     }
+
+    private static final String REQUEST_EMAIL = "email";
 
     public static EmailFragment newInstance(String email) {
         Bundle bundle = new Bundle();
@@ -94,7 +96,9 @@ public class EmailFragment extends BaseBackFragment<EmailPresenter> implements I
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isChangeEmailSuccess(OnUserEvent event) {
-        presenter.isChangeEmailSuccess(event.getMessage());
+        if (TextUtils.equals(event.getRequest(), REQUEST_EMAIL)) {
+            presenter.isChangeEmailSuccess(event.getResult());
+        }
     }
 
     @Override

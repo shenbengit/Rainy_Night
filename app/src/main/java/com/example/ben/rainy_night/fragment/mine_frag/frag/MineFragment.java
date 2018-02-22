@@ -4,16 +4,17 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
-import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.RegisterFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.personal.MyPersonalFragment;
+import com.example.ben.rainy_night.fragment.mine_frag.frag.personal.SpaceFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IMineView;
@@ -26,7 +27,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -41,8 +41,10 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
     TextView tvMineName;
     @BindView(R.id.civ_mine_setting)
     CircleImageView civMineSetting;
+    @BindView(R.id.rela_space)
+    RelativeLayout relaSpace;
 
-    @OnClick({R.id.civ_mine_head, R.id.civ_mine_setting})
+    @OnClick({R.id.civ_mine_head, R.id.civ_mine_setting,R.id.rela_space})
     public void viewOnClick(View view) {
         switch (view.getId()) {
             case R.id.civ_mine_head:
@@ -55,12 +57,17 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
             case R.id.civ_mine_setting:
                 ((MainFragment) getParentFragment()).startBrotherFragment(LoginFragment.newInstance());
                 break;
+            case R.id.rela_space:
+                ((MainFragment) getParentFragment()).startBrotherFragment(SpaceFragment.newInstance());
+                break;
             default:
                 break;
         }
     }
 
     private String objectId = "";
+
+    private static final String REQUEST_MINE = "mine";
 
     public static MineFragment newInstance() {
         Bundle args = new Bundle();
@@ -108,7 +115,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isGetUserInformationSuccess(OnUserEvent event) {
-        presenter.isGetUserInformationSuccess(event.getMessage(), event.getBean());
+        if (TextUtils.equals(event.getRequest(),REQUEST_MINE)) {
+            presenter.isGetUserInformationSuccess(event.getResult(), event.getBean());
+        }
     }
 
     @Override

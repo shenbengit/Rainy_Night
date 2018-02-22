@@ -18,6 +18,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
     private UserModel model;
 
     private static final String OK = "ok";
+    private static final String REQUEST_REGISTER = "register";
 
     public RegisterPresenterImpl(IRegisterView view) {
         this.view = view;
@@ -30,7 +31,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
     @Override
     public void registerUser() {
         view.showDialog();
-        model.register(view.getEditPhone().getText().toString().trim(), view.getEditPassWord().getText().toString().trim());
+        model.register(REQUEST_REGISTER, view.getEditPhone().getText().toString().trim(), view.getEditPassWord().getText().toString().trim());
     }
 
     /**

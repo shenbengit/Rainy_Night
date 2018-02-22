@@ -52,6 +52,8 @@ public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implem
         }
     }
 
+    private static final String REQUEST_NICK_NAME = "nick_name";
+
     public static NickNameFragment newInstance(String name) {
         Bundle bundle = new Bundle();
         NickNameFragment fragment = new NickNameFragment();
@@ -98,7 +100,9 @@ public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implem
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isChangeNickNameSuccess(OnUserEvent event) {
-        presenter.isChangeNickNameSuccess(event.getMessage());
+        if (TextUtils.equals(event.getRequest(),REQUEST_NICK_NAME)){
+            presenter.isChangeNickNameSuccess(event.getResult());
+        }
     }
 
     @Override

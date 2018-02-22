@@ -21,6 +21,7 @@ public class NickNamePresenterImpl implements NickNamePresenter {
     private String nickName = "";
 
     private static final String OK = "ok";
+    private static final String REQUEST_NICK_NAME = "nick_name";
 
     public NickNamePresenterImpl(IPetNameView view) {
         this.view = view;
@@ -43,7 +44,7 @@ public class NickNamePresenterImpl implements NickNamePresenter {
         UserBean bean = new UserBean();
         bean.setObjectId(String.valueOf(view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "")));
         bean.setNickName(nickName);
-        model.updateUser(bean);
+        model.updateUser(REQUEST_NICK_NAME, bean);
     }
 
     /**

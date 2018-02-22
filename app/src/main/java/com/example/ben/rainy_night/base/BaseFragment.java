@@ -1,6 +1,5 @@
 package com.example.ben.rainy_night.base;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -41,6 +40,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
         super.onActivityCreated(savedInstanceState);
         initData();
     }
+
 
     @Override
     public void onDestroy() {

@@ -17,7 +17,7 @@
             android:layout_height="60dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
-            android:background="@drawable/oval_style"/>
+            android:background="@drawable/oval_style" />
 
         <TextView
             android:id="@+id/tv_mine_name"
@@ -39,5 +39,30 @@
             android:src="@mipmap/ic_setting" />
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/tab_unselect" />
+
+    <RelativeLayout
+        android:id="@+id/rela_space"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:drawableLeft="@mipmap/iv_space"
+            android:drawablePadding="15dp"
+            android:gravity="center"
+            android:text="动态"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/tab_unselect" />
 
 </LinearLayout>

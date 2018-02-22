@@ -27,6 +27,9 @@ public class PostBean extends BmobObject {
      */
     private BmobRelation likes;
 
+    /**
+     * 帖子里面的图片
+     */
     private List<BmobFile> pictures;
 
     public PostBean() {

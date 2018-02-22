@@ -20,6 +20,7 @@ public class EmailPresenterImpl implements EmailPresenter {
     private String email;
 
     private static final String OK = "ok";
+    private static final String REQUEST_EMAIL = "email";
 
     public EmailPresenterImpl(IEmailView view) {
         this.view = view;
@@ -44,7 +45,7 @@ public class EmailPresenterImpl implements EmailPresenter {
         UserBean bean = new UserBean();
         bean.setObjectId(String.valueOf(view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "")));
         bean.setEmail(email);
-        model.updateUser(bean);
+        model.updateUser(REQUEST_EMAIL,bean);
     }
 
     /**

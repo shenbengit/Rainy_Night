@@ -3,7 +3,6 @@ package com.example.ben.rainy_night.fragment.mine_frag.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
@@ -18,7 +17,6 @@ import com.example.ben.rainy_night.fragment.mine_frag.view.IMyPersonalView;
 import com.example.ben.rainy_night.util.CompressPictureUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.example.ben.rainy_night.util.ToastUtil;
-import com.nanchen.compresshelper.CompressHelper;
 import com.vondear.rxtools.RxPhotoTool;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
@@ -45,6 +43,7 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
     private File mFile = null;
 
     private static final String OK = "ok";
+    private static final String REQUEST_PERSONAL = "personal";
 
     public MyPersonalPresentImpl(IMyPersonalView view) {
         this.view = view;
@@ -192,7 +191,7 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
      * 更新用户资料,包括头像
      */
     private void updateIncludeImage() {
-        final BmobFile bmobFile = new BmobFile(CompressPictureUtil.getInstance().compress(view.getFragAct(), mFile));
+        final BmobFile bmobFile = new BmobFile(CompressPictureUtil.compress(view.getFragAct(), mFile));
         bmobFile.uploadblock(new UploadFileListener() {
             @Override
             public void done(BmobException e) {
@@ -213,6 +212,6 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
         bean.setSex(view.getTextSex().getText().toString().trim());
         bean.setBirthday(view.getTextBirthday().getText().toString().trim());
         bean.setEmail(view.getTextEmail().getText().toString().trim());
-        model.updateUser(bean);
+        model.updateUser(REQUEST_PERSONAL, bean);
     }
 }

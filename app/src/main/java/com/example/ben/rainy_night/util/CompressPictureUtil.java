@@ -16,25 +16,13 @@ import java.io.File;
 
 public class CompressPictureUtil {
 
-    private CompressPictureUtil() {
-
-    }
-
-    public static CompressPictureUtil getInstance() {
-        return Holder.mUtil;
-    }
-
-    private static class Holder {
-        private static final CompressPictureUtil mUtil = new CompressPictureUtil();
-    }
-
     /**
      * 压缩一张图片
      * @param context
      * @param oldFile 旧文件地址
      * @return
      */
-    public File compress(Context context, File oldFile) {
+    public static File compress(Context context, File oldFile) {
         //图片压缩
         return new CompressHelper.Builder(context)
                 //压缩质量[0-100]

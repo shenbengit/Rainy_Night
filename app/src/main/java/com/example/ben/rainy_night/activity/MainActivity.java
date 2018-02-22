@@ -1,8 +1,5 @@
 package com.example.ben.rainy_night.activity;
 
-import android.content.Intent;
-import android.view.KeyEvent;
-
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseActivity;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;

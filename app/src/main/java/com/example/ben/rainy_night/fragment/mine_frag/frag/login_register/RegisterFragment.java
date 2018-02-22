@@ -49,6 +49,8 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
         }
     }
 
+    private static final String REQUEST_REGISTER = "register";
+
     public static RegisterFragment newInstance() {
         RegisterFragment fragment = new RegisterFragment();
         return fragment;
@@ -89,7 +91,9 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isRegisterSuccess(OnUserEvent event) {
-        presenter.isRegisterSuccess(event.getMessage(), event.getBean());
+        if (TextUtils.equals(event.getRequest(), REQUEST_REGISTER)) {
+            presenter.isRegisterSuccess(event.getResult(), event.getBean());
+        }
     }
 
     @Override

@@ -21,6 +21,7 @@ public class MinePresenterImpl implements MinePresenter {
     private UserModel model;
 
     private static final String OK = "ok";
+    private static final String REQUEST_MINE = "mine";
 
     public MinePresenterImpl(IMineView view) {
         this.view = view;
@@ -33,7 +34,7 @@ public class MinePresenterImpl implements MinePresenter {
      */
     @Override
     public void getUserInformation() {
-        model.getUserInformation(String.valueOf(view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "")));
+        model.getUserInformation(REQUEST_MINE, String.valueOf(view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "")));
     }
 
     /**

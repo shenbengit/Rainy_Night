@@ -1,139 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="说"
-            android:textColor="@color/colorWhite"
-            android:textSize="17sp" />
-    </android.support.v7.widget.Toolbar>
-
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/refreshLayout_share"
+        android:id="@+id/smartRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srlAccentColor="#fff"
-        app:srlEnablePreviewInEditMode="false"
-        app:srlFixedHeaderViewId="@+id/profile"
-        app:srlPrimaryColor="#444">
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recy_share"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:background="@color/colorPrimary">
+            android:layout_height="match_parent">
 
-            <FrameLayout
-                android:id="@+id/profile"
-                android:layout_width="match_parent"
-                android:layout_height="110dp">
+        </android.support.v7.widget.RecyclerView>
 
-                <com.github.mmin18.widget.RealtimeBlurView
-                    android:id="@+id/blurview"
-                    android:layout_width="match_parent"
-                    android:layout_height="110dp"
-                    app:realtimeBlurRadius="5dp"
-                    app:realtimeOverlayColor="#aa3bb2ff"/>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/civ_share_head"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:src="@mipmap/iv_head"
-                        app:civ_border_color="@android:color/white"
-                        app:civ_border_width="3dp" />
-
-                    <TextView
-                        android:id="@+id/tv_share_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:layout_toRightOf="@+id/civ_share_head"
-                        android:text="冬季穿短裤"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="18sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/civ_share_head"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal"
-                        android:weightSum="3">
-
-                        <TextView
-                            android:id="@+id/tv_share_shuoshuo"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="写说说"
-                            android:textColor="@color/colorWhite" />
-
-                        <TextView
-                            android:id="@+id/tv_share_PersonalSpace"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="个人空间"
-                            android:textColor="@color/colorWhite" />
-
-                        <TextView
-                            android:id="@+id/tv_share_message"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="消息"
-                            android:textColor="@color/colorWhite" />
-                    </LinearLayout>
-                </RelativeLayout>
-            </FrameLayout>
-
-            <android.support.v4.widget.NestedScrollView
-                android:id="@+id/scrollView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingTop="110dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rv_share"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                    </android.support.v7.widget.RecyclerView>
-                </LinearLayout>
-            </android.support.v4.widget.NestedScrollView>
-
-        </FrameLayout>
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-
 </LinearLayout>

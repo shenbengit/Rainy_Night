@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -79,9 +78,6 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
                 selectHeadImage();
                 break;
             case R.id.rela_person_petName:
-                if (EventBus.getDefault().isRegistered(this)){
-                    EventBus.getDefault().unregister(this);
-                }
                 start(NickNameFragment.newInstance(nickname));
                 break;
             case R.id.rela_person_sex:
@@ -97,9 +93,6 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
                 mPickerDate.show();
                 break;
             case R.id.rela_person_email:
-                if (EventBus.getDefault().isRegistered(this)){
-                    EventBus.getDefault().unregister(this);
-                }
                 start(EmailFragment.newInstance(email));
                 break;
             case R.id.btn_personal_save:
@@ -120,6 +113,8 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
     private String sex = "";
     private String birthday = "";
     private String email = "";
+
+    private static final String REQUEST_PERSONAL = "personal";
 
     public static MyPersonalFragment newInstance() {
         Bundle args = new Bundle();
@@ -186,9 +181,6 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        if (!EventBus.getDefault().isRegistered(this)){
-            EventBus.getDefault().register(this);
-        }
 
         objectId = String.valueOf(getSharedPreferences(SharedPreferencesUtil.USER_OBJECT_ID, ""));
         nickname = String.valueOf(getSharedPreferences(SharedPreferencesUtil.USER_NICK_NAME, ""));
@@ -207,7 +199,7 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (EventBus.getDefault().isRegistered(this)){
+        if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
         _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -225,7 +217,9 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void isUpdateUserSuccess(OnUserEvent event) {
-        presenter.isUpdateUserSuccess(event.getMessage());
+        if (TextUtils.equals(event.getRequest(), REQUEST_PERSONAL)) {
+            presenter.isUpdateUserSuccess(event.getResult());
+        }
     }
 
     /**

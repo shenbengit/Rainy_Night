@@ -13,43 +13,47 @@ public class UserModelImpl implements UserModel {
     /**
      * 用户注册
      *
-     * @param phone    手机号
-     * @param password 密码
+     * @param request
+     * @param phone
+     * @param password
      */
     @Override
-    public void register(String phone, String password) {
-        UserBmob.getInstance().registerUser(phone, password);
+    public void register(String request, String phone, String password) {
+        UserBmob.getInstance().registerUser(request, phone, password);
     }
 
     /**
      * 用户登陆
      *
+     * @param request
      * @param phone
      * @param password
      */
     @Override
-    public void login(String phone, String password) {
-        UserBmob.getInstance().loginUser(phone, password);
+    public void login(String request, String phone, String password) {
+        UserBmob.getInstance().loginUser(request, phone, password);
     }
 
     /**
      * 获取用户信息
      *
+     * @param request
      * @param objectId 用户objectId
      */
     @Override
-    public void getUserInformation(String objectId) {
-        UserBmob.getInstance().getUserInformation(objectId);
+    public void getUserInformation(String request, String objectId) {
+        UserBmob.getInstance().getUserInformation(request, objectId);
     }
 
     /**
      * 更新用户信息
      *
+     * @param request
      * @param userBean 用户实体
      */
     @Override
-    public void updateUser(UserBean userBean) {
-        UserBmob.getInstance().updateUser(userBean);
+    public void updateUser(String request, UserBean userBean) {
+        UserBmob.getInstance().updateUser(request, userBean);
     }
 
 }

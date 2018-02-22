@@ -1,7 +1,6 @@
 package com.example.ben.rainy_night.fragment.mine_frag.presenter;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
@@ -19,6 +18,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     private UserModel model;
 
     private static final String OK = "ok";
+    private static final String REQUEST_LOGIN = "login";
 
     public LoginPresenterImpl(ILoginView view) {
         this.view = view;
@@ -32,7 +32,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void login() {
         view.showDialog();
-        model.login(view.getEditPhone().getText().toString().trim(), view.getEditPassWord().getText().toString().trim());
+        model.login(REQUEST_LOGIN, view.getEditPhone().getText().toString().trim(), view.getEditPassWord().getText().toString().trim());
     }
 
     /**
@@ -47,7 +47,7 @@ public class LoginPresenterImpl implements LoginPresenter {
         if (TextUtils.equals(OK, message)) {
             view.cancelDialog();
             view.showToast("登陆成功");
-            view.putSpValue(SharedPreferencesUtil.USER_OBJECT_ID,bean.getObjectId());
+            view.putSpValue(SharedPreferencesUtil.USER_OBJECT_ID, bean.getObjectId());
             view.putSpValue(SharedPreferencesUtil.USER_NAME, bean.getUsername());
         } else {
             view.cancelDialog();

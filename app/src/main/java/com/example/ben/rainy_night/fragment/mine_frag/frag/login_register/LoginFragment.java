@@ -1,5 +1,6 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag.login_register;
 
+import android.text.TextUtils;
 import android.view.View;
 
 import com.chaychan.viewlib.PowerfulEditText;
@@ -39,6 +40,8 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
                 break;
         }
     }
+
+    private static final String REQUEST_LOGIN = "login";
 
     public static LoginFragment newInstance() {
         LoginFragment fragment = new LoginFragment();
@@ -81,7 +84,9 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isLoginSuccess(OnUserEvent event) {
-        presenter.isLoginSuccess(event.getMessage(), event.getBean());
+        if (TextUtils.equals(event.getRequest(),REQUEST_LOGIN)){
+            presenter.isLoginSuccess(event.getResult(), event.getBean());
+        }
     }
 
     @Override

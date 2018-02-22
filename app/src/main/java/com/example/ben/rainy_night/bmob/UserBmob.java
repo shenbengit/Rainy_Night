@@ -18,6 +18,8 @@ import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
+ * User信息表增删改查方法封装
+ *
  * @author Ben
  * @date 2018/1/26
  */
@@ -41,10 +43,11 @@ public class UserBmob {
     /**
      * 注册用户
      *
+     * @param request
      * @param phone
      * @param password
      */
-    public void registerUser(String phone, String password) {
+    public void registerUser(final String request, String phone, String password) {
         UserBean bean = new UserBean();
         bean.setUsername(phone);
         bean.setMobilePhoneNumber(phone);
@@ -53,9 +56,9 @@ public class UserBmob {
             @Override
             public void done(UserBean bean, BmobException e) {
                 if (e == null) {
-                    EventBus.getDefault().post(new OnUserEvent(OK, bean));
+                    EventBus.getDefault().post(new OnUserEvent(request, OK, bean));
                 } else {
-                    EventBus.getDefault().post(new OnUserEvent(e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
+                    EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
                 }
 
             }
@@ -65,17 +68,18 @@ public class UserBmob {
     /**
      * 用户登陆
      *
+     * @param request
      * @param account  账号
      * @param password 密码
      */
-    public void loginUser(String account, String password) {
+    public void loginUser(final String request, String account, String password) {
         BmobUser.loginByAccount(account, password, new LogInListener<UserBean>() {
             @Override
             public void done(UserBean bean, BmobException e) {
                 if (e == null) {
-                    EventBus.getDefault().post(new OnUserEvent(OK, bean));
+                    EventBus.getDefault().post(new OnUserEvent(request, OK, bean));
                 } else {
-                    EventBus.getDefault().post(new OnUserEvent(e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
+                    EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
                 }
             }
         });
@@ -84,17 +88,18 @@ public class UserBmob {
     /**
      * 手机号码一键注册或登录
      *
+     * @param request
      * @param phone
      * @param code
      */
-    public void signOrLoginByPhone(String phone, String code) {
+    public void signOrLoginByPhone(final String request, String phone, String code) {
         BmobUser.signOrLoginByMobilePhone(phone, code, new LogInListener<UserBean>() {
             @Override
             public void done(UserBean bean, BmobException e) {
                 if (e == null) {
-                    EventBus.getDefault().post(new OnUserEvent(OK, bean));
+                    EventBus.getDefault().post(new OnUserEvent(request, OK, bean));
                 } else {
-                    EventBus.getDefault().post(new OnUserEvent(e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
+                    EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
                 }
             }
         });
@@ -103,18 +108,19 @@ public class UserBmob {
     /**
      * 获取用户信息
      *
+     * @param request
      * @param objectId
      */
-    public void getUserInformation(String objectId) {
+    public void getUserInformation(final String request, String objectId) {
         BmobQuery<UserBean> query = new BmobQuery<UserBean>();
         query.getObject(objectId, new QueryListener<UserBean>() {
             @Override
             public void done(UserBean bean, BmobException e) {
                 if (e == null) {
                     LoggerUtil.d(bean);
-                    EventBus.getDefault().post(new OnUserEvent(OK, bean));
+                    EventBus.getDefault().post(new OnUserEvent(request, OK, bean));
                 } else {
-                    EventBus.getDefault().post(new OnUserEvent(e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
+                    EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
                 }
             }
         });
@@ -134,17 +140,18 @@ public class UserBmob {
     /**
      * 更新用户信息
      *
+     * @param request
      * @param userBean
      */
-    public void updateUser(UserBean userBean) {
+    public void updateUser(final String request, UserBean userBean) {
         UserBean bean = userBean;
         bean.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    EventBus.getDefault().post(new OnUserEvent(OK, null));
+                    EventBus.getDefault().post(new OnUserEvent(request, OK, null));
                 } else {
-                    EventBus.getDefault().post(new OnUserEvent(e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
+                    EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
                 }
             }
         });
