@@ -11,6 +11,7 @@ import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.RegisterPresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.RegisterPresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IRegisterView;
+import com.example.ben.rainy_night.util.ConstantUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -48,8 +49,6 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
                 break;
         }
     }
-
-    private static final String REQUEST_REGISTER = "register";
 
     public static RegisterFragment newInstance() {
         RegisterFragment fragment = new RegisterFragment();
@@ -91,7 +90,7 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isRegisterSuccess(OnUserEvent event) {
-        if (TextUtils.equals(event.getRequest(), REQUEST_REGISTER)) {
+        if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_REGISTER)) {
             presenter.isRegisterSuccess(event.getResult(), event.getBean());
         }
     }

@@ -2,6 +2,7 @@ package com.example.ben.rainy_night.bmob;
 
 import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
+import com.example.ben.rainy_night.util.ConstantUtil;
 import com.example.ben.rainy_night.util.LoggerUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -25,7 +26,6 @@ import cn.bmob.v3.listener.UpdateListener;
  */
 
 public class UserBmob {
-    private static final String OK = "ok";
 
     private UserBmob() {
 
@@ -37,7 +37,6 @@ public class UserBmob {
 
     private static class Holder {
         private static final UserBmob bmob = new UserBmob();
-
     }
 
     /**
@@ -56,7 +55,7 @@ public class UserBmob {
             @Override
             public void done(UserBean bean, BmobException e) {
                 if (e == null) {
-                    EventBus.getDefault().post(new OnUserEvent(request, OK, bean));
+                    EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
                 } else {
                     EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
                 }
@@ -77,7 +76,7 @@ public class UserBmob {
             @Override
             public void done(UserBean bean, BmobException e) {
                 if (e == null) {
-                    EventBus.getDefault().post(new OnUserEvent(request, OK, bean));
+                    EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
                 } else {
                     EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
                 }
@@ -97,7 +96,7 @@ public class UserBmob {
             @Override
             public void done(UserBean bean, BmobException e) {
                 if (e == null) {
-                    EventBus.getDefault().post(new OnUserEvent(request, OK, bean));
+                    EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
                 } else {
                     EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
                 }
@@ -117,8 +116,7 @@ public class UserBmob {
             @Override
             public void done(UserBean bean, BmobException e) {
                 if (e == null) {
-                    LoggerUtil.d(bean);
-                    EventBus.getDefault().post(new OnUserEvent(request, OK, bean));
+                    EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
                 } else {
                     EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
                 }
@@ -144,12 +142,11 @@ public class UserBmob {
      * @param userBean
      */
     public void updateUser(final String request, UserBean userBean) {
-        UserBean bean = userBean;
-        bean.update(new UpdateListener() {
+        userBean.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    EventBus.getDefault().post(new OnUserEvent(request, OK, null));
+                    EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, null));
                 } else {
                     EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
                 }

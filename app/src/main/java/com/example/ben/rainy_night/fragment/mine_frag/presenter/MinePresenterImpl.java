@@ -8,6 +8,7 @@ import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IMineView;
+import com.example.ben.rainy_night.util.ConstantUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 /**
@@ -20,9 +21,6 @@ public class MinePresenterImpl implements MinePresenter {
     private IMineView view;
     private UserModel model;
 
-    private static final String OK = "ok";
-    private static final String REQUEST_MINE = "mine";
-
     public MinePresenterImpl(IMineView view) {
         this.view = view;
         model = new UserModelImpl();
@@ -34,7 +32,7 @@ public class MinePresenterImpl implements MinePresenter {
      */
     @Override
     public void getUserInformation() {
-        model.getUserInformation(REQUEST_MINE, String.valueOf(view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "")));
+        model.getUserInformation(ConstantUtil.REQUEST_MINE, String.valueOf(view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "")));
     }
 
     /**
@@ -45,7 +43,7 @@ public class MinePresenterImpl implements MinePresenter {
      */
     @Override
     public void isGetUserInformationSuccess(String message, UserBean bean) {
-        if (TextUtils.equals(OK, message)) {
+        if (TextUtils.equals(ConstantUtil.OK, message)) {
             view.putSpValue(SharedPreferencesUtil.USER_PHONE, bean.getMobilePhoneNumber());
             view.putSpValue(SharedPreferencesUtil.USER_NAME, bean.getUsername());
             isNull(SharedPreferencesUtil.USER_NICK_NAME, bean.getNickName());
@@ -92,6 +90,7 @@ public class MinePresenterImpl implements MinePresenter {
     private void loadImage(String imageUri) {
         GlideApp.with(view.getFragmentActivity())
                 .load(imageUri)
+                .placeholder(R.mipmap.ic_head)
                 .error(R.mipmap.ic_head)
                 .into(view.getHeadImg());
     }

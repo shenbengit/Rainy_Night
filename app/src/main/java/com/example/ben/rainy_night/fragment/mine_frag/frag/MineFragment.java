@@ -14,10 +14,11 @@ import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.RegisterFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.personal.MyPersonalFragment;
-import com.example.ben.rainy_night.fragment.mine_frag.frag.personal.SpaceFragment;
+import com.example.ben.rainy_night.fragment.mine_frag.frag.space.SpaceFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IMineView;
+import com.example.ben.rainy_night.util.ConstantUtil;
 import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
@@ -67,8 +68,6 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
 
     private String objectId = "";
 
-    private static final String REQUEST_MINE = "mine";
-
     public static MineFragment newInstance() {
         Bundle args = new Bundle();
         MineFragment fragment = new MineFragment();
@@ -88,7 +87,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
 
     @Override
     public void initView() {
-
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -102,9 +101,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        EventBus.getDefault().register(this);
         objectId = String.valueOf(getSharedPreferences(SharedPreferencesUtil.USER_OBJECT_ID, ""));
-        LoggerUtil.e(objectId);
         if (TextUtils.equals(objectId, "")) {
             civMineHead.setImageDrawable(getResources().getDrawable(R.mipmap.ic_head));
             tvMineName.setText(getString(R.string.login_register));
@@ -115,15 +112,17 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isGetUserInformationSuccess(OnUserEvent event) {
-        if (TextUtils.equals(event.getRequest(),REQUEST_MINE)) {
+        if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_MINE)) {
             presenter.isGetUserInformationSuccess(event.getResult(), event.getBean());
         }
     }
 
     @Override
-    public void onSupportInvisible() {
-        super.onSupportInvisible();
-        EventBus.getDefault().unregister(this);
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     /**

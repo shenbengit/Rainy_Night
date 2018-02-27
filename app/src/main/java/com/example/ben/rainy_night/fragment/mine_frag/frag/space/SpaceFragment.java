@@ -1,8 +1,14 @@
-package com.example.ben.rainy_night.fragment.mine_frag.frag.personal;
+package com.example.ben.rainy_night.fragment.mine_frag.frag.space;
 
+
+import android.view.View;
 
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseBackFragment;
+import com.flyco.roundview.RoundTextView;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @author Ben
@@ -10,6 +16,20 @@ import com.example.ben.rainy_night.base.BaseBackFragment;
  */
 
 public class SpaceFragment extends BaseBackFragment {
+
+    @BindView(R.id.rtv_post_story)
+    RoundTextView rtvPostStory;
+
+    @OnClick({R.id.rtv_post_story})
+    public void viewOnClick(View view) {
+        switch (view.getId()) {
+            case R.id.rtv_post_story:
+                start(PostStoryFragment.newInstance());
+                break;
+            default:
+                break;
+        }
+    }
 
     public static SpaceFragment newInstance() {
         SpaceFragment fragment = new SpaceFragment();

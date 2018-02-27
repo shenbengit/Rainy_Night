@@ -15,6 +15,7 @@ import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IMyPersonalView;
 import com.example.ben.rainy_night.util.CompressPictureUtil;
+import com.example.ben.rainy_night.util.ConstantUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.example.ben.rainy_night.util.ToastUtil;
 import com.vondear.rxtools.RxPhotoTool;
@@ -41,9 +42,6 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
     private UserModel model;
     private Uri mUri = null;
     private File mFile = null;
-
-    private static final String OK = "ok";
-    private static final String REQUEST_PERSONAL = "personal";
 
     public MyPersonalPresentImpl(IMyPersonalView view) {
         this.view = view;
@@ -118,13 +116,12 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
      */
     @Override
     public void isUpdateUserSuccess(String message) {
-        if (TextUtils.equals(OK, message)) {
-            view.cancelDialog();
+        view.cancelDialog();
+        if (TextUtils.equals(ConstantUtil.OK, message)) {
             view.putSpValue(SharedPreferencesUtil.USER_SEX, view.getTextSex().getText().toString().trim());
             view.putSpValue(SharedPreferencesUtil.USER_BIRTHDAY, view.getTextBirthday().getText().toString().trim());
             view.showToast("用户资料更新成功");
         } else {
-            view.cancelDialog();
             view.showToast(message);
         }
     }
@@ -212,6 +209,6 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
         bean.setSex(view.getTextSex().getText().toString().trim());
         bean.setBirthday(view.getTextBirthday().getText().toString().trim());
         bean.setEmail(view.getTextEmail().getText().toString().trim());
-        model.updateUser(REQUEST_PERSONAL, bean);
+        model.updateUser(ConstantUtil.REQUEST_PERSONAL, bean);
     }
 }

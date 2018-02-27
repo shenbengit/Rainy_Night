@@ -21,6 +21,7 @@ import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MyPersonalPresentImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MyPersonalPresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IMyPersonalView;
+import com.example.ben.rainy_night.util.ConstantUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.vondear.rxtools.RxTimeTool;
 import com.vondear.rxtools.view.dialog.RxDialogChooseImage;
@@ -113,8 +114,6 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
     private String sex = "";
     private String birthday = "";
     private String email = "";
-
-    private static final String REQUEST_PERSONAL = "personal";
 
     public static MyPersonalFragment newInstance() {
         Bundle args = new Bundle();
@@ -217,7 +216,7 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void isUpdateUserSuccess(OnUserEvent event) {
-        if (TextUtils.equals(event.getRequest(), REQUEST_PERSONAL)) {
+        if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_PERSONAL)) {
             presenter.isUpdateUserSuccess(event.getResult());
         }
     }

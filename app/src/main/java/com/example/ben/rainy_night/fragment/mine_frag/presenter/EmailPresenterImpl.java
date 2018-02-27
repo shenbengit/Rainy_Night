@@ -6,6 +6,7 @@ import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IEmailView;
+import com.example.ben.rainy_night.util.ConstantUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.vondear.rxtools.RxRegTool;
 
@@ -18,9 +19,6 @@ public class EmailPresenterImpl implements EmailPresenter {
     private IEmailView view;
     private UserModel model;
     private String email;
-
-    private static final String OK = "ok";
-    private static final String REQUEST_EMAIL = "email";
 
     public EmailPresenterImpl(IEmailView view) {
         this.view = view;
@@ -45,7 +43,7 @@ public class EmailPresenterImpl implements EmailPresenter {
         UserBean bean = new UserBean();
         bean.setObjectId(String.valueOf(view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "")));
         bean.setEmail(email);
-        model.updateUser(REQUEST_EMAIL,bean);
+        model.updateUser(ConstantUtil.REQUEST_EMAIL,bean);
     }
 
     /**
@@ -55,12 +53,11 @@ public class EmailPresenterImpl implements EmailPresenter {
      */
     @Override
     public void isChangeEmailSuccess(String message) {
-        if (TextUtils.equals(OK, message)) {
+        view.cancelDialog();
+        if (TextUtils.equals(ConstantUtil.OK, message)) {
             view.putSpValue(SharedPreferencesUtil.USER_EMAIL, email);
-            view.cancelDialog();
             view.showToast("邮箱地址更新成功");
         } else {
-            view.cancelDialog();
             view.showToast(message);
         }
     }

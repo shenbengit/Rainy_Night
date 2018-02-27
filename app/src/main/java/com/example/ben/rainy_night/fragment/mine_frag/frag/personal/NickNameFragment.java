@@ -13,6 +13,7 @@ import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.NickNamePresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.NickNamePresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IPetNameView;
+import com.example.ben.rainy_night.util.ConstantUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,8 +52,6 @@ public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implem
                 break;
         }
     }
-
-    private static final String REQUEST_NICK_NAME = "nick_name";
 
     public static NickNameFragment newInstance(String name) {
         Bundle bundle = new Bundle();
@@ -100,7 +99,7 @@ public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implem
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isChangeNickNameSuccess(OnUserEvent event) {
-        if (TextUtils.equals(event.getRequest(),REQUEST_NICK_NAME)){
+        if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_NICK_NAME)){
             presenter.isChangeNickNameSuccess(event.getResult());
         }
     }

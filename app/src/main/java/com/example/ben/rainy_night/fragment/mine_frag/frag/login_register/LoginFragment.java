@@ -10,6 +10,7 @@ import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.LoginPresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.LoginPresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.ILoginView;
+import com.example.ben.rainy_night.util.ConstantUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -40,8 +41,6 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
                 break;
         }
     }
-
-    private static final String REQUEST_LOGIN = "login";
 
     public static LoginFragment newInstance() {
         LoginFragment fragment = new LoginFragment();
@@ -84,7 +83,7 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isLoginSuccess(OnUserEvent event) {
-        if (TextUtils.equals(event.getRequest(),REQUEST_LOGIN)){
+        if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_LOGIN)) {
             presenter.isLoginSuccess(event.getResult(), event.getBean());
         }
     }

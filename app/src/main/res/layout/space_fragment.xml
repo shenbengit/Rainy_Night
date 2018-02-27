@@ -71,7 +71,7 @@
                                 android:paddingTop="@dimen/padding_common_v">
 
                                 <com.flyco.roundview.RoundTextView
-                                    android:id="@+id/attention"
+                                    android:id="@+id/rtv_post_story"
                                     style="@style/AppTheme.Label"
                                     android:layout_alignParentEnd="true"
                                     android:layout_alignParentRight="true"

@@ -6,6 +6,7 @@ import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IPetNameView;
+import com.example.ben.rainy_night.util.ConstantUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.vondear.rxtools.RxRegTool;
 
@@ -19,9 +20,6 @@ public class NickNamePresenterImpl implements NickNamePresenter {
     private IPetNameView view;
     private UserModel model;
     private String nickName = "";
-
-    private static final String OK = "ok";
-    private static final String REQUEST_NICK_NAME = "nick_name";
 
     public NickNamePresenterImpl(IPetNameView view) {
         this.view = view;
@@ -44,7 +42,7 @@ public class NickNamePresenterImpl implements NickNamePresenter {
         UserBean bean = new UserBean();
         bean.setObjectId(String.valueOf(view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "")));
         bean.setNickName(nickName);
-        model.updateUser(REQUEST_NICK_NAME, bean);
+        model.updateUser(ConstantUtil.REQUEST_NICK_NAME, bean);
     }
 
     /**
@@ -54,12 +52,11 @@ public class NickNamePresenterImpl implements NickNamePresenter {
      */
     @Override
     public void isChangeNickNameSuccess(String message) {
-        if (TextUtils.equals(OK, message)) {
+        view.cancelDialog();
+        if (TextUtils.equals(ConstantUtil.OK, message)) {
             view.putSpValue(SharedPreferencesUtil.USER_NICK_NAME, nickName);
             view.showToast("昵称更改成功");
-            view.cancelDialog();
         } else {
-            view.cancelDialog();
             view.showToast(message);
         }
     }
