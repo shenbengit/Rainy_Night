@@ -71,7 +71,7 @@ public class UserBean extends BmobUser {
                 "nickName='" + nickName + '\'' +
                 ", sex='" + sex + '\'' +
                 ", birthday='" + birthday + '\'' +
-                ", headimg=" + headimg +
+                ", headimg=" + headimg.getUrl() +
                 '}';
     }
 }

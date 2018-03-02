@@ -2,8 +2,8 @@ package com.example.ben.rainy_night.bmob;
 
 import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
+import com.example.ben.rainy_night.manager.ThreadPoolManager;
 import com.example.ben.rainy_night.util.ConstantUtil;
-import com.example.ben.rainy_night.util.LoggerUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -46,22 +46,28 @@ public class UserBmob {
      * @param phone
      * @param password
      */
-    public void registerUser(final String request, String phone, String password) {
-        UserBean bean = new UserBean();
-        bean.setUsername(phone);
-        bean.setMobilePhoneNumber(phone);
-        bean.setPassword(password);
-        bean.signUp(new SaveListener<UserBean>() {
+    public void registerUser(final String request, final String phone, final String password) {
+        Runnable runnable = new Runnable() {
             @Override
-            public void done(UserBean bean, BmobException e) {
-                if (e == null) {
-                    EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
-                } else {
-                    EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
-                }
+            public void run() {
+                UserBean bean = new UserBean();
+                bean.setUsername(phone);
+                bean.setMobilePhoneNumber(phone);
+                bean.setPassword(password);
+                bean.signUp(new SaveListener<UserBean>() {
+                    @Override
+                    public void done(UserBean bean, BmobException e) {
+                        if (e == null) {
+                            EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
+                        } else {
+                            EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
+                        }
 
+                    }
+                });
             }
-        });
+        };
+        ThreadPoolManager.getInstance().execute(runnable);
     }
 
     /**
@@ -71,17 +77,24 @@ public class UserBmob {
      * @param account  账号
      * @param password 密码
      */
-    public void loginUser(final String request, String account, String password) {
-        BmobUser.loginByAccount(account, password, new LogInListener<UserBean>() {
+    public void loginUser(final String request, final String account, final String password) {
+        Runnable runnable = new Runnable() {
             @Override
-            public void done(UserBean bean, BmobException e) {
-                if (e == null) {
-                    EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
-                } else {
-                    EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
-                }
+            public void run() {
+                BmobUser.loginByAccount(account, password, new LogInListener<UserBean>() {
+                    @Override
+                    public void done(UserBean bean, BmobException e) {
+                        if (e == null) {
+                            EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
+                        } else {
+                            EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
+                        }
+                    }
+                });
             }
-        });
+        };
+        ThreadPoolManager.getInstance().execute(runnable);
+
     }
 
     /**
@@ -110,18 +123,25 @@ public class UserBmob {
      * @param request
      * @param objectId
      */
-    public void getUserInformation(final String request, String objectId) {
-        BmobQuery<UserBean> query = new BmobQuery<UserBean>();
-        query.getObject(objectId, new QueryListener<UserBean>() {
+    public void getUserInformation(final String request, final String objectId) {
+        Runnable runnable = new Runnable() {
             @Override
-            public void done(UserBean bean, BmobException e) {
-                if (e == null) {
-                    EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
-                } else {
-                    EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
-                }
+            public void run() {
+                BmobQuery<UserBean> query = new BmobQuery<UserBean>();
+                query.getObject(objectId, new QueryListener<UserBean>() {
+                    @Override
+                    public void done(UserBean bean, BmobException e) {
+                        if (e == null) {
+                            EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
+                        } else {
+                            EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
+                        }
+                    }
+                });
             }
-        });
+        };
+
+        ThreadPoolManager.getInstance().execute(runnable);
     }
 
     public void getUserInformationCache(String objectId) {
@@ -141,16 +161,22 @@ public class UserBmob {
      * @param request
      * @param userBean
      */
-    public void updateUser(final String request, UserBean userBean) {
-        userBean.update(new UpdateListener() {
+    public void updateUser(final String request, final UserBean userBean) {
+        Runnable runnable = new Runnable() {
             @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, null));
-                } else {
-                    EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
-                }
+            public void run() {
+                userBean.update(new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+                        if (e == null) {
+                            EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, null));
+                        } else {
+                            EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
+                        }
+                    }
+                });
             }
-        });
+        };
+        ThreadPoolManager.getInstance().execute(runnable);
     }
 }
