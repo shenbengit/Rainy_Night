@@ -1,12 +1,16 @@
 package com.example.ben.rainy_night;
 
 import android.app.Application;
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.multidex.MultiDex;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 import com.vondear.rxtools.RxTool;
 
 import cn.bmob.v3.Bmob;
@@ -20,6 +24,8 @@ import me.yokeyword.fragmentation.helper.ExceptionHandler;
  */
 
 public class App extends Application {
+    private RefWatcher refWatcher;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -41,7 +47,7 @@ public class App extends Application {
                 })
                 .install();
         //Bmob初始化
-        BmobConfig config=new BmobConfig.Builder(this)
+        BmobConfig config = new BmobConfig.Builder(this)
                 .setApplicationId("066dc84797cf2e222e1d914eb7d1a297")
                 .setConnectTimeout(7)
                 .build();
@@ -60,5 +66,23 @@ public class App extends Application {
                 .build();
 
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        refWatcher = LeakCanary.install(this);
+    }
+
+    public static RefWatcher getRefWatcher(Context context) {
+        App application = (App) context.getApplicationContext();
+        return application.refWatcher;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

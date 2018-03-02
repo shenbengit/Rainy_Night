@@ -7,10 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.ben.rainy_night.App;
 import com.example.ben.rainy_night.fragment.event.OnActivityResultEvent;
 import com.example.ben.rainy_night.util.DialogLoadingUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.example.ben.rainy_night.util.ToastUtil;
+import com.squareup.leakcanary.RefWatcher;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -51,6 +53,8 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     protected void onDestroy() {
         super.onDestroy();
         DialogLoadingUtil.getInstance(this).cancel();
+        RefWatcher refWatcher = App.getRefWatcher(this);
+        refWatcher.watch(this);
     }
 
 

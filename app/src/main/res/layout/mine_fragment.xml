@@ -6,6 +6,11 @@
     android:orientation="vertical"
     tools:context="com.example.ben.rainy_night.fragment.mine_frag.frag.MineFragment">
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary" />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"

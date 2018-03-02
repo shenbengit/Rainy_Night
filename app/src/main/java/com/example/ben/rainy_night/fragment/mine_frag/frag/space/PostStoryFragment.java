@@ -128,6 +128,16 @@ public class PostStoryFragment extends BaseBackFragment<PostStoryPresenter> impl
         EventBus.getDefault().register(this);
     }
 
+    /**
+     * 是否透明化状态栏
+     *
+     * @return
+     */
+    @Override
+    protected boolean isTransparentStatusBar() {
+        return false;
+    }
+
     @Override
     public void onEnterAnimationEnd(Bundle savedInstanceState) {
         super.onEnterAnimationEnd(savedInstanceState);

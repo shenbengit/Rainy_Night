@@ -93,6 +93,16 @@ public class EmailFragment extends BaseBackFragment<EmailPresenter> implements I
 
     }
 
+    /**
+     * 是否透明化状态栏
+     *
+     * @return
+     */
+    @Override
+    protected boolean isTransparentStatusBar() {
+        return false;
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isChangeEmailSuccess(OnUserEvent event) {
         if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_EMAIL)) {

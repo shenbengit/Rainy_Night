@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackGrey"
     android:orientation="vertical"
     tools:context=".fragment.mine_frag.frag.personal.MyPersonalFragment">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary" />
 
     <include layout="@layout/toolbar" />
 
@@ -32,7 +37,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/image1"/>
+            android:layout_toLeftOf="@+id/image1" />
 
         <ImageView
             android:id="@+id/image1"

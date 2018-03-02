@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ben.rainy_night.App;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.util.DialogLoadingUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.example.ben.rainy_night.util.ToastUtil;
+import com.gyf.barlibrary.ImmersionBar;
+import com.squareup.leakcanary.RefWatcher;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -26,14 +29,18 @@ import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
  */
 
 public abstract class BaseBackFragment<T extends BasePresenter> extends SwipeBackFragment {
-    public T presenter;
+    protected T presenter;
     private Unbinder unbinder = null;
+    protected ImmersionBar mImmersionBar;
+    private View v;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getLayout(), container, false);
         unbinder = ButterKnife.bind(this, view);
+        mImmersionBar = ImmersionBar.with(_mActivity);
+        v = view.findViewById(setStatusBarView());
         setPresenter();
         initView();
         return attachToSwipeBack(view);
@@ -47,15 +54,35 @@ public abstract class BaseBackFragment<T extends BasePresenter> extends SwipeBac
     }
 
     @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if (isTransparentStatusBar()) {
+            mImmersionBar.transparentStatusBar().init();
+        } else {
+            if (v != null) {
+                ImmersionBar.setStatusBarView(_mActivity, v);
+            }
+            mImmersionBar.statusBarColor(R.color.colorPrimary).init();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         //fragment 销毁时ButterKnife解绑
         unbinder.unbind();
-        DialogLoadingUtil.getInstance(_mActivity).cancel();
+        if (mImmersionBar != null) {
+            mImmersionBar.destroy();
+        }
+        RefWatcher refWatcher = App.getRefWatcher(_mActivity);
+        refWatcher.watch(this);
+    }
+
+    protected int setStatusBarView() {
+        return R.id.view;
     }
 
     /**
-     *
      * @return 返回界面layout
      */
     @LayoutRes
@@ -77,7 +104,15 @@ public abstract class BaseBackFragment<T extends BasePresenter> extends SwipeBac
     protected abstract void initData();
 
     /**
+     * 是否透明化状态栏
+     *
+     * @return
+     */
+    protected abstract boolean isTransparentStatusBar();
+
+    /**
      * 设置ToolBar
+     *
      * @param toolbar 传入子类中的ToolBar
      */
     protected void initToolbarNav(Toolbar toolbar) {

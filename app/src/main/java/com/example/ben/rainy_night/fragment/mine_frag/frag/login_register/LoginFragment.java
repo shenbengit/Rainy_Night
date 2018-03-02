@@ -81,6 +81,16 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
 
     }
 
+    /**
+     * 是否透明化状态栏
+     *
+     * @return
+     */
+    @Override
+    protected boolean isTransparentStatusBar() {
+        return false;
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isLoginSuccess(OnUserEvent event) {
         if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_LOGIN)) {
