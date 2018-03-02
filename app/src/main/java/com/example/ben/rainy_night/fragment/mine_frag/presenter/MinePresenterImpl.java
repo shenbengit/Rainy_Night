@@ -46,23 +46,11 @@ public class MinePresenterImpl implements MinePresenter {
         if (TextUtils.equals(ConstantUtil.OK, message)) {
             view.putSpValue(SharedPreferencesUtil.USER_PHONE, bean.getMobilePhoneNumber());
             view.putSpValue(SharedPreferencesUtil.USER_NAME, bean.getUsername());
+            isNull(SharedPreferencesUtil.USER_HEAD_IMAGE, bean.getHeadimg().getFileUrl());
             isNull(SharedPreferencesUtil.USER_NICK_NAME, bean.getNickName());
             isNull(SharedPreferencesUtil.USER_SEX, bean.getSex());
             isNull(SharedPreferencesUtil.USER_BIRTHDAY, bean.getBirthday());
             isNull(SharedPreferencesUtil.USER_EMAIL, bean.getEmail());
-
-            if (TextUtils.isEmpty(bean.getNickName())) {
-                view.getTextUser().setText(bean.getUsername());
-            } else {
-                view.getTextUser().setText(bean.getNickName());
-            }
-
-            if (bean.getHeadimg() == null) {
-                view.getHeadImg().setImageDrawable(view.getFragmentActivity().getResources().getDrawable(R.mipmap.ic_head));
-            } else {
-                view.putSpValue(SharedPreferencesUtil.USER_HEAD_IMAGE, bean.getHeadimg().getFileUrl());
-                loadImage(bean.getHeadimg().getFileUrl());
-            }
         } else {
             view.showToast(message);
         }

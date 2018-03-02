@@ -183,6 +183,7 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
 
         GlideApp.with(_mActivity)
                 .load(getSharedPreferences(SharedPreferencesUtil.USER_HEAD_IMAGE, ""))
+                .placeholder(R.mipmap.img_head)
                 .error(R.mipmap.img_head)
                 .into(ivPersonHead);
     }

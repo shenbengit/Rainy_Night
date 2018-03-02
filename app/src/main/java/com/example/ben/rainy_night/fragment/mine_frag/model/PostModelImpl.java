@@ -33,4 +33,12 @@ public class PostModelImpl implements PostModel {
     public void publishPostWithPicture(String[] paths, String content, UserBean user) {
         PostBmob.getInstance().publishPostWithPicture(paths, content, user);
     }
+
+    /**
+     * 查询帖子
+     */
+    @Override
+    public void queryPost() {
+        PostBmob.getInstance().queryPost();
+    }
 }

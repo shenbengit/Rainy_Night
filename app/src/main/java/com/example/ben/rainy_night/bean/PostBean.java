@@ -36,13 +36,6 @@ public class PostBean extends BmobObject {
 
     }
 
-    public PostBean(String content, UserBean user, BmobRelation likes, List<BmobFile> pictures) {
-        this.content = content;
-        this.user = user;
-        this.likes = likes;
-        this.pictures = pictures;
-    }
-
     public String getContent() {
         return content;
     }

@@ -52,6 +52,8 @@ public class UserBmob {
             public void run() {
                 UserBean bean = new UserBean();
                 bean.setUsername(phone);
+                bean.setNickName(phone);
+                bean.setSex("保密");
                 bean.setMobilePhoneNumber(phone);
                 bean.setPassword(password);
                 bean.signUp(new SaveListener<UserBean>() {

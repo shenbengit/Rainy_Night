@@ -24,4 +24,9 @@ public interface PostModel {
      * @param user    帖子作者
      */
     void publishPostWithPicture(String[] paths, String content, UserBean user);
+
+    /**
+     * 查询帖子
+     */
+    void queryPost();
 }

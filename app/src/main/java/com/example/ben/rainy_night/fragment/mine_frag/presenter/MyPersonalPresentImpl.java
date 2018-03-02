@@ -179,7 +179,8 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
     private File roadImageView(Uri mUri) {
         GlideApp.with(view.getFragAct())
                 .load(mUri)
-                .error(R.mipmap.ic_launcher_round)
+                .error(R.mipmap.img_head)
+                .error(R.mipmap.img_picture_load_failed)
                 .into(view.getHeadImg());
         return new File(RxPhotoTool.getImageAbsolutePath(view.getFragAct(), mUri));
     }
@@ -193,6 +194,7 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
+                    view.putSpValue(SharedPreferencesUtil.USER_HEAD_IMAGE, bmobFile.getFileUrl());
                     updateInformation(bmobFile);
                 } else {
                     view.showToast("图片资源上传失败,请稍后重试!");

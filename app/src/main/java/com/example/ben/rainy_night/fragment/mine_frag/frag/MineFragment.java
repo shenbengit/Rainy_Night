@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
@@ -19,7 +20,6 @@ import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IMineView;
 import com.example.ben.rainy_night.util.ConstantUtil;
-import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,8 +45,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
     @BindView(R.id.rela_space)
     RelativeLayout relaSpace;
 
-    @OnClick({R.id.civ_mine_head, R.id.civ_mine_setting,R.id.rela_space})
+    @OnClick({R.id.civ_mine_head, R.id.civ_mine_setting, R.id.rela_space})
     public void viewOnClick(View view) {
+        assert ((MainFragment) getParentFragment()) != null;
         switch (view.getId()) {
             case R.id.civ_mine_head:
                 if (TextUtils.equals(objectId, "")) {
@@ -92,7 +93,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
 
     @Override
     public void initData() {
-
+        if (!TextUtils.equals(objectId, "")){
+            presenter.getUserInformation();
+        }
     }
 
     /**
@@ -101,13 +104,21 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        objectId = String.valueOf(getSharedPreferences(SharedPreferencesUtil.USER_OBJECT_ID, ""));
+        objectId = (String) getSharedPreferences(SharedPreferencesUtil.USER_OBJECT_ID, "");
         if (TextUtils.equals(objectId, "")) {
             civMineHead.setImageDrawable(getResources().getDrawable(R.mipmap.ic_head));
             tvMineName.setText(getString(R.string.login_register));
             return;
         }
-        presenter.getUserInformation();
+        String nickName = (String) getSharedPreferences(SharedPreferencesUtil.USER_NICK_NAME, "");
+        String imageUri= (String) getSharedPreferences(SharedPreferencesUtil.USER_HEAD_IMAGE,"");
+        tvMineName.setText(nickName);
+
+        GlideApp.with(_mActivity)
+                .load(imageUri)
+                .placeholder(R.mipmap.ic_head)
+                .error(R.mipmap.ic_head)
+                .into(civMineHead);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
@@ -120,7 +131,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (EventBus.getDefault().isRegistered(this)){
+        if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
     }
