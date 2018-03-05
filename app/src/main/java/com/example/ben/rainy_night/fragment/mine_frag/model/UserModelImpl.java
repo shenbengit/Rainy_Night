@@ -15,11 +15,12 @@ public class UserModelImpl implements UserModel {
      *
      * @param request
      * @param phone
+     * @param nickname
      * @param password
      */
     @Override
-    public void register(String request, String phone, String password) {
-        UserBmob.getInstance().registerUser(request, phone, password);
+    public void register(String request, String phone, String nickname, String password) {
+        UserBmob.getInstance().registerUser(request, phone, nickname, password);
     }
 
     /**

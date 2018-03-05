@@ -9,15 +9,21 @@ import com.example.ben.rainy_night.bean.UserBean;
  */
 
 public interface MinePresenter extends BasePresenter {
-    /**
-     * 获取用户信息
-     */
-    void getUserInformation();
 
     /**
-     * 获取用户信息是否成功
+     * 用户登陆
+     *
+     * @param request  类型
+     * @param account  帐户名
+     * @param password 密码
+     */
+    void loginUser(String request, String account, String password);
+
+    /**
+     * 用户登陆是否成功
+     *
      * @param message 成功：“ok”,失败：“e.getMessage()”
      * @param bean
      */
-    void isGetUserInformationSuccess(String message, UserBean bean);
+    void isLoginSuccess(String message, UserBean bean);
 }

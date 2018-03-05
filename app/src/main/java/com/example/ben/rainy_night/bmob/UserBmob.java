@@ -46,13 +46,13 @@ public class UserBmob {
      * @param phone
      * @param password
      */
-    public void registerUser(final String request, final String phone, final String password) {
+    public void registerUser(final String request, final String phone, final String nickname, final String password) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 UserBean bean = new UserBean();
                 bean.setUsername(phone);
-                bean.setNickName(phone);
+                bean.setNickName(nickname);
                 bean.setSex("保密");
                 bean.setMobilePhoneNumber(phone);
                 bean.setPassword(password);

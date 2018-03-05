@@ -14,9 +14,10 @@ public interface UserModel {
      *
      * @param request
      * @param phone
+     * @param nickname
      * @param password
      */
-    void register(String request, String phone, String password);
+    void register(String request, String phone, String nickname, String password);
 
     /**
      * 用户登陆

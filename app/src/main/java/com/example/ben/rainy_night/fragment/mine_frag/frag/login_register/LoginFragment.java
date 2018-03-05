@@ -1,7 +1,11 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag.login_register;
 
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.R;
@@ -24,18 +28,33 @@ import butterknife.OnClick;
  */
 public class LoginFragment extends BaseBackFragment<LoginPresenter> implements ILoginView {
 
-    @BindView(R.id.pet_login_name)
-    PowerfulEditText petLoginName;
+
+    @BindView(R.id.base_toolbar)
+    Toolbar baseToolbar;
+    @BindView(R.id.logo)
+    ImageView logo;
     @BindView(R.id.pet_login_phone)
     PowerfulEditText petLoginPhone;
     @BindView(R.id.pet_login_password)
     PowerfulEditText petLoginPassword;
+    @BindView(R.id.btn_login)
+    Button btnLogin;
+    @BindView(R.id.tv_regist)
+    TextView tvRegist;
+    @BindView(R.id.tv_forget_password)
+    TextView tvForgetPassword;
 
-    @OnClick({R.id.btn_login})
+    @OnClick({R.id.btn_login, R.id.tv_regist, R.id.tv_forget_password})
     public void viewOnClick(View view) {
         switch (view.getId()) {
             case R.id.btn_login:
                 presenter.login();
+                break;
+            case R.id.tv_regist:
+                start(RegisterFragment.newInstance());
+                break;
+            case R.id.tv_forget_password:
+
                 break;
             default:
                 break;
@@ -71,6 +90,8 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
     @Override
     public void initView() {
         EventBus.getDefault().register(this);
+        baseToolbar.setTitle(R.string.login);
+        initToolbarNav(baseToolbar);
     }
 
     /**

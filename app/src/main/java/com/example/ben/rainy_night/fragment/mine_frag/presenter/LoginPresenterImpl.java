@@ -7,6 +7,7 @@ import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.ILoginView;
 import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 /**
@@ -43,11 +44,15 @@ public class LoginPresenterImpl implements LoginPresenter {
     public void isLoginSuccess(String message, UserBean bean) {
         view.cancelDialog();
         if (TextUtils.equals(ConstantUtil.OK, message)) {
+            LoggerUtil.e(bean.toString());
             view.showToast("登陆成功");
             view.putSpValue(SharedPreferencesUtil.USER_OBJECT_ID, bean.getObjectId());
-            view.putSpValue(SharedPreferencesUtil.USER_PHONE, bean.getMobilePhoneNumber());
             view.putSpValue(SharedPreferencesUtil.USER_NAME, bean.getUsername());
-            isNull(SharedPreferencesUtil.USER_HEAD_IMAGE, bean.getHeadimg().getFileUrl());
+            view.putSpValue(SharedPreferencesUtil.USER_PHONE, bean.getMobilePhoneNumber());
+            view.putSpValue(SharedPreferencesUtil.USER_PASSWORD,view.getEditPassWord().getText().toString().trim());
+            if (bean.getHeadimg()!=null){
+                isNull(SharedPreferencesUtil.USER_HEAD_IMAGE, bean.getHeadimg().getFileUrl());
+            }
             isNull(SharedPreferencesUtil.USER_NICK_NAME, bean.getNickName());
             isNull(SharedPreferencesUtil.USER_SEX, bean.getSex());
             isNull(SharedPreferencesUtil.USER_BIRTHDAY, bean.getBirthday());

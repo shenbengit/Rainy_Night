@@ -13,7 +13,6 @@ import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
-import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.RegisterFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.personal.MyPersonalFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.space.SpaceFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenter;
@@ -51,7 +50,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
         switch (view.getId()) {
             case R.id.civ_mine_head:
                 if (TextUtils.equals(objectId, "")) {
-                    ((MainFragment) getParentFragment()).startBrotherFragment(RegisterFragment.newInstance());
+                    ((MainFragment) getParentFragment()).startBrotherFragment(LoginFragment.newInstance());
                 } else {
                     ((MainFragment) getParentFragment()).startBrotherFragment(MyPersonalFragment.newInstance());
                 }
@@ -68,6 +67,8 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
     }
 
     private String objectId = "";
+    private String account = "";
+    private String password = "";
 
     public static MineFragment newInstance() {
         Bundle args = new Bundle();
@@ -93,8 +94,10 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
 
     @Override
     public void initData() {
-        if (!TextUtils.equals(objectId, "")){
-            presenter.getUserInformation();
+        account = (String) getSharedPreferences(SharedPreferencesUtil.USER_PHONE, "");
+        password = (String) getSharedPreferences(SharedPreferencesUtil.USER_PASSWORD, "");
+        if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(password)) {
+            presenter.loginUser(ConstantUtil.REQUEST_LOGIN_MINE,account,password);
         }
     }
 
@@ -111,7 +114,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
             return;
         }
         String nickName = (String) getSharedPreferences(SharedPreferencesUtil.USER_NICK_NAME, "");
-        String imageUri= (String) getSharedPreferences(SharedPreferencesUtil.USER_HEAD_IMAGE,"");
+        String imageUri = (String) getSharedPreferences(SharedPreferencesUtil.USER_HEAD_IMAGE, "");
         tvMineName.setText(nickName);
 
         GlideApp.with(_mActivity)
@@ -122,9 +125,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
-    public void isGetUserInformationSuccess(OnUserEvent event) {
-        if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_MINE)) {
-            presenter.isGetUserInformationSuccess(event.getResult(), event.getBean());
+    public void isLoginSuccess(OnUserEvent event) {
+        if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_LOGIN_MINE)) {
+            presenter.isLoginSuccess(event.getResult(), event.getBean());
         }
     }
 

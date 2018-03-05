@@ -3,7 +3,6 @@ package com.example.ben.rainy_night.base;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +54,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        mImmersionBar.statusBarColor(R.color.colorPrimary).init();
+        mImmersionBar.statusBarColor(R.color.colorPrimaryDark).init();
     }
 
     protected int setStatusBarView() {

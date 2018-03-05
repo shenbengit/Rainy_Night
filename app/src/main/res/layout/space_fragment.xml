@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true">
 
     <ImageView
         android:id="@+id/parallax_space"
@@ -86,8 +88,8 @@
                                 <TextView
                                     android:id="@+id/tv_space_nickName"
                                     style="@style/AppTheme.Label.Title"
-                                    android:layout_marginTop="35dp"
-                                    android:layout_marginLeft="5dp"/>
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginTop="35dp" />
 
                                 <TextView
                                     android:id="@+id/tv_signature"

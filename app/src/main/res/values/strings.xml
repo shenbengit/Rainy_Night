@@ -3,10 +3,15 @@
 
     <string name="save">保存</string>
     <string name="login">登录</string>
+    <string name="userphone_hint">请输入手机号</string>
+    <string name="usernickname_hint">请输入用户名</string>
+    <string name="userpassword_hint">请输入密码</string>
+    <string name="picture_code_hint">图片验证码</string>
+    <string name="phone_code_hint">手机验证码</string>
     <string name="register">注册</string>
     <string name="register_success">注册成功</string>
     <string name="register_failed">注册失败</string>
-    <string name="register_user">注册新用户</string>
+    <string name="register_newuser">注册新用户</string>
     <string name="forget_pwd">忘记密码</string>
     <string name="login_register">登陆/注册</string>
     <string name="personal_information">个人资料</string>

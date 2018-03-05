@@ -13,6 +13,7 @@ public class ConstantUtil {
 
     public static final String OK = "ok";
     public static final String REQUEST_LOGIN = "login";
+    public static final String REQUEST_LOGIN_MINE = "login_mine";
     public static final String REQUEST_REGISTER = "register";
     public static final String REQUEST_EMAIL = "email";
     public static final String REQUEST_MINE = "mine";

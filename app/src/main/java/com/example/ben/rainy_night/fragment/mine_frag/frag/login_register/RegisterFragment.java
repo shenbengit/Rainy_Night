@@ -1,8 +1,11 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag.login_register;
 
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.R;
@@ -12,6 +15,7 @@ import com.example.ben.rainy_night.fragment.mine_frag.presenter.RegisterPresente
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.RegisterPresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IRegisterView;
 import com.example.ben.rainy_night.util.ConstantUtil;
+import com.vondear.rxtools.view.RxCaptcha;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -20,27 +24,55 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.vondear.rxtools.view.RxCaptcha.TYPE.NUMBER;
+
 /**
  * @author Ben
  */
 public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implements IRegisterView {
 
-    @BindView(R.id.pet_register_name)
-    PowerfulEditText petRegisterName;
+    @BindView(R.id.base_toolbar)
+    Toolbar baseToolbar;
     @BindView(R.id.pet_register_phone)
     PowerfulEditText petRegisterPhone;
+    @BindView(R.id.pet_register_name)
+    PowerfulEditText petRegisterName;
     @BindView(R.id.pet_register_password)
     PowerfulEditText petRegisterPassword;
+    @BindView(R.id.pet_register_pictureCode)
+    PowerfulEditText petRegisterPictureCode;
+    @BindView(R.id.iv_pictureCode)
+    ImageView ivPictureCode;
+    @BindView(R.id.pet_register_phoneCode)
+    PowerfulEditText petRegisterPhoneCode;
+    @BindView(R.id.tv_phoneCode)
+    TextView tvPhoneCode;
     @BindView(R.id.btn_register)
     Button btnRegister;
 
-    @OnClick({R.id.btn_register})
+    @OnClick({R.id.iv_pictureCode, R.id.tv_phoneCode, R.id.btn_register})
     public void viewOnClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_pictureCode:
+                getPictureCode();
+                break;
+            case R.id.tv_phoneCode:
+                if (TextUtils.isEmpty(petRegisterPhone.getText().toString().trim()) ||
+                        TextUtils.isEmpty(petRegisterName.getText().toString().trim()) ||
+                        TextUtils.isEmpty(petRegisterPassword.getText().toString().trim()) ||
+                        TextUtils.isEmpty(pictureCode)) {
+                    toastShow("以上关键字不能为空!");
+                    return;
+                }
+                presenter.sendPhoneCode();
+                break;
             case R.id.btn_register:
                 if (TextUtils.isEmpty(petRegisterPhone.getText().toString().trim()) ||
-                        TextUtils.isEmpty(petRegisterPassword.getText().toString().trim())) {
-                    showToast("注册用户不能为空");
+                        TextUtils.isEmpty(petRegisterName.getText().toString().trim()) ||
+                        TextUtils.isEmpty(petRegisterPassword.getText().toString().trim()) ||
+                        TextUtils.isEmpty(pictureCode) ||
+                        TextUtils.isEmpty(petRegisterPhoneCode.getText().toString().trim())) {
+                    toastShow("以上关键字不能为空!");
                     return;
                 }
                 presenter.registerUser();
@@ -49,6 +81,9 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
                 break;
         }
     }
+
+    private static final int PHONE_LENGTH = 11;
+    private String pictureCode = "";
 
     public static RegisterFragment newInstance() {
         RegisterFragment fragment = new RegisterFragment();
@@ -79,6 +114,9 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
     @Override
     public void initView() {
         EventBus.getDefault().register(this);
+        baseToolbar.setTitle(R.string.register);
+        initToolbarNav(baseToolbar);
+        getPictureCode();
     }
 
     /**
@@ -86,6 +124,22 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
      */
     @Override
     public void initData() {
+
+    }
+
+    /**
+     * 获取图片验证码
+     */
+    private void getPictureCode() {
+        RxCaptcha.build()
+                .backColor(0xffffff)
+                .codeLength(4)
+                .fontSize(60)
+                .lineNumber(0)
+                .size(210, 100)
+                .type(NUMBER)
+                .into(ivPictureCode);
+        pictureCode = RxCaptcha.build().getCode();
     }
 
     /**
@@ -110,6 +164,7 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
         hideSoftInput();
+        presenter.cancel();
     }
 
     /**
@@ -121,11 +176,55 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
     }
 
     /**
+     * @return 用户名
+     */
+    @Override
+    public PowerfulEditText getEditName() {
+        return petRegisterName;
+    }
+
+    /**
      * @return 密码
      */
     @Override
     public PowerfulEditText getEditPassWord() {
         return petRegisterPassword;
+    }
+
+    /**
+     * @return 图片验证码
+     */
+    @Override
+    public PowerfulEditText getEditPictureCode() {
+        return petRegisterPictureCode;
+    }
+
+    /**
+     * @return 手机验证码
+     */
+    @Override
+    public PowerfulEditText getEditPhoneCode() {
+        return petRegisterPhoneCode;
+    }
+
+    /**
+     * 发送手机验证码
+     *
+     * @return
+     */
+    @Override
+    public TextView getTextPhoneCode() {
+        return tvPhoneCode;
+    }
+
+    /**
+     * 图片验证码
+     *
+     * @return
+     */
+    @Override
+    public String getStringPictureCode() {
+        return pictureCode;
     }
 
     /**

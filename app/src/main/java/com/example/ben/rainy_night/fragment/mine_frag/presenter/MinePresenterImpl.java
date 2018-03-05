@@ -26,27 +26,30 @@ public class MinePresenterImpl implements MinePresenter {
         model = new UserModelImpl();
     }
 
-
     /**
-     * 获取用户信息
+     * 用户登陆
+     *
+     * @param request  类型
+     * @param account  帐户名
+     * @param password 密码
      */
     @Override
-    public void getUserInformation() {
-        model.getUserInformation(ConstantUtil.REQUEST_MINE, String.valueOf(view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "")));
+    public void loginUser(String request, String account, String password) {
+        model.login(request, account, password);
     }
 
     /**
-     * 获取用户信息是否成功
+     * 用户登陆是否成功
      *
      * @param message 成功：“ok”,失败：“e.getMessage()”
      * @param bean
      */
     @Override
-    public void isGetUserInformationSuccess(String message, UserBean bean) {
+    public void isLoginSuccess(String message, UserBean bean) {
         if (TextUtils.equals(ConstantUtil.OK, message)) {
-            view.putSpValue(SharedPreferencesUtil.USER_PHONE, bean.getMobilePhoneNumber());
-            view.putSpValue(SharedPreferencesUtil.USER_NAME, bean.getUsername());
-            isNull(SharedPreferencesUtil.USER_HEAD_IMAGE, bean.getHeadimg().getFileUrl());
+            if (bean.getHeadimg() != null) {
+                isNull(SharedPreferencesUtil.USER_HEAD_IMAGE, bean.getHeadimg().getFileUrl());
+            }
             isNull(SharedPreferencesUtil.USER_NICK_NAME, bean.getNickName());
             isNull(SharedPreferencesUtil.USER_SEX, bean.getSex());
             isNull(SharedPreferencesUtil.USER_BIRTHDAY, bean.getBirthday());

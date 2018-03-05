@@ -207,10 +207,8 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
         UserBean bean = new UserBean();
         bean.setObjectId(String.valueOf(view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "")));
         bean.setHeadimg(file);
-        bean.setNickName(view.getTextUser().getText().toString().trim());
         bean.setSex(view.getTextSex().getText().toString().trim());
         bean.setBirthday(view.getTextBirthday().getText().toString().trim());
-        bean.setEmail(view.getTextEmail().getText().toString().trim());
         model.updateUser(ConstantUtil.REQUEST_PERSONAL, bean);
     }
 }
