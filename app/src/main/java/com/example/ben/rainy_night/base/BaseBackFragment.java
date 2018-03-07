@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.ben.rainy_night.App;
 import com.example.ben.rainy_night.R;
+import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.util.DialogLoadingUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.example.ben.rainy_night.util.ToastUtil;
@@ -19,6 +20,7 @@ import com.squareup.leakcanary.RefWatcher;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.bmob.v3.BmobUser;
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
 
 /**
@@ -30,8 +32,9 @@ import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
 
 public abstract class BaseBackFragment<T extends BasePresenter> extends SwipeBackFragment {
     protected T presenter;
-    private Unbinder unbinder = null;
     protected ImmersionBar mImmersionBar;
+    protected UserBean mUserBean;
+    private Unbinder unbinder = null;
     private View v;
 
     @Nullable
@@ -41,6 +44,7 @@ public abstract class BaseBackFragment<T extends BasePresenter> extends SwipeBac
         unbinder = ButterKnife.bind(this, view);
         mImmersionBar = ImmersionBar.with(_mActivity);
         v = view.findViewById(setStatusBarView());
+        mUserBean = BmobUser.getCurrentUser(UserBean.class);
         setPresenter();
         initView();
         return attachToSwipeBack(view);
@@ -163,16 +167,5 @@ public abstract class BaseBackFragment<T extends BasePresenter> extends SwipeBac
      */
     protected void putSharedPreferences(String keyName, Object value) {
         SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).putValue(keyName, value);
-    }
-
-    /**
-     * 获取SP数据里指定key对应的value。如果key不存在，则返回默认值defValue。
-     *
-     * @param keyName      键
-     * @param defaultValue 默认值
-     * @return
-     */
-    protected Object getSharedPreferences(String keyName, Object defaultValue) {
-        return SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(keyName, defaultValue);
     }
 }

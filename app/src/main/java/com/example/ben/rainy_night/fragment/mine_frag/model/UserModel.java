@@ -32,9 +32,8 @@ public interface UserModel {
      * 获取用户信息
      *
      * @param request
-     * @param objectId 用户objectId
      */
-    void getUserInformation(String request, String objectId);
+    void getUserInformation(String request);
 
     /**
      * 更新用户信息

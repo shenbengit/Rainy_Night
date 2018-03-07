@@ -40,7 +40,6 @@ public class NickNamePresenterImpl implements NickNamePresenter {
         }
         view.showDialog();
         UserBean bean = new UserBean();
-        bean.setObjectId(String.valueOf(view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "")));
         bean.setNickName(nickName);
         model.updateUser(ConstantUtil.REQUEST_NICK_NAME, bean);
     }
@@ -54,7 +53,6 @@ public class NickNamePresenterImpl implements NickNamePresenter {
     public void isChangeNickNameSuccess(String message) {
         view.cancelDialog();
         if (TextUtils.equals(ConstantUtil.OK, message)) {
-            view.putSpValue(SharedPreferencesUtil.USER_NICK_NAME, nickName);
             view.showToast("昵称更改成功");
         } else {
             view.showToast(message);

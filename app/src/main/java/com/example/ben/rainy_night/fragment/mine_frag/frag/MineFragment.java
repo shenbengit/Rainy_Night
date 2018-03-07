@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
+import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
@@ -27,6 +28,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -49,7 +51,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
         assert ((MainFragment) getParentFragment()) != null;
         switch (view.getId()) {
             case R.id.civ_mine_head:
-                if (TextUtils.equals(objectId, "")) {
+                if (mUserBean == null) {
                     ((MainFragment) getParentFragment()).startBrotherFragment(LoginFragment.newInstance());
                 } else {
                     ((MainFragment) getParentFragment()).startBrotherFragment(MyPersonalFragment.newInstance());
@@ -94,11 +96,16 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
 
     @Override
     public void initData() {
-        account = (String) getSharedPreferences(SharedPreferencesUtil.USER_PHONE, "");
-        password = (String) getSharedPreferences(SharedPreferencesUtil.USER_PASSWORD, "");
-        if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(password)) {
-            presenter.loginUser(ConstantUtil.REQUEST_LOGIN_MINE,account,password);
+        if (mUserBean != null) {
+            account = mUserBean.getMobilePhoneNumber();
+            password = String.valueOf(SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(SharedPreferencesUtil.USER_PASSWORD, ""));
+            presenter.loginUser(ConstantUtil.REQUEST_LOGIN_MINE, account, password);
+        } else {
+            civMineHead.setImageResource(R.mipmap.ic_head);
+            tvMineName.setText(getString(R.string.login_register));
         }
+
+
     }
 
     /**
@@ -107,21 +114,20 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        objectId = (String) getSharedPreferences(SharedPreferencesUtil.USER_OBJECT_ID, "");
-        if (TextUtils.equals(objectId, "")) {
-            civMineHead.setImageDrawable(getResources().getDrawable(R.mipmap.ic_head));
-            tvMineName.setText(getString(R.string.login_register));
-            return;
-        }
-        String nickName = (String) getSharedPreferences(SharedPreferencesUtil.USER_NICK_NAME, "");
-        String imageUri = (String) getSharedPreferences(SharedPreferencesUtil.USER_HEAD_IMAGE, "");
-        tvMineName.setText(nickName);
+        mUserBean = BmobUser.getCurrentUser(UserBean.class);
+        if (mUserBean != null) {
+            tvMineName.setText(mUserBean.getNickName());
+            if (mUserBean.getHeadimg() != null) {
+                GlideApp.with(_mActivity)
+                        .load(mUserBean.getHeadimg().getFileUrl())
+                        .placeholder(R.mipmap.ic_head)
+                        .error(R.mipmap.ic_head)
+                        .into(civMineHead);
+            } else {
+                civMineHead.setImageResource(R.mipmap.ic_head);
+            }
 
-        GlideApp.with(_mActivity)
-                .load(imageUri)
-                .placeholder(R.mipmap.ic_head)
-                .error(R.mipmap.ic_head)
-                .into(civMineHead);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
@@ -195,28 +201,5 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
     @Override
     public void cancelDialog() {
         dialogCancel();
-    }
-
-    /**
-     * 使用SharedPreferences存储信息
-     *
-     * @param keyName 键
-     * @param value   值
-     */
-    @Override
-    public void putSpValue(String keyName, Object value) {
-        putSharedPreferences(keyName, value);
-    }
-
-    /**
-     * 获取SP数据里指定key对应的value。如果key不存在，则返回默认值defValue。
-     *
-     * @param keyName      键
-     * @param defaultValue 默认值
-     * @return
-     */
-    @Override
-    public Object getSpValue(String keyName, Object defaultValue) {
-        return getSharedPreferences(keyName, defaultValue);
     }
 }

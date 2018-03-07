@@ -118,9 +118,7 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
     public void isUpdateUserSuccess(String message) {
         view.cancelDialog();
         if (TextUtils.equals(ConstantUtil.OK, message)) {
-            view.putSpValue(SharedPreferencesUtil.USER_SEX, view.getTextSex().getText().toString().trim());
-            view.putSpValue(SharedPreferencesUtil.USER_BIRTHDAY, view.getTextBirthday().getText().toString().trim());
-            view.showToast("用户资料更新成功");
+            view.showToast("您的信息更新成功");
         } else {
             view.showToast(message);
         }
@@ -179,7 +177,6 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
     private File roadImageView(Uri mUri) {
         GlideApp.with(view.getFragAct())
                 .load(mUri)
-                .error(R.mipmap.img_head)
                 .error(R.mipmap.img_picture_load_failed)
                 .into(view.getHeadImg());
         return new File(RxPhotoTool.getImageAbsolutePath(view.getFragAct(), mUri));
@@ -194,7 +191,6 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    view.putSpValue(SharedPreferencesUtil.USER_HEAD_IMAGE, bmobFile.getFileUrl());
                     updateInformation(bmobFile);
                 } else {
                     view.showToast("图片资源上传失败,请稍后重试!");
@@ -205,8 +201,9 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
 
     private void updateInformation(BmobFile file) {
         UserBean bean = new UserBean();
-        bean.setObjectId(String.valueOf(view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "")));
-        bean.setHeadimg(file);
+        if (file != null) {
+            bean.setHeadimg(file);
+        }
         bean.setSex(view.getTextSex().getText().toString().trim());
         bean.setBirthday(view.getTextBirthday().getText().toString().trim());
         model.updateUser(ConstantUtil.REQUEST_PERSONAL, bean);

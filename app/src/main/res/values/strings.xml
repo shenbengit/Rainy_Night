@@ -28,5 +28,11 @@
     <string name="change_email">修改邮箱</string>
     <string name="email">714081644@qq.com</string>
 
+    <string name="setting">设置</string>
+    <string name="change_user_password">修改帐户密码</string>
+    <string name="about_us">关于我们</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="login_out">退出登陆</string>
+
     <string name="publish">发表</string>
 </resources>

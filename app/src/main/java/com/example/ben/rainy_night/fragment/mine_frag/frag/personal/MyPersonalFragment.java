@@ -16,13 +16,13 @@ import com.bigkoo.pickerview.TimePickerView;
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseBackFragment;
+import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.fragment.event.OnActivityResultEvent;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MyPersonalPresentImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MyPersonalPresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IMyPersonalView;
 import com.example.ben.rainy_night.util.ConstantUtil;
-import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.vondear.rxtools.RxTimeTool;
 import com.vondear.rxtools.view.dialog.RxDialogChooseImage;
 
@@ -37,6 +37,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
@@ -109,10 +110,7 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
     private TimePickerView mPickerDate = null;
     private List<String> lists_sex = null;
 
-    private String objectId = "";
     private String nickname = "";
-    private String sex = "";
-    private String birthday = "";
     private String email = "";
 
     public static MyPersonalFragment newInstance() {
@@ -180,30 +178,33 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
         super.onEnterAnimationEnd(savedInstanceState);
         // 入场动画结束后执行  优化,防动画卡顿
         _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        if (mUserBean != null) {
+            if (mUserBean.getHeadimg() != null) {
+                GlideApp.with(_mActivity)
+                        .load(mUserBean.getHeadimg().getFileUrl())
+                        .placeholder(R.mipmap.img_head)
+                        .error(R.mipmap.img_head)
+                        .into(ivPersonHead);
+            } else {
+                ivPersonHead.setImageResource(R.mipmap.img_head);
+            }
+        }
 
-        GlideApp.with(_mActivity)
-                .load(getSharedPreferences(SharedPreferencesUtil.USER_HEAD_IMAGE, ""))
-                .placeholder(R.mipmap.img_head)
-                .error(R.mipmap.img_head)
-                .into(ivPersonHead);
     }
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-
-        objectId = String.valueOf(getSharedPreferences(SharedPreferencesUtil.USER_OBJECT_ID, ""));
-        nickname = String.valueOf(getSharedPreferences(SharedPreferencesUtil.USER_NICK_NAME, ""));
-        sex = String.valueOf(getSharedPreferences(SharedPreferencesUtil.USER_SEX, ""));
-        birthday = String.valueOf(getSharedPreferences(SharedPreferencesUtil.USER_BIRTHDAY, ""));
-        email = String.valueOf(getSharedPreferences(SharedPreferencesUtil.USER_EMAIL, ""));
-        if (TextUtils.equals(objectId, "")) {
+        mUserBean = BmobUser.getCurrentUser(UserBean.class);
+        if (mUserBean == null) {
             return;
         }
-        tvPersonPetName.setText(nickname);
-        tvPersonSex.setText(sex);
-        tvPersonBirth.setText(birthday);
-        tvPersonEmail.setText(email);
+        nickname = mUserBean.getNickName();
+        email = mUserBean.getEmail();
+        tvPersonPetName.setText(mUserBean.getNickName());
+        tvPersonSex.setText(mUserBean.getSex());
+        tvPersonBirth.setText(mUserBean.getBirthday());
+        tvPersonEmail.setText(mUserBean.getEmail());
     }
 
     @Override
@@ -380,28 +381,4 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
     public void cancelDialog() {
         dialogCancel();
     }
-
-    /**
-     * 使用SharedPreferences存储信息
-     *
-     * @param keyName 键
-     * @param value   值
-     */
-    @Override
-    public void putSpValue(String keyName, Object value) {
-        putSharedPreferences(keyName, value);
-    }
-
-    /**
-     * 获取SP数据里指定key对应的value。如果key不存在，则返回默认值defValue。
-     *
-     * @param keyName      键
-     * @param defaultValue 默认值
-     * @return
-     */
-    @Override
-    public Object getSpValue(String keyName, Object defaultValue) {
-        return getSharedPreferences(keyName, defaultValue);
-    }
-
 }

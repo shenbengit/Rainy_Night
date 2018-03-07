@@ -4,6 +4,7 @@ import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.manager.ThreadPoolManager;
 import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.LoggerUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FetchUserInfoListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListener;
@@ -123,14 +125,19 @@ public class UserBmob {
      * 获取用户信息
      *
      * @param request
-     * @param objectId
      */
-    public void getUserInformation(final String request, final String objectId) {
+    public void getUserInformation(final String request) {
+        final UserBean bean = BmobUser.getCurrentUser(UserBean.class);
+        if (bean == null) {
+            EventBus.getDefault().post(new OnUserEvent(request, "暂无用户登陆!", null));
+            return;
+        }
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 BmobQuery<UserBean> query = new BmobQuery<UserBean>();
-                query.getObject(objectId, new QueryListener<UserBean>() {
+                query.getObject(bean.getObjectId(), new QueryListener<UserBean>() {
                     @Override
                     public void done(UserBean bean, BmobException e) {
                         if (e == null) {
@@ -146,17 +153,6 @@ public class UserBmob {
         ThreadPoolManager.getInstance().execute(runnable);
     }
 
-    public void getUserInformationCache(String objectId) {
-        BmobQuery<UserBean> query = new BmobQuery<UserBean>();
-        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
-        query.findObjects(new FindListener<UserBean>() {
-            @Override
-            public void done(List<UserBean> list, BmobException e) {
-
-            }
-        });
-    }
-
     /**
      * 更新用户信息
      *
@@ -164,13 +160,19 @@ public class UserBmob {
      * @param userBean
      */
     public void updateUser(final String request, final UserBean userBean) {
+        final UserBean bean = BmobUser.getCurrentUser(UserBean.class);
+        if (bean == null) {
+            EventBus.getDefault().post(new OnUserEvent(request, "暂无用户登陆!", null));
+            return;
+        }
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                userBean.update(new UpdateListener() {
+                userBean.update(bean.getObjectId(), new UpdateListener() {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
+                            fetchUserInfo();
                             EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, null));
                         } else {
                             EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
@@ -180,5 +182,42 @@ public class UserBmob {
             }
         };
         ThreadPoolManager.getInstance().execute(runnable);
+    }
+
+    /**
+     * 用户更新账号密码
+     *
+     * @param requset
+     * @param oldPwd
+     * @param newPwd
+     */
+    public void updateCurrentUserPassword(String requset, final String oldPwd, final String newPwd) {
+        Runnable runnable=new Runnable() {
+            @Override
+            public void run() {
+                BmobUser.updateCurrentUserPassword(oldPwd, newPwd, new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+
+                    }
+                });
+            }
+        };
+        ThreadPoolManager.getInstance().execute(runnable);
+    }
+
+    /**
+     * 同步本地缓存的用户信息
+     * 注意：需要先登录，否则会报9024错误
+     */
+    private void fetchUserInfo() {
+        BmobUser.fetchUserJsonInfo(new FetchUserInfoListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    LoggerUtil.e("同步本地缓存的用户信息: " + s);
+                }
+            }
+        });
     }
 }

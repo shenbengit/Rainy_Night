@@ -39,11 +39,10 @@ public class UserModelImpl implements UserModel {
      * 获取用户信息
      *
      * @param request
-     * @param objectId 用户objectId
      */
     @Override
-    public void getUserInformation(String request, String objectId) {
-        UserBmob.getInstance().getUserInformation(request, objectId);
+    public void getUserInformation(String request) {
+        UserBmob.getInstance().getUserInformation(request);
     }
 
     /**

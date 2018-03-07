@@ -20,4 +20,11 @@ public interface ILoginView extends BaseView {
      * @return 密码
      */
     PowerfulEditText getEditPassWord();
+
+    /**
+     * 保存到 SP
+     * @param key
+     * @param value
+     */
+    void putSpValue(String key,String value);
 }

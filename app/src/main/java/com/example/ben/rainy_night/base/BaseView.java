@@ -26,21 +26,4 @@ public interface BaseView {
      * 关闭网络加载Dialog
      */
     void cancelDialog();
-
-    /**
-     * 使用SharedPreferences存储信息
-     *
-     * @param keyName 键
-     * @param value   值
-     */
-    void putSpValue(String keyName, Object value);
-
-    /**
-     * 获取SP数据里指定key对应的value。如果key不存在，则返回默认值defValue。
-     *
-     * @param keyName 键
-     * @param defaultValue 默认值
-     * @return
-     */
-    Object getSpValue(String keyName, Object defaultValue);
 }

@@ -13,13 +13,14 @@ import com.example.ben.rainy_night.fragment.mine_frag.model.PostModelImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IPostStoryView;
 import com.example.ben.rainy_night.util.ConstantUtil;
 import com.example.ben.rainy_night.util.PictureSelectorUtil;
-import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.example.ben.rainy_night.view.EnlargePictureDialog;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.bmob.v3.BmobUser;
 
 /**
  * @author Ben
@@ -36,13 +37,10 @@ public class PostStoryPresenterImpl implements PostStoryPresenter {
      */
     private List<String> mPictures;
 
-    private List<LocalMedia> mMedias;
-
     public PostStoryPresenterImpl(IPostStoryView view) {
         this.view = view;
         model = new PostModelImpl();
         mPictures = new ArrayList<String>();
-        mMedias = new ArrayList<>();
     }
 
     /**
@@ -50,6 +48,9 @@ public class PostStoryPresenterImpl implements PostStoryPresenter {
      */
     @Override
     public void initGridView() {
+
+        model.queryPost();
+
         mAdapter = new PostStoryAdapter(view.getFragAct());
         view.getGridView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -71,16 +72,14 @@ public class PostStoryPresenterImpl implements PostStoryPresenter {
 
     private void showEnlargePictureDialog(int position) {
         EnlargePictureDialog mDialog = new EnlargePictureDialog(view.getFragAct());
-        mDialog.isCanDeletePicture(true);
         mDialog.setIsDeleteListener(new EnlargePictureDialog.OnDeletePictureOnClickListener() {
             @Override
             public void isDeleteListener(int position) {
-                mMedias.remove(position);
                 mPictures.remove(position);
                 mAdapter.setData(mPictures);
             }
         });
-        mDialog.setImageList(mMedias, position);
+        mDialog.setImageList(mPictures, position, true);
         mDialog.setCanceledOnTouchOutside(false);
         mDialog.show();
     }
@@ -96,7 +95,6 @@ public class PostStoryPresenterImpl implements PostStoryPresenter {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ConstantUtil.REQUEST_IMAGE) {
             if (resultCode == Activity.RESULT_OK && data != null) {
-                mMedias.addAll(PictureSelector.obtainMultipleResult(data));
                 for (LocalMedia localMedia : PictureSelector.obtainMultipleResult(data)) {
                     //被压缩后的图片路径
                     if (localMedia.isCompressed()) {
@@ -117,9 +115,7 @@ public class PostStoryPresenterImpl implements PostStoryPresenter {
     @Override
     public void publishPost() {
         String content = view.getEditText().getText().toString().trim();
-        String user_objectId = (String) view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "");
-        UserBean bean = new UserBean();
-        bean.setObjectId(user_objectId);
+        UserBean bean = BmobUser.getCurrentUser(UserBean.class);
         view.showDialog();
         if (mPictures.size() != 0) {
             String[] paths = mPictures.toArray(new String[mPictures.size()]);

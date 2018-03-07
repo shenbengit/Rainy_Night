@@ -41,7 +41,6 @@ public class EmailPresenterImpl implements EmailPresenter {
         }
         view.showDialog();
         UserBean bean = new UserBean();
-        bean.setObjectId(String.valueOf(view.getSpValue(SharedPreferencesUtil.USER_OBJECT_ID, "")));
         bean.setEmail(email);
         model.updateUser(ConstantUtil.REQUEST_EMAIL,bean);
     }
@@ -55,7 +54,6 @@ public class EmailPresenterImpl implements EmailPresenter {
     public void isChangeEmailSuccess(String message) {
         view.cancelDialog();
         if (TextUtils.equals(ConstantUtil.OK, message)) {
-            view.putSpValue(SharedPreferencesUtil.USER_EMAIL, email);
             view.showToast("邮箱地址更新成功");
         } else {
             view.showToast(message);

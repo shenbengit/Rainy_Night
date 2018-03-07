@@ -15,6 +15,7 @@ import com.example.ben.rainy_night.fragment.mine_frag.presenter.LoginPresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.LoginPresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.ILoginView;
 import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -143,6 +144,17 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
     }
 
     /**
+     * 保存到 SP
+     *
+     * @param key
+     * @param value
+     */
+    @Override
+    public void putSpValue(String key, String value) {
+        SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).putValue(key,value);
+    }
+
+    /**
      * 显示Toast
      *
      * @param text
@@ -174,28 +186,5 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
     @Override
     public void cancelDialog() {
         dialogCancel();
-    }
-
-    /**
-     * 使用SharedPreferences存储信息
-     *
-     * @param keyName 键
-     * @param value   值
-     */
-    @Override
-    public void putSpValue(String keyName, Object value) {
-        putSharedPreferences(keyName, value);
-    }
-
-    /**
-     * 获取SP数据里指定key对应的value。如果key不存在，则返回默认值defValue。
-     *
-     * @param keyName      键
-     * @param defaultValue 默认值
-     * @return
-     */
-    @Override
-    public Object getSpValue(String keyName, Object defaultValue) {
-        return getSharedPreferences(keyName, defaultValue);
     }
 }

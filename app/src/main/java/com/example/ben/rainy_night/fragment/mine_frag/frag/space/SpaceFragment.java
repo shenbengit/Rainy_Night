@@ -1,15 +1,22 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag.space;
 
 
+import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.ButtonBarLayout;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseBackFragment;
+import com.example.ben.rainy_night.bean.UserBean;
+import com.example.ben.rainy_night.util.LoggerUtil;
 import com.flyco.roundview.RoundTextView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
@@ -20,6 +27,8 @@ import com.scwang.smartrefresh.layout.util.DensityUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobUser;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @author Ben
@@ -40,7 +49,22 @@ public class SpaceFragment extends BaseBackFragment {
     NestedScrollView scrollViewSpace;
     @BindView(R.id.rtv_post_story)
     RoundTextView rtvPostStory;
-
+    @BindView(R.id.recy_space)
+    RecyclerView recySpace;
+    @BindView(R.id.tv_space_nickName)
+    TextView tvSpaceNickName;
+    @BindView(R.id.tv_signature)
+    TextView tvSignature;
+    @BindView(R.id.civ_space_head)
+    CircleImageView civSpaceHead;
+    @BindView(R.id.collapse)
+    CollapsingToolbarLayout collapse;
+    @BindView(R.id.top_view)
+    View topView;
+    @BindView(R.id.civ_space_toolbar_head)
+    CircleImageView civSpaceToolbarHead;
+    @BindView(R.id.tv_space_toolbar_nickName)
+    TextView tvSpaceToolbarNickName;
 
     @OnClick({R.id.rtv_post_story})
     public void viewOnClick(View view) {
@@ -55,6 +79,7 @@ public class SpaceFragment extends BaseBackFragment {
 
     private int mOffset = 0;
     private int mScrollY = 0;
+
     public static SpaceFragment newInstance() {
         SpaceFragment fragment = new SpaceFragment();
         return fragment;
@@ -92,8 +117,9 @@ public class SpaceFragment extends BaseBackFragment {
             public void onHeaderPulling(RefreshHeader header, float percent, int offset, int bottomHeight, int extendHeight) {
                 mOffset = offset / 2;
                 parallaxSpace.setTranslationY(mOffset - mScrollY);
-                buttonBarLayoutSpace.setAlpha(1 - Math.min(percent, 1));
+                buttonBarLayoutSpace.setAlpha(0);
             }
+
             @Override
             public void onHeaderReleasing(RefreshHeader header, float percent, int offset, int bottomHeight, int extendHeight) {
                 mOffset = offset / 2;
@@ -104,7 +130,8 @@ public class SpaceFragment extends BaseBackFragment {
         scrollViewSpace.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             private int lastScrollY = 0;
             private int h = DensityUtil.dp2px(170);
-            private int color = ContextCompat.getColor(_mActivity, R.color.colorPrimary)&0x00ffffff;
+            private int color = ContextCompat.getColor(_mActivity, R.color.colorPrimary) & 0x00ffffff;
+
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (lastScrollY < h) {
@@ -126,7 +153,8 @@ public class SpaceFragment extends BaseBackFragment {
      */
     @Override
     protected void initData() {
-
+        UserBean bean = BmobUser.getCurrentUser(UserBean.class);
+        LoggerUtil.e("SpaceFragment: " + bean.getObjectId());
     }
 
     /**
@@ -139,4 +167,31 @@ public class SpaceFragment extends BaseBackFragment {
         return true;
     }
 
+    @Override
+    public void onEnterAnimationEnd(Bundle savedInstanceState) {
+        super.onEnterAnimationEnd(savedInstanceState);
+        if (mUserBean == null) {
+            tvSpaceNickName.setText("");
+            tvSpaceToolbarNickName.setText("");
+            civSpaceHead.setImageResource(R.mipmap.ic_head);
+            civSpaceToolbarHead.setImageResource(R.mipmap.ic_head);
+            return;
+        }
+        tvSpaceNickName.setText(mUserBean.getNickName());
+        tvSpaceToolbarNickName.setText(mUserBean.getNickName());
+        if (mUserBean.getHeadimg() != null) {
+            GlideApp.with(_mActivity)
+                    .load(mUserBean.getHeadimg().getFileUrl())
+                    .placeholder(R.mipmap.ic_head)
+                    .error(R.mipmap.ic_head)
+                    .into(civSpaceHead);
+            GlideApp.with(_mActivity)
+                    .load(mUserBean.getHeadimg().getFileUrl())
+                    .placeholder(R.mipmap.ic_head)
+                    .error(R.mipmap.ic_head)
+                    .into(civSpaceToolbarHead);
+        }
+
+
+    }
 }

@@ -55,7 +55,7 @@ dependencies {
     //图片压缩 CompressHelper
     compile 'com.github.nanchen2251:CompressHelper:1.0.5'
     //bmob SDK
-    compile 'cn.bmob.android:bmob-sdk:3.5.5'
+    compile 'cn.bmob.android:bmob-sdk:3.5.9'
     compile 'cn.bmob.android:http-legacy:1.0'
     //RxTools
     compile 'com.github.vondear:RxTools:v1.7.6.4'

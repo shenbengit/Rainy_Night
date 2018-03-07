@@ -9,6 +9,7 @@ import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IMineView;
 import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 /**
@@ -47,42 +48,9 @@ public class MinePresenterImpl implements MinePresenter {
     @Override
     public void isLoginSuccess(String message, UserBean bean) {
         if (TextUtils.equals(ConstantUtil.OK, message)) {
-            if (bean.getHeadimg() != null) {
-                isNull(SharedPreferencesUtil.USER_HEAD_IMAGE, bean.getHeadimg().getFileUrl());
-            }
-            isNull(SharedPreferencesUtil.USER_NICK_NAME, bean.getNickName());
-            isNull(SharedPreferencesUtil.USER_SEX, bean.getSex());
-            isNull(SharedPreferencesUtil.USER_BIRTHDAY, bean.getBirthday());
-            isNull(SharedPreferencesUtil.USER_EMAIL, bean.getEmail());
+
         } else {
             view.showToast(message);
         }
-    }
-
-    /**
-     * 判断取到的用户信息是否为空
-     *
-     * @param key   存在SP的key
-     * @param value 值
-     */
-    private void isNull(String key, String value) {
-        if (TextUtils.isEmpty(value)) {
-            view.putSpValue(key, "");
-        } else {
-            view.putSpValue(key, value);
-        }
-    }
-
-    /**
-     * 加载图片
-     *
-     * @param imageUri 头像uri地址
-     */
-    private void loadImage(String imageUri) {
-        GlideApp.with(view.getFragmentActivity())
-                .load(imageUri)
-                .placeholder(R.mipmap.ic_head)
-                .error(R.mipmap.ic_head)
-                .into(view.getHeadImg());
     }
 }

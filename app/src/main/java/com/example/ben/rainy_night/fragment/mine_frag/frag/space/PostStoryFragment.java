@@ -229,27 +229,4 @@ public class PostStoryFragment extends BaseBackFragment<PostStoryPresenter> impl
     public void cancelDialog() {
         dialogCancel();
     }
-
-    /**
-     * 使用SharedPreferences存储信息
-     *
-     * @param keyName 键
-     * @param value   值
-     */
-    @Override
-    public void putSpValue(String keyName, Object value) {
-        putSharedPreferences(keyName, value);
-    }
-
-    /**
-     * 获取SP数据里指定key对应的value。如果key不存在，则返回默认值defValue。
-     *
-     * @param keyName      键
-     * @param defaultValue 默认值
-     * @return
-     */
-    @Override
-    public Object getSpValue(String keyName, Object defaultValue) {
-        return getSharedPreferences(keyName, defaultValue);
-    }
 }
