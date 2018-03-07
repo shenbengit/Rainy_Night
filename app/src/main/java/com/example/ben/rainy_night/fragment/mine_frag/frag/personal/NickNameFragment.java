@@ -14,6 +14,7 @@ import com.example.ben.rainy_night.fragment.mine_frag.presenter.NickNamePresente
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.NickNamePresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IPetNameView;
 import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.DialogLoadingUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -61,6 +62,8 @@ public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implem
         return fragment;
     }
 
+    private DialogLoadingUtil mDialog;
+
     /**
      * @return 返回界面layout
      */
@@ -87,6 +90,8 @@ public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implem
         petPetName.setText(getArguments().getString(ARG_NAME));
         baseToolbar.setTitle(getString(R.string.change_nickname));
         initToolbarNav(baseToolbar);
+
+        mDialog=new DialogLoadingUtil(_mActivity);
     }
 
     /**
@@ -118,6 +123,7 @@ public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implem
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
+        mDialog.cancel();
     }
 
     @Override
@@ -140,15 +146,7 @@ public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implem
      */
     @Override
     public void showDialog() {
-        dialogShow();
-    }
-
-    /**
-     * @return 网络加载Dialog是否正在显示
-     */
-    @Override
-    public boolean dialogIsShowing() {
-        return dialogIsShow();
+        mDialog.show();
     }
 
     /**
@@ -156,6 +154,6 @@ public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implem
      */
     @Override
     public void cancelDialog() {
-        dialogCancel();
+        mDialog.cancel();
     }
 }

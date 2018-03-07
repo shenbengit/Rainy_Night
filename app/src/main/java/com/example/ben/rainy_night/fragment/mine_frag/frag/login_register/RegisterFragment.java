@@ -15,6 +15,7 @@ import com.example.ben.rainy_night.fragment.mine_frag.presenter.RegisterPresente
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.RegisterPresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IRegisterView;
 import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.DialogLoadingUtil;
 import com.vondear.rxtools.view.RxCaptcha;
 
 import org.greenrobot.eventbus.EventBus;
@@ -86,9 +87,10 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
     private String pictureCode = "";
 
     public static RegisterFragment newInstance() {
-        RegisterFragment fragment = new RegisterFragment();
-        return fragment;
+        return new RegisterFragment();
     }
+
+    private DialogLoadingUtil mDialog;
 
     /**
      * 设置presenter
@@ -116,6 +118,9 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
         EventBus.getDefault().register(this);
         baseToolbar.setTitle(R.string.register);
         initToolbarNav(baseToolbar);
+
+        mDialog = new DialogLoadingUtil(_mActivity);
+
         getPictureCode();
     }
 
@@ -165,6 +170,7 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
         EventBus.getDefault().unregister(this);
         hideSoftInput();
         presenter.cancel();
+        mDialog.cancel();
     }
 
     /**
@@ -242,15 +248,7 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
      */
     @Override
     public void showDialog() {
-        dialogShow();
-    }
-
-    /**
-     * @return 网络加载Dialog是否正在显示
-     */
-    @Override
-    public boolean dialogIsShowing() {
-        return dialogIsShow();
+        mDialog.show();
     }
 
     /**
@@ -258,6 +256,6 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
      */
     @Override
     public void cancelDialog() {
-        dialogCancel();
+        mDialog.cancel();
     }
 }

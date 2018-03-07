@@ -1,6 +1,5 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag;
 
-import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,11 +14,13 @@ import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.personal.MyPersonalFragment;
+import com.example.ben.rainy_night.fragment.mine_frag.frag.setting.SettingFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.space.SpaceFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IMineView;
 import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -48,7 +49,6 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
 
     @OnClick({R.id.civ_mine_head, R.id.civ_mine_setting, R.id.rela_space})
     public void viewOnClick(View view) {
-        assert ((MainFragment) getParentFragment()) != null;
         switch (view.getId()) {
             case R.id.civ_mine_head:
                 if (mUserBean == null) {
@@ -58,7 +58,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
                 }
                 break;
             case R.id.civ_mine_setting:
-                ((MainFragment) getParentFragment()).startBrotherFragment(LoginFragment.newInstance());
+                ((MainFragment) getParentFragment()).startBrotherFragment(SettingFragment.newInstance());
                 break;
             case R.id.rela_space:
                 ((MainFragment) getParentFragment()).startBrotherFragment(SpaceFragment.newInstance());
@@ -68,15 +68,11 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
         }
     }
 
-    private String objectId = "";
     private String account = "";
     private String password = "";
 
     public static MineFragment newInstance() {
-        Bundle args = new Bundle();
-        MineFragment fragment = new MineFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new MineFragment();
     }
 
     @Override
@@ -127,6 +123,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
                 civMineHead.setImageResource(R.mipmap.ic_head);
             }
 
+        } else {
+            civMineHead.setImageResource(R.mipmap.ic_head);
+            tvMineName.setText(getString(R.string.login_register));
         }
     }
 
@@ -172,34 +171,11 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
     /**
      * 显示Toast
      *
-     * @param text
+     * @param text 文本
      */
     @Override
     public void showToast(String text) {
         toastShow(text);
     }
 
-    /**
-     * 显示网络加载Dialog
-     */
-    @Override
-    public void showDialog() {
-        dialogShow();
-    }
-
-    /**
-     * @return 网络加载Dialog是否正在显示
-     */
-    @Override
-    public boolean dialogIsShowing() {
-        return dialogIsShowing();
-    }
-
-    /**
-     * 关闭网络加载Dialog
-     */
-    @Override
-    public void cancelDialog() {
-        dialogCancel();
-    }
 }

@@ -107,25 +107,4 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     protected void toastShow(String text) {
         ToastUtil.show(_mActivity.getApplicationContext(), text);
     }
-
-    /**
-     * 显示网络加载Dialog
-     */
-    protected void dialogShow() {
-        DialogLoadingUtil.getInstance(_mActivity).show();
-    }
-
-    /**
-     * @return 网络加载Dialog是否正在显示
-     */
-    protected boolean dialogIsShow() {
-        return DialogLoadingUtil.getInstance(_mActivity).isShowing();
-    }
-
-    /**
-     * 关闭网络加载Dialog
-     */
-    protected void dialogCancel() {
-        DialogLoadingUtil.getInstance(_mActivity).cancel();
-    }
 }

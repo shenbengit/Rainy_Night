@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,6 +22,7 @@ import com.example.ben.rainy_night.fragment.mine_frag.presenter.MyPersonalPresen
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MyPersonalPresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IMyPersonalView;
 import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.DialogLoadingUtil;
 import com.vondear.rxtools.RxTimeTool;
 import com.vondear.rxtools.view.dialog.RxDialogChooseImage;
 
@@ -114,11 +114,10 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
     private String email = "";
 
     public static MyPersonalFragment newInstance() {
-        Bundle args = new Bundle();
-        MyPersonalFragment fragment = new MyPersonalFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new MyPersonalFragment();
     }
+
+    private DialogLoadingUtil mDialog;
 
     /**
      * 设置presenter
@@ -147,6 +146,8 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
 
         mToolBar.setTitle(getString(R.string.personal_information));
         initToolbarNav(mToolBar);
+
+        mDialog = new DialogLoadingUtil(_mActivity);
     }
 
     /**
@@ -176,8 +177,6 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
     @Override
     public void onEnterAnimationEnd(Bundle savedInstanceState) {
         super.onEnterAnimationEnd(savedInstanceState);
-        // 入场动画结束后执行  优化,防动画卡顿
-        _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         if (mUserBean != null) {
             if (mUserBean.getHeadimg() != null) {
                 GlideApp.with(_mActivity)
@@ -213,7 +212,7 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
-        _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        mDialog.cancel();
     }
 
     /**
@@ -363,15 +362,7 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
      */
     @Override
     public void showDialog() {
-        dialogShow();
-    }
-
-    /**
-     * @return 网络加载Dialog是否正在显示
-     */
-    @Override
-    public boolean dialogIsShowing() {
-        return dialogIsShow();
+        mDialog.show();
     }
 
     /**
@@ -379,6 +370,6 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
      */
     @Override
     public void cancelDialog() {
-        dialogCancel();
+        mDialog.cancel();
     }
 }

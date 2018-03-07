@@ -81,8 +81,7 @@ public class SpaceFragment extends BaseBackFragment {
     private int mScrollY = 0;
 
     public static SpaceFragment newInstance() {
-        SpaceFragment fragment = new SpaceFragment();
-        return fragment;
+        return new SpaceFragment();
     }
 
     /**
@@ -153,8 +152,7 @@ public class SpaceFragment extends BaseBackFragment {
      */
     @Override
     protected void initData() {
-        UserBean bean = BmobUser.getCurrentUser(UserBean.class);
-        LoggerUtil.e("SpaceFragment: " + bean.getObjectId());
+
     }
 
     /**

@@ -44,8 +44,9 @@ public class LoginPresenterImpl implements LoginPresenter {
     public void isLoginSuccess(String message, UserBean bean) {
         view.cancelDialog();
         if (TextUtils.equals(ConstantUtil.OK, message)) {
-            view.showToast("登陆成功");
             view.putSpValue(SharedPreferencesUtil.USER_PASSWORD,view.getEditPassWord().getText().toString().trim());
+            view.showToast("登陆成功");
+            view.getAct().onBackPressed();
         } else {
             view.showToast(message);
         }

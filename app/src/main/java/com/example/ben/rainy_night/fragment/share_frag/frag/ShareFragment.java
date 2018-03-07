@@ -34,10 +34,7 @@ public class ShareFragment extends BaseFragment{
     private int index = 10;
 
     public static ShareFragment newInstance() {
-        Bundle args = new Bundle();
-        ShareFragment fragment = new ShareFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new ShareFragment();
     }
 
     /**

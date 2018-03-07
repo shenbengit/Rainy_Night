@@ -52,7 +52,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DialogLoadingUtil.getInstance(this).cancel();
         RefWatcher refWatcher = App.getRefWatcher(this);
         refWatcher.watch(this);
     }
@@ -80,81 +79,5 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
      * 初始化数据
      */
     protected abstract void initData();
-
-    /**
-     * 根据传入的class进行activity的跳转
-     *
-     * @param cls 传入Class
-     */
-    protected void jumpActivity(Class<? extends AppCompatActivity> cls) {
-        if (cls != null) {
-            startActivity(new Intent(this, cls));
-        }
-    }
-
-    /**
-     * 根据传入的class进行activity的跳转  可传入参数
-     *
-     * @param cls    传入class
-     * @param bundle 传入参数
-     */
-    protected void jumpActivity(Class<? extends AppCompatActivity> cls, Bundle bundle) {
-        if (cls != null) {
-            Intent intent = new Intent(this, cls);
-            intent.putExtras(bundle);
-            startActivity(intent);
-        }
-    }
-
-    /**
-     * 显示Toast
-     *
-     * @param text
-     */
-    protected void toastShow(String text) {
-        ToastUtil.show(getApplicationContext(), text);
-    }
-
-    /**
-     * 显示网络加载Dialog
-     */
-    protected void dialogShow() {
-        DialogLoadingUtil.getInstance(this).show();
-    }
-
-    /**
-     * @return 网络加载Dialog是否正在显示
-     */
-    protected boolean dialogIsShow() {
-        return DialogLoadingUtil.getInstance(this).isShowing();
-    }
-
-    /**
-     * 关闭网络加载Dialog
-     */
-    protected void dialogCancel() {
-        DialogLoadingUtil.getInstance(this).cancel();
-    }
-
-    /**
-     * 使用SharedPreferences存储信息
-     *
-     * @param keyName 键
-     * @param value   值
-     */
-    protected void putSharedPreferences(String keyName, Object value) {
-        SharedPreferencesUtil.getInstance(getApplicationContext()).putValue(keyName, value);
-    }
-
-    /**
-     * 获取SP数据里指定key对应的value。如果key不存在，则返回默认值defValue。
-     *
-     * @param keyName      键
-     * @param defaultValue 默认值
-     * @return
-     */
-    protected Object getSharedPreferences(String keyName, Object defaultValue) {
-        return SharedPreferencesUtil.getInstance(getApplicationContext()).getValue(keyName, defaultValue);
-    }
 
 }

@@ -10,10 +10,7 @@ import com.example.ben.rainy_night.base.BaseFragment;
 public class NightFragment extends BaseFragment {
 
     public static NightFragment newInstance() {
-        Bundle args = new Bundle();
-        NightFragment fragment = new NightFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new NightFragment();
     }
 
     @Override

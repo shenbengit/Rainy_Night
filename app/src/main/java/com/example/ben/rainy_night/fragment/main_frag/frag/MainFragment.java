@@ -33,10 +33,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements IMainVi
     BottomBar mBottomBar;
 
     public static MainFragment newInstance() {
-        Bundle args = new Bundle();
-        MainFragment fragment = new MainFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new MainFragment();
     }
 
     @Override

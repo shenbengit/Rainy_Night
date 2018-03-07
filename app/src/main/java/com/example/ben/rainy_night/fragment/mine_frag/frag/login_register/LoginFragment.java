@@ -1,5 +1,6 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag.login_register;
 
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.example.ben.rainy_night.fragment.mine_frag.presenter.LoginPresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.LoginPresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.ILoginView;
 import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.DialogLoadingUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -63,10 +65,10 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
     }
 
     public static LoginFragment newInstance() {
-        LoginFragment fragment = new LoginFragment();
-        return fragment;
+        return new LoginFragment();
     }
 
+    private DialogLoadingUtil mDialog;
     /**
      * 设置presenter
      */
@@ -93,6 +95,8 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
         EventBus.getDefault().register(this);
         baseToolbar.setTitle(R.string.login);
         initToolbarNav(baseToolbar);
+
+        mDialog=new DialogLoadingUtil(_mActivity);
     }
 
     /**
@@ -125,6 +129,7 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
         hideSoftInput();
+        mDialog.cancel();
     }
 
     /**
@@ -151,7 +156,17 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
      */
     @Override
     public void putSpValue(String key, String value) {
-        SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).putValue(key,value);
+        SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).putValue(key, value);
+    }
+
+    /**
+     * 获取FragmentActivity
+     *
+     * @return
+     */
+    @Override
+    public FragmentActivity getAct() {
+        return _mActivity;
     }
 
     /**
@@ -169,15 +184,7 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
      */
     @Override
     public void showDialog() {
-        dialogShow();
-    }
-
-    /**
-     * @return 网络加载Dialog是否正在显示
-     */
-    @Override
-    public boolean dialogIsShowing() {
-        return dialogIsShow();
+        mDialog.show();
     }
 
     /**
@@ -185,6 +192,6 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
      */
     @Override
     public void cancelDialog() {
-        dialogCancel();
+        mDialog.cancel();
     }
 }

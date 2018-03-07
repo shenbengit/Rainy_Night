@@ -15,7 +15,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * @date 2018/1/19
  */
 
-public interface IMineView extends BaseView {
+public interface IMineView{
+    /**
+     * 显示Toast
+     *
+     * @param text 文本
+     */
+    void showToast(String text);
     /**
      *
      * @return FragmentActivity实例

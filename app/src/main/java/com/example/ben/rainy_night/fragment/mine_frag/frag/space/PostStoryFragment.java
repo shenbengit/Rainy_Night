@@ -19,6 +19,7 @@ import com.example.ben.rainy_night.fragment.event.OnPostEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.PostStoryPresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.PostStoryPresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IPostStoryView;
+import com.example.ben.rainy_night.util.DialogLoadingUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -59,9 +60,10 @@ public class PostStoryFragment extends BaseBackFragment<PostStoryPresenter> impl
     }
 
     public static PostStoryFragment newInstance() {
-        PostStoryFragment fragment = new PostStoryFragment();
-        return fragment;
+        return new PostStoryFragment();
     }
+
+    private DialogLoadingUtil mDialog;
 
     /**
      * @return 返回界面layout
@@ -84,6 +86,10 @@ public class PostStoryFragment extends BaseBackFragment<PostStoryPresenter> impl
      */
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
+
+        mDialog = new DialogLoadingUtil(_mActivity);
+
         postToolbar.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
         postToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +131,7 @@ public class PostStoryFragment extends BaseBackFragment<PostStoryPresenter> impl
      */
     @Override
     protected void initData() {
-        EventBus.getDefault().register(this);
+
     }
 
     /**
@@ -167,6 +173,7 @@ public class PostStoryFragment extends BaseBackFragment<PostStoryPresenter> impl
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+        mDialog.cancel();
         hideSoftInput();
     }
 
@@ -211,15 +218,7 @@ public class PostStoryFragment extends BaseBackFragment<PostStoryPresenter> impl
      */
     @Override
     public void showDialog() {
-        dialogShow();
-    }
-
-    /**
-     * @return 网络加载Dialog是否正在显示
-     */
-    @Override
-    public boolean dialogIsShowing() {
-        return dialogIsShow();
+        mDialog.show();
     }
 
     /**
@@ -227,6 +226,6 @@ public class PostStoryFragment extends BaseBackFragment<PostStoryPresenter> impl
      */
     @Override
     public void cancelDialog() {
-        dialogCancel();
+        mDialog.cancel();
     }
 }

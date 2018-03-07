@@ -1,10 +1,13 @@
 package com.example.ben.rainy_night.fragment.mine_frag.view;
 
+import android.support.v4.app.FragmentActivity;
+
 import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.base.BaseView;
 
+import me.yokeyword.fragmentation.ISupportFragment;
+
 /**
- *
  * @author Ben
  * @date 2018/1/22
  */
@@ -23,8 +26,15 @@ public interface ILoginView extends BaseView {
 
     /**
      * 保存到 SP
+     *
      * @param key
      * @param value
      */
-    void putSpValue(String key,String value);
+    void putSpValue(String key, String value);
+
+    /**
+     * 获取FragmentActivity
+     * @return
+     */
+    FragmentActivity getAct();
 }

@@ -18,11 +18,6 @@ public interface BaseView {
     void showDialog();
 
     /**
-     * @return 网络加载Dialog是否正在显示
-     */
-    boolean dialogIsShowing();
-
-    /**
      * 关闭网络加载Dialog
      */
     void cancelDialog();

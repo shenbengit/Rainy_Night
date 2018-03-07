@@ -48,9 +48,6 @@ public class PostStoryPresenterImpl implements PostStoryPresenter {
      */
     @Override
     public void initGridView() {
-
-        model.queryPost();
-
         mAdapter = new PostStoryAdapter(view.getFragAct());
         view.getGridView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

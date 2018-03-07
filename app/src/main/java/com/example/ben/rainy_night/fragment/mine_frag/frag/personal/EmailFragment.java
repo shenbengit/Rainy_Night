@@ -14,6 +14,7 @@ import com.example.ben.rainy_night.fragment.mine_frag.presenter.EmailPresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.EmailPresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.IEmailView;
 import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.DialogLoadingUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -57,6 +58,8 @@ public class EmailFragment extends BaseBackFragment<EmailPresenter> implements I
         return fragment;
     }
 
+    private DialogLoadingUtil mDialog;
+
     /**
      * @return 返回界面layout
      */
@@ -83,6 +86,9 @@ public class EmailFragment extends BaseBackFragment<EmailPresenter> implements I
         petEmail.setText(getArguments().getString(ARG_NAME));
         baseToolbar.setTitle("修改邮箱");
         initToolbarNav(baseToolbar);
+
+        mDialog=new DialogLoadingUtil(_mActivity);
+
     }
 
     /**
@@ -115,6 +121,7 @@ public class EmailFragment extends BaseBackFragment<EmailPresenter> implements I
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
         hideSoftInput();
+        mDialog.cancel();
     }
 
     /**
@@ -142,15 +149,7 @@ public class EmailFragment extends BaseBackFragment<EmailPresenter> implements I
      */
     @Override
     public void showDialog() {
-        dialogShow();
-    }
-
-    /**
-     * @return 网络加载Dialog是否正在显示
-     */
-    @Override
-    public boolean dialogIsShowing() {
-        return dialogIsShow();
+        mDialog.show();
     }
 
     /**
@@ -158,6 +157,6 @@ public class EmailFragment extends BaseBackFragment<EmailPresenter> implements I
      */
     @Override
     public void cancelDialog() {
-        dialogCancel();
+        mDialog.cancel();
     }
 }

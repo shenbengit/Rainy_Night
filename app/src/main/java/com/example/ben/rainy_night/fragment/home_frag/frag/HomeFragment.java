@@ -13,10 +13,7 @@ import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 public class HomeFragment extends BaseFragment {
 
     public static HomeFragment newInstance() {
-        Bundle args = new Bundle();
-        HomeFragment fragment = new HomeFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new HomeFragment();
     }
 
     /**
