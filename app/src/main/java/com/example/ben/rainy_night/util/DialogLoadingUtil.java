@@ -1,5 +1,6 @@
 package com.example.ben.rainy_night.util;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.vondear.rxtools.view.dialog.RxDialogLoading;
@@ -15,23 +16,12 @@ public class DialogLoadingUtil {
 
     private RxDialogLoading mDialogLoading = null;
 
-    private volatile static DialogLoadingUtil mUtil;
+    private  DialogLoadingUtil mUtil;
 
-    private DialogLoadingUtil(Context context) {
-        mDialogLoading = new RxDialogLoading(context);
+    public DialogLoadingUtil(Activity activity) {
+        mDialogLoading = new RxDialogLoading(activity);
         mDialogLoading.setCanceledOnTouchOutside(false);
         mDialogLoading.setCancelable(true);
-    }
-
-    public static DialogLoadingUtil getInstance(Context context) {
-        if (mUtil == null) {
-            synchronized (DialogLoadingUtil.class) {
-                if (mUtil == null) {
-                    mUtil = new DialogLoadingUtil(context);
-                }
-            }
-        }
-        return mUtil;
     }
 
     public void show() {
