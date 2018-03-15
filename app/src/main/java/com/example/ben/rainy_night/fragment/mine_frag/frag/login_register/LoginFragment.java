@@ -104,7 +104,7 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
      */
     @Override
     public void initData() {
-
+        petLoginPhone.setText(String.valueOf(SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(SharedPreferencesUtil.USER_PHONE,"")));
     }
 
     /**

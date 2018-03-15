@@ -29,7 +29,10 @@
     <string name="email">714081644@qq.com</string>
 
     <string name="setting">设置</string>
-    <string name="change_user_password">修改帐户密码</string>
+    <string name="change_user_password">修改密码</string>
+    <string name="user_oldPwd">原密码</string>
+    <string name="user_newPwd">新密码</string>
+    <string name="user_pwd_format">密码格式为8~16位数字、字母组合密码!</string>
     <string name="about_us">关于我们</string>
     <string name="clear_cache">清除缓存</string>
     <string name="login_out">退出登陆</string>

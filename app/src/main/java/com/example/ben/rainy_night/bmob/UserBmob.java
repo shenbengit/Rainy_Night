@@ -8,13 +8,10 @@ import com.example.ben.rainy_night.util.LoggerUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.List;
-
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FetchUserInfoListener;
-import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
@@ -49,27 +46,24 @@ public class UserBmob {
      * @param password
      */
     public void registerUser(final String request, final String phone, final String nickname, final String password) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                UserBean bean = new UserBean();
-                bean.setUsername(phone);
-                bean.setNickName(nickname);
-                bean.setSex("保密");
-                bean.setMobilePhoneNumber(phone);
-                bean.setPassword(password);
-                bean.signUp(new SaveListener<UserBean>() {
-                    @Override
-                    public void done(UserBean bean, BmobException e) {
-                        if (e == null) {
-                            EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
-                        } else {
-                            EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
-                        }
-
+        Runnable runnable = () -> {
+            UserBean bean = new UserBean();
+            bean.setUsername(phone);
+            bean.setNickName(nickname);
+            bean.setSex("保密");
+            bean.setMobilePhoneNumber(phone);
+            bean.setPassword(password);
+            bean.signUp(new SaveListener<UserBean>() {
+                @Override
+                public void done(UserBean bean, BmobException e) {
+                    if (e == null) {
+                        EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
+                    } else {
+                        EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
                     }
-                });
-            }
+
+                }
+            });
         };
         ThreadPoolManager.getInstance().execute(runnable);
     }
@@ -82,21 +76,16 @@ public class UserBmob {
      * @param password 密码
      */
     public void loginUser(final String request, final String account, final String password) {
-        Runnable runnable = new Runnable() {
+        Runnable runnable = () -> BmobUser.loginByAccount(account, password, new LogInListener<UserBean>() {
             @Override
-            public void run() {
-                BmobUser.loginByAccount(account, password, new LogInListener<UserBean>() {
-                    @Override
-                    public void done(UserBean bean, BmobException e) {
-                        if (e == null) {
-                            EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
-                        } else {
-                            EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
-                        }
-                    }
-                });
+            public void done(UserBean bean, BmobException e) {
+                if (e == null) {
+                    EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
+                } else {
+                    EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
+                }
             }
-        };
+        });
         ThreadPoolManager.getInstance().execute(runnable);
 
     }
@@ -133,21 +122,18 @@ public class UserBmob {
             return;
         }
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                BmobQuery<UserBean> query = new BmobQuery<UserBean>();
-                query.getObject(bean.getObjectId(), new QueryListener<UserBean>() {
-                    @Override
-                    public void done(UserBean bean, BmobException e) {
-                        if (e == null) {
-                            EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean));
-                        } else {
-                            EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
-                        }
+        Runnable runnable = () -> {
+            BmobQuery<UserBean> query = new BmobQuery<>();
+            query.getObject(bean.getObjectId(), new QueryListener<UserBean>() {
+                @Override
+                public void done(UserBean bean1, BmobException e) {
+                    if (e == null) {
+                        EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, bean1));
+                    } else {
+                        EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
                     }
-                });
-            }
+                }
+            });
         };
 
         ThreadPoolManager.getInstance().execute(runnable);
@@ -165,44 +151,38 @@ public class UserBmob {
             EventBus.getDefault().post(new OnUserEvent(request, "暂无用户登陆!", null));
             return;
         }
-        Runnable runnable = new Runnable() {
+        Runnable runnable = () -> userBean.update(bean.getObjectId(), new UpdateListener() {
             @Override
-            public void run() {
-                userBean.update(bean.getObjectId(), new UpdateListener() {
-                    @Override
-                    public void done(BmobException e) {
-                        if (e == null) {
-                            fetchUserInfo();
-                            EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, null));
-                        } else {
-                            EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
-                        }
-                    }
-                });
+            public void done(BmobException e) {
+                if (e == null) {
+                    fetchUserInfo();
+                    EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, null));
+                } else {
+                    EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
+                }
             }
-        };
+        });
         ThreadPoolManager.getInstance().execute(runnable);
     }
 
     /**
      * 用户更新账号密码
      *
-     * @param requset
+     * @param request
      * @param oldPwd
      * @param newPwd
      */
-    public void updateCurrentUserPassword(String requset, final String oldPwd, final String newPwd) {
-        Runnable runnable=new Runnable() {
+    public void updateCurrentUserPassword(String request, final String oldPwd, final String newPwd) {
+        Runnable runnable = () -> BmobUser.updateCurrentUserPassword(oldPwd, newPwd, new UpdateListener() {
             @Override
-            public void run() {
-                BmobUser.updateCurrentUserPassword(oldPwd, newPwd, new UpdateListener() {
-                    @Override
-                    public void done(BmobException e) {
-
-                    }
-                });
+            public void done(BmobException e) {
+                if (e == null) {
+                    EventBus.getDefault().post(new OnUserEvent(request, ConstantUtil.OK, null));
+                } else {
+                    EventBus.getDefault().post(new OnUserEvent(request, e.getMessage() + ",ErrorCode:" + e.getErrorCode(), null));
+                }
             }
-        };
+        });
         ThreadPoolManager.getInstance().execute(runnable);
     }
 

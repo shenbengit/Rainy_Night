@@ -29,18 +29,6 @@ public class SettingPresenterImpl implements SettingPresenter {
     }
 
     /**
-     * 修改密码
-     *
-     * @param requset 请求类型
-     * @param oldPwd  旧密码
-     * @param newPwd  新密码
-     */
-    @Override
-    public void updateCurrentUserPassword(String requset, String oldPwd, String newPwd) {
-
-    }
-
-    /**
      * 关于我们
      */
     @Override
@@ -62,25 +50,17 @@ public class SettingPresenterImpl implements SettingPresenter {
     @Override
     public void loginOut() {
         final RxDialogSureCancel dialog = new RxDialogSureCancel(view.getAct());
-        dialog.getSureView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BmobUser.logOut();
-                UserBean bean = BmobUser.getCurrentUser(UserBean.class);
-                if (bean == null) {
-                    dialog.cancel();
-                    view.showToast("用户已退出登陆");
-                    view.clearSP();
-                    view.startWithPopToFragment(LoginFragment.newInstance());
-                }
-            }
-        });
-        dialog.getCancelView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        dialog.getSureView().setOnClickListener(v -> {
+            BmobUser.logOut();
+            UserBean bean = BmobUser.getCurrentUser(UserBean.class);
+            if (bean == null) {
                 dialog.cancel();
+                view.showToast("用户已退出登陆");
+                view.clearSP();
+                view.startWithPopToFragment(LoginFragment.newInstance());
             }
         });
+        dialog.getCancelView().setOnClickListener(v -> dialog.cancel());
 
         dialog.show();
     }

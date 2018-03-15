@@ -56,4 +56,16 @@ public class UserModelImpl implements UserModel {
         UserBmob.getInstance().updateUser(request, userBean);
     }
 
+    /**
+     * 用户更新账号密码
+     *
+     * @param request
+     * @param oldPwd  旧密码
+     * @param newPwd  新密码
+     */
+    @Override
+    public void updateCurrentUserPassword(String request, String oldPwd, String newPwd) {
+        UserBmob.getInstance().updateCurrentUserPassword(request, oldPwd, newPwd);
+    }
+
 }

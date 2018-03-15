@@ -8,14 +8,6 @@ import com.example.ben.rainy_night.base.BasePresenter;
  */
 
 public interface SettingPresenter extends BasePresenter {
-    /**
-     * 修改密码
-     *
-     * @param requset 请求类型
-     * @param oldPwd  旧密码
-     * @param newPwd  新密码
-     */
-    void updateCurrentUserPassword(String requset, String oldPwd, String newPwd);
 
     /**
      * 关于我们

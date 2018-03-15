@@ -49,6 +49,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements IMineVi
 
     @OnClick({R.id.civ_mine_head, R.id.civ_mine_setting, R.id.rela_space})
     public void viewOnClick(View view) {
+        assert ((MainFragment) getParentFragment()) != null;
         switch (view.getId()) {
             case R.id.civ_mine_head:
                 if (mUserBean == null) {

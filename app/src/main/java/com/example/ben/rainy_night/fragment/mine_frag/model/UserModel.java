@@ -42,4 +42,13 @@ public interface UserModel {
      * @param userBean 用户实体
      */
     void updateUser(String request, UserBean userBean);
+
+    /**
+     * 用户更新账号密码
+     *
+     * @param request
+     * @param oldPwd  旧密码
+     * @param newPwd  新密码
+     */
+    void updateCurrentUserPassword(String request, final String oldPwd, final String newPwd);
 }

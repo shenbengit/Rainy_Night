@@ -26,10 +26,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
 
     private IRegisterView view;
     private UserModel model;
-
     private CountDownTimer mTimer;
-
-    private int phoneCode;
 
     public RegisterPresenterImpl(IRegisterView view) {
         this.view = view;
@@ -69,7 +66,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
             @Override
             public void done(Integer integer, BmobException e) {
                 if (e == null) {
-                    phoneCode = integer;
+
                 } else {
                     if (mTimer != null) {
                         mTimer.cancel();

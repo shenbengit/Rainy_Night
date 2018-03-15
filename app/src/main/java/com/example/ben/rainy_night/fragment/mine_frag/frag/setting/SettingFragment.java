@@ -1,7 +1,9 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag.setting;
 
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -12,6 +14,7 @@ import com.example.ben.rainy_night.base.BaseBackFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.SettingPresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.SettingPresenterImpl;
 import com.example.ben.rainy_night.fragment.mine_frag.view.ISettingView;
+import com.example.ben.rainy_night.util.ConstantUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 import butterknife.BindView;
@@ -45,7 +48,7 @@ public class SettingFragment extends BaseBackFragment<SettingPresenter> implemen
     public void viewOnClick(View view) {
         switch (view.getId()) {
             case R.id.rela_setting_change_password:
-                start(ChangePasswordFragment.newInstance());
+                startForResult(ChangePasswordFragment.newInstance(), ConstantUtil.REQUEST_POP);
                 break;
             case R.id.rela_setting_about_us:
 

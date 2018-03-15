@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import com.example.ben.rainy_night.App;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.bean.UserBean;
-import com.example.ben.rainy_night.util.DialogLoadingUtil;
-import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.example.ben.rainy_night.util.ToastUtil;
 import com.gyf.barlibrary.ImmersionBar;
 import com.squareup.leakcanary.RefWatcher;
@@ -67,8 +65,8 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
 
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         //fragment 销毁时ButterKnife解绑
         unbinder.unbind();
         if (mImmersionBar != null) {

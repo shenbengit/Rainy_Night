@@ -72,42 +72,37 @@ public class PostBmob {
      * @param user    帖子作者
      */
     public void publishPostWithPicture(final String[] paths, final String content, final UserBean user) {
-        Runnable runnable = new Runnable() {
+        Runnable runnable = () -> BmobFile.uploadBatch(paths, new UploadBatchListener() {
             @Override
-            public void run() {
-                BmobFile.uploadBatch(paths, new UploadBatchListener() {
-                    @Override
-                    public void onSuccess(List<BmobFile> list, List<String> list1) {
-                        if (list.size() == paths.length) {
-                            PostBean post = new PostBean();
-                            post.setContent(content);
-                            post.setPictures(list);
-                            post.setUser(user);
-                            post.save(new SaveListener<String>() {
-                                @Override
-                                public void done(String objectId, BmobException e) {
-                                    if (e == null) {
-                                        EventBus.getDefault().post(new OnPostEvent(ConstantUtil.OK));
-                                    } else {
-                                        EventBus.getDefault().post(new OnPostEvent(e.getMessage() + ",ErrorCode: " + e.getErrorCode()));
-                                    }
-                                }
-                            });
+            public void onSuccess(List<BmobFile> list, List<String> list1) {
+                if (list.size() == paths.length) {
+                    PostBean post = new PostBean();
+                    post.setContent(content);
+                    post.setPictures(list);
+                    post.setUser(user);
+                    post.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String objectId, BmobException e) {
+                            if (e == null) {
+                                EventBus.getDefault().post(new OnPostEvent(ConstantUtil.OK));
+                            } else {
+                                EventBus.getDefault().post(new OnPostEvent(e.getMessage() + ",ErrorCode: " + e.getErrorCode()));
+                            }
                         }
-                    }
-
-                    @Override
-                    public void onProgress(int i, int i1, int i2, int i3) {
-                        Log.e("上传图片", "onProgress: " + i3);
-                    }
-
-                    @Override
-                    public void onError(int i, String s) {
-                        EventBus.getDefault().post(new OnPostEvent("上传至服务器失败: " + s + ",ErrorCode: " + i));
-                    }
-                });
+                    });
+                }
             }
-        };
+
+            @Override
+            public void onProgress(int i, int i1, int i2, int i3) {
+                Log.e("上传图片", "onProgress: " + i3);
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                EventBus.getDefault().post(new OnPostEvent("上传至服务器失败: " + s + ",ErrorCode: " + i));
+            }
+        });
 
         ThreadPoolManager.getInstance().execute(runnable);
     }
@@ -116,10 +111,8 @@ public class PostBmob {
      * 查询帖子
      */
     public void queryPost() {
-        Runnable runable = new Runnable() {
-            @Override
-            public void run() {
-                BmobQuery<PostBean> query = new BmobQuery<PostBean>();
+        Runnable runable = () -> {
+            BmobQuery<PostBean> query = new BmobQuery<PostBean>();
 //        query.addWhereEqualTo("createdAt", "");
 //        query.setLimit(10);
 //        query.order("createdAt");
@@ -134,24 +127,23 @@ public class PostBmob {
 //                //表示缓存一天
 //                query.setMaxCacheAge(TimeUnit.DAYS.toMillis(1));
 
-                // 希望在查询帖子信息的同时也把发布人的信息查询出来
-                query.include("user");
-                query.findObjects(new FindListener<PostBean>() {
-                    @Override
-                    public void done(List<PostBean> list, BmobException e) {
-                        if (e == null) {
-                            LoggerUtil.e(list.toString());
-                            for (int i = 0; i < list.size(); i++) {
-                                UserBean bean = list.get(i).getUser();
-                                String nickname = bean.getNickName();
-                                String headimg = bean.getHeadimg().getUrl();
-                            }
-                        } else {
-
+            // 希望在查询帖子信息的同时也把发布人的信息查询出来
+            query.include("user");
+            query.findObjects(new FindListener<PostBean>() {
+                @Override
+                public void done(List<PostBean> list, BmobException e) {
+                    if (e == null) {
+                        LoggerUtil.e(list.toString());
+                        for (int i = 0; i < list.size(); i++) {
+                            UserBean bean = list.get(i).getUser();
+                            String nickname = bean.getNickName();
+                            String headimg = bean.getHeadimg().getUrl();
                         }
+                    } else {
+
                     }
-                });
-            }
+                }
+            });
         };
         ThreadPoolManager.getInstance().execute(runable);
 

@@ -10,6 +10,7 @@ package com.example.ben.rainy_night.util;
 public class ConstantUtil {
     public static final int REQUEST_IMAGE = 188;
     public static final int MAX_PICTURES = 6;
+    public static final int REQUEST_POP=99;
 
     public static final String OK = "ok";
     public static final String REQUEST_LOGIN = "login";
@@ -19,5 +20,9 @@ public class ConstantUtil {
     public static final String REQUEST_MINE = "mine";
     public static final String REQUEST_PERSONAL = "personal";
     public static final String REQUEST_NICK_NAME = "nick_name";
+    public static final String REQUEST_CHANGE_PASSWORD="change_password";
     public static final String ADD_PICTURE = "add_picture";
+
+    public static final String IS_POP="is_pop";
+    public static final String POP="pop";
 }

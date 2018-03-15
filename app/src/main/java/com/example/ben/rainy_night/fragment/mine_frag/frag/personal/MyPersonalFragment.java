@@ -251,12 +251,7 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
         Calendar startDate = Calendar.getInstance();
         startDate.set(1980, 0, 1);
         Calendar endDate = Calendar.getInstance();
-        mPickerDate = new TimePickerView.Builder(_mActivity, new TimePickerView.OnTimeSelectListener() {
-            @Override
-            public void onTimeSelect(Date date, View v) {
-                tvPersonBirth.setText(RxTimeTool.simpleDateFormat("yyyy年MM月dd日", date));
-            }
-        }).setType(new boolean[]{true, true, true, false, false, false})
+        mPickerDate = new TimePickerView.Builder(_mActivity, (date, v) -> tvPersonBirth.setText(RxTimeTool.simpleDateFormat("yyyy年MM月dd日", date))).setType(new boolean[]{true, true, true, false, false, false})
                 .setLabel("", "", "", "", "", "")
                 .isCenterLabel(true)
                 .setDividerColor(Color.DKGRAY)
@@ -274,16 +269,11 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
      * 选择性别
      */
     private void selectSex() {
-        lists_sex = new ArrayList<String>();
+        lists_sex = new ArrayList<>();
         lists_sex.add("男");
         lists_sex.add("女");
         lists_sex.add("保密");
-        mPickerSex = new OptionsPickerView.Builder(_mActivity, new OptionsPickerView.OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                tvPersonSex.setText(lists_sex.get(options1));
-            }
-        })
+        mPickerSex = new OptionsPickerView.Builder(_mActivity, (options1, options2, options3, v) -> tvPersonSex.setText(lists_sex.get(options1)))
                 .setDividerColor(Color.DKGRAY)
                 .setContentTextSize(21)
                 .setTextColorCenter(Color.DKGRAY)

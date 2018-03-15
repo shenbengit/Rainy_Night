@@ -71,8 +71,8 @@ public abstract class BaseBackFragment<T extends BasePresenter> extends SwipeBac
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         //fragment 销毁时ButterKnife解绑
         unbinder.unbind();
         if (mImmersionBar != null) {
@@ -121,12 +121,7 @@ public abstract class BaseBackFragment<T extends BasePresenter> extends SwipeBac
      */
     protected void initToolbarNav(Toolbar toolbar) {
         toolbar.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _mActivity.onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v1 -> _mActivity.onBackPressed());
     }
 
     /**
