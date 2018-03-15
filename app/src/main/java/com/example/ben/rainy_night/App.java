@@ -12,6 +12,7 @@ import com.orhanobut.logger.PrettyFormatStrategy;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.vondear.rxtools.RxTool;
+import com.zhouyou.http.EasyHttp;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
@@ -73,6 +74,8 @@ public class App extends Application {
             return;
         }
         refWatcher = LeakCanary.install(this);
+
+        EasyHttp.init(this);
     }
 
     public static RefWatcher getRefWatcher(Context context) {

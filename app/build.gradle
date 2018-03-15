@@ -94,6 +94,8 @@ dependencies {
     //检测内存泄漏工具
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    //基于RxJava2+Retrofit2实现简单易用的网络请求框架
+    compile 'com.zhouyou:rxeasyhttp:2.0.5'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.5.0'
