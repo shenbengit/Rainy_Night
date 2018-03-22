@@ -1,14 +1,10 @@
 package com.example.ben.rainy_night.fragment.mine_frag.presenter;
 
-import android.view.View;
-
-import com.example.ben.rainy_night.bean.UserBean;
+import com.example.ben.rainy_night.fragment.mine_frag.contract.SettingContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
-import com.example.ben.rainy_night.fragment.mine_frag.view.ISettingView;
-import com.example.ben.rainy_night.util.LoggerUtil;
-import com.example.ben.rainy_night.util.SharedPreferencesUtil;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 import com.vondear.rxtools.view.dialog.RxDialogSureCancel;
 
 import cn.bmob.v3.BmobUser;
@@ -18,12 +14,12 @@ import cn.bmob.v3.BmobUser;
  * @date 2018/3/7
  */
 
-public class SettingPresenterImpl implements SettingPresenter {
+public class SettingPresenterImpl implements SettingContract.Presenter {
 
-    private ISettingView view;
+    private SettingContract.View view;
     private UserModel model;
 
-    public SettingPresenterImpl(ISettingView view) {
+    public SettingPresenterImpl(SettingContract.View view) {
         this.view = view;
         model = new UserModelImpl();
     }
@@ -52,7 +48,7 @@ public class SettingPresenterImpl implements SettingPresenter {
         final RxDialogSureCancel dialog = new RxDialogSureCancel(view.getAct());
         dialog.getSureView().setOnClickListener(v -> {
             BmobUser.logOut();
-            UserBean bean = BmobUser.getCurrentUser(UserBean.class);
+            UserEntity bean = BmobUser.getCurrentUser(UserEntity.class);
             if (bean == null) {
                 dialog.cancel();
                 view.showToast("用户已退出登陆");

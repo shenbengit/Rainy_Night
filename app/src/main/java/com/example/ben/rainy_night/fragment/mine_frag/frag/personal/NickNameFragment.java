@@ -10,10 +10,9 @@ import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseBackFragment;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
-import com.example.ben.rainy_night.fragment.mine_frag.presenter.NickNamePresenter;
+import com.example.ben.rainy_night.fragment.mine_frag.contract.NickNameContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.NickNamePresenterImpl;
-import com.example.ben.rainy_night.fragment.mine_frag.view.IPetNameView;
-import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.DialogLoadingUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,7 +27,7 @@ import butterknife.OnClick;
  * @date 2018/1/26
  */
 
-public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implements IPetNameView {
+public class NickNameFragment extends BaseBackFragment<NickNameContract.Presenter> implements NickNameContract.View {
 
     private static final String ARG_NAME = "arg_name";
 
@@ -91,7 +90,7 @@ public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implem
         baseToolbar.setTitle(getString(R.string.change_nickname));
         initToolbarNav(baseToolbar);
 
-        mDialog=new DialogLoadingUtil(_mActivity);
+        mDialog = new DialogLoadingUtil(_mActivity);
     }
 
     /**
@@ -114,7 +113,7 @@ public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implem
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isChangeNickNameSuccess(OnUserEvent event) {
-        if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_NICK_NAME)){
+        if (TextUtils.equals(event.getRequest(), Constant.REQUEST_NICK_NAME)) {
             presenter.isChangeNickNameSuccess(event.getResult());
         }
     }
@@ -126,9 +125,14 @@ public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implem
         mDialog.cancel();
     }
 
+    /**
+     * 当前网络是否可用
+     *
+     * @return true: 可用 false: 不可用
+     */
     @Override
-    public PowerfulEditText getTextView() {
-        return petPetName;
+    public boolean isNetworkAvailable() {
+        return isNetAvailable();
     }
 
     /**
@@ -155,5 +159,15 @@ public class NickNameFragment extends BaseBackFragment<NickNamePresenter> implem
     @Override
     public void cancelDialog() {
         mDialog.cancel();
+    }
+
+    /**
+     * 获取PowerfulEditText
+     *
+     * @return
+     */
+    @Override
+    public PowerfulEditText getEditText() {
+        return petPetName;
     }
 }

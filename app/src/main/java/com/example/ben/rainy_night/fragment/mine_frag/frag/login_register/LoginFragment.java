@@ -12,10 +12,9 @@ import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseBackFragment;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
-import com.example.ben.rainy_night.fragment.mine_frag.presenter.LoginPresenter;
+import com.example.ben.rainy_night.fragment.mine_frag.contract.LoginContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.LoginPresenterImpl;
-import com.example.ben.rainy_night.fragment.mine_frag.view.ILoginView;
-import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.DialogLoadingUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
@@ -29,7 +28,7 @@ import butterknife.OnClick;
 /**
  * @author Ben
  */
-public class LoginFragment extends BaseBackFragment<LoginPresenter> implements ILoginView {
+public class LoginFragment extends BaseBackFragment<LoginContract.Presenter> implements LoginContract.View {
 
 
     @BindView(R.id.base_toolbar)
@@ -119,7 +118,7 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isLoginSuccess(OnUserEvent event) {
-        if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_LOGIN)) {
+        if (TextUtils.equals(event.getRequest(), Constant.REQUEST_LOGIN)) {
             presenter.isLoginSuccess(event.getResult(), event.getBean());
         }
     }
@@ -167,6 +166,16 @@ public class LoginFragment extends BaseBackFragment<LoginPresenter> implements I
     @Override
     public FragmentActivity getAct() {
         return _mActivity;
+    }
+
+    /**
+     * 当前网络是否可用
+     *
+     * @return true: 可用 false: 不可用
+     */
+    @Override
+    public boolean isNetworkAvailable() {
+        return isNetAvailable();
     }
 
     /**

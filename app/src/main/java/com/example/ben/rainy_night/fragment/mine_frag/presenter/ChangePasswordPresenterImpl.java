@@ -2,11 +2,10 @@ package com.example.ben.rainy_night.fragment.mine_frag.presenter;
 
 import android.text.TextUtils;
 
-import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
+import com.example.ben.rainy_night.fragment.mine_frag.contract.ChangePasswordContract;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
-import com.example.ben.rainy_night.fragment.mine_frag.view.IChangePasswordView;
-import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.Constant;
 import com.vondear.rxtools.RxRegTool;
 
 /**
@@ -14,12 +13,13 @@ import com.vondear.rxtools.RxRegTool;
  * @date 2018/3/12
  */
 
-public class ChangePasswordPresenterImpl implements ChangePasswordPresenter {
-    private IChangePasswordView view;
+public class ChangePasswordPresenterImpl implements ChangePasswordContract.Presenter {
+    private ChangePasswordContract.View view;
     private UserModel model;
-    public ChangePasswordPresenterImpl(IChangePasswordView view) {
+
+    public ChangePasswordPresenterImpl(ChangePasswordContract.View view) {
         this.view = view;
-        model=new UserModelImpl();
+        model = new UserModelImpl();
     }
 
     /**
@@ -32,8 +32,13 @@ public class ChangePasswordPresenterImpl implements ChangePasswordPresenter {
             view.showToast("请输入8~16位数字、字母组合密码!");
             return;
         }
+
+        if (!view.isNetworkAvailable()) {
+            view.showToast("当前网络不可用");
+            return;
+        }
         view.showDialog();
-        model.updateCurrentUserPassword(ConstantUtil.REQUEST_CHANGE_PASSWORD,view.getOldPwd(),view.getNewPwd());
+        model.updateCurrentUserPassword(Constant.REQUEST_CHANGE_PASSWORD, view.getOldPwd(), view.getNewPwd());
     }
 
     /**
@@ -44,10 +49,10 @@ public class ChangePasswordPresenterImpl implements ChangePasswordPresenter {
     @Override
     public void isUpdateCurrentUserPasswordSuccess(String message) {
         view.cancelDialog();
-        if (TextUtils.equals(ConstantUtil.OK,message)){
+        if (TextUtils.equals(Constant.OK, message)) {
             view.getPreFragmentPopAndStart();
             view.showToast("密码修改成功,请重新登录!");
-        }else {
+        } else {
             view.showToast(message);
         }
     }

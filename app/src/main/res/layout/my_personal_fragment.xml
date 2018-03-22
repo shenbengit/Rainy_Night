@@ -18,7 +18,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="3dp"
-        android:background="@color/tab_unselect"></View>
+        android:background="@color/tab_unselect" />
 
     <RelativeLayout
         android:id="@+id/rela_person_head"
@@ -35,20 +35,19 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/image1" />
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/image1" />
 
         <ImageView
             android:id="@+id/image1"
             style="@style/Img_Go"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="15dp" />
     </RelativeLayout>
 
-    <View style="@style/ViewStyle"></View>
+    <View style="@style/ViewStyle" />
 
     <RelativeLayout
         android:id="@+id/rela_person_petName"
@@ -77,7 +76,7 @@
             android:layout_marginTop="15dp" />
     </RelativeLayout>
 
-    <View style="@style/ViewStyle"></View>
+    <View style="@style/ViewStyle" />
 
     <RelativeLayout
         android:id="@+id/rela_person_sex"

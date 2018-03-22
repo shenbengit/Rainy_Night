@@ -2,9 +2,10 @@ package com.example.ben.rainy_night;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 
+import com.example.ben.rainy_night.http.rxhttp.factory.RetrofitFactory;
+import com.example.ben.rainy_night.util.LoggerUtil;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
@@ -12,12 +13,10 @@ import com.orhanobut.logger.PrettyFormatStrategy;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.vondear.rxtools.RxTool;
-import com.zhouyou.http.EasyHttp;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
 import me.yokeyword.fragmentation.Fragmentation;
-import me.yokeyword.fragmentation.helper.ExceptionHandler;
 
 /**
  * @author Ben
@@ -40,11 +39,8 @@ public class App extends Application {
                 .debug(true)
                 // 生产环境时，捕获上述异常（避免crash），会捕获
                 // 建议在回调处上传下面异常到崩溃监控服务器
-                .handleException(new ExceptionHandler() {
-                    @Override
-                    public void onException(@NonNull Exception e) {
-
-                    }
+                .handleException(e -> {
+                    LoggerUtil.e("Fragmentation异常: " + e.getMessage());
                 })
                 .install();
         //Bmob初始化
@@ -75,7 +71,7 @@ public class App extends Application {
         }
         refWatcher = LeakCanary.install(this);
 
-        EasyHttp.init(this);
+        RetrofitFactory.initOkHttpClient();
     }
 
     public static RefWatcher getRefWatcher(Context context) {

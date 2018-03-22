@@ -11,11 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/colorPrimary" />
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
 
-    </android.support.v7.widget.Toolbar>
+    <include layout="@layout/toolbar" />
+
+    <Button
+        android:id="@+id/btn_home_sleep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="伴我睡" />
 </LinearLayout>

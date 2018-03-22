@@ -15,13 +15,12 @@ import com.bigkoo.pickerview.TimePickerView;
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseBackFragment;
-import com.example.ben.rainy_night.bean.UserBean;
 import com.example.ben.rainy_night.fragment.event.OnActivityResultEvent;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
+import com.example.ben.rainy_night.fragment.mine_frag.contract.MyPersonalContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MyPersonalPresentImpl;
-import com.example.ben.rainy_night.fragment.mine_frag.presenter.MyPersonalPresenter;
-import com.example.ben.rainy_night.fragment.mine_frag.view.IMyPersonalView;
-import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.DialogLoadingUtil;
 import com.vondear.rxtools.RxTimeTool;
 import com.vondear.rxtools.view.dialog.RxDialogChooseImage;
@@ -32,7 +31,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,7 +43,7 @@ import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TIT
 /**
  * @author Ben
  */
-public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> implements IMyPersonalView {
+public class MyPersonalFragment extends BaseBackFragment<MyPersonalContract.Presenter> implements MyPersonalContract.View {
 
     @BindView(R.id.base_toolbar)
     Toolbar mToolBar;
@@ -177,10 +175,10 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
     @Override
     public void onEnterAnimationEnd(Bundle savedInstanceState) {
         super.onEnterAnimationEnd(savedInstanceState);
-        if (mUserBean != null) {
-            if (mUserBean.getHeadimg() != null) {
+        if (mUserEntity != null) {
+            if (mUserEntity.getHeadimg() != null) {
                 GlideApp.with(_mActivity)
-                        .load(mUserBean.getHeadimg().getFileUrl())
+                        .load(mUserEntity.getHeadimg().getFileUrl())
                         .placeholder(R.mipmap.img_head)
                         .error(R.mipmap.img_head)
                         .into(ivPersonHead);
@@ -194,16 +192,16 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        mUserBean = BmobUser.getCurrentUser(UserBean.class);
-        if (mUserBean == null) {
+        mUserEntity = BmobUser.getCurrentUser(UserEntity.class);
+        if (mUserEntity == null) {
             return;
         }
-        nickname = mUserBean.getNickName();
-        email = mUserBean.getEmail();
-        tvPersonPetName.setText(mUserBean.getNickName());
-        tvPersonSex.setText(mUserBean.getSex());
-        tvPersonBirth.setText(mUserBean.getBirthday());
-        tvPersonEmail.setText(mUserBean.getEmail());
+        nickname = mUserEntity.getNickName();
+        email = mUserEntity.getEmail();
+        tvPersonPetName.setText(mUserEntity.getNickName());
+        tvPersonSex.setText(mUserEntity.getSex());
+        tvPersonBirth.setText(mUserEntity.getBirthday());
+        tvPersonEmail.setText(mUserEntity.getEmail());
     }
 
     @Override
@@ -227,7 +225,7 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void isUpdateUserSuccess(OnUserEvent event) {
-        if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_PERSONAL)) {
+        if (TextUtils.equals(event.getRequest(), Constant.REQUEST_PERSONAL)) {
             presenter.isUpdateUserSuccess(event.getResult());
         }
     }
@@ -306,14 +304,6 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
     }
 
     /**
-     * @return username控件
-     */
-    @Override
-    public TextView getTextUser() {
-        return tvPersonPetName;
-    }
-
-    /**
      * @return sex控件
      */
     @Override
@@ -330,11 +320,13 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalPresenter> im
     }
 
     /**
-     * @return email控件
+     * 当前网络是否可用
+     *
+     * @return true: 可用 false: 不可用
      */
     @Override
-    public TextView getTextEmail() {
-        return tvPersonEmail;
+    public boolean isNetworkAvailable() {
+        return isNetAvailable();
     }
 
     /**

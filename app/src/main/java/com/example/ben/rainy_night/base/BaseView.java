@@ -8,7 +8,16 @@ package com.example.ben.rainy_night.base;
 public interface BaseView {
 
     /**
+     * 当前网络是否可用
+     *
+     * @return true: 可用 false: 不可用
+     */
+    boolean isNetworkAvailable();
+
+    /**
      * 显示Toast
+     *
+     * @param text
      */
     void showToast(String text);
 

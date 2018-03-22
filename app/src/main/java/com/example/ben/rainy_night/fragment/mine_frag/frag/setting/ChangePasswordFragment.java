@@ -1,6 +1,5 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag.setting;
 
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,11 +9,10 @@ import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseBackFragment;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
+import com.example.ben.rainy_night.fragment.mine_frag.contract.ChangePasswordContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
-import com.example.ben.rainy_night.fragment.mine_frag.presenter.ChangePasswordPresenter;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.ChangePasswordPresenterImpl;
-import com.example.ben.rainy_night.fragment.mine_frag.view.IChangePasswordView;
-import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.DialogLoadingUtil;
 import com.example.ben.rainy_night.util.LoggerUtil;
 
@@ -24,14 +22,13 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
  * @author Ben
  * @date 2018/3/7
  */
 
-public class ChangePasswordFragment extends BaseBackFragment<ChangePasswordPresenter> implements IChangePasswordView {
+public class ChangePasswordFragment extends BaseBackFragment<ChangePasswordContract.Presenter> implements ChangePasswordContract.View {
 
     @BindView(R.id.base_toolbar)
     Toolbar baseToolbar;
@@ -112,7 +109,7 @@ public class ChangePasswordFragment extends BaseBackFragment<ChangePasswordPrese
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isUpdatePasswordSuccess(OnUserEvent event) {
-        if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_CHANGE_PASSWORD)) {
+        if (TextUtils.equals(event.getRequest(), Constant.REQUEST_CHANGE_PASSWORD)) {
             presenter.isUpdateCurrentUserPasswordSuccess(event.getResult());
         }
     }
@@ -151,6 +148,16 @@ public class ChangePasswordFragment extends BaseBackFragment<ChangePasswordPrese
     @Override
     public void getPreFragmentPopAndStart() {
         popTo(SettingFragment.class, true, () -> start(LoginFragment.newInstance()));
+    }
+
+    /**
+     * 当前网络是否可用
+     *
+     * @return true: 可用 false: 不可用
+     */
+    @Override
+    public boolean isNetworkAvailable() {
+        return isNetAvailable();
     }
 
     /**

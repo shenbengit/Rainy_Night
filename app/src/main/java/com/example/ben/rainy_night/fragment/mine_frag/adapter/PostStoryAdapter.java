@@ -1,6 +1,7 @@
 package com.example.ben.rainy_night.fragment.mine_frag.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,8 @@ import android.widget.ImageView;
 
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.Constant;
+import com.example.ben.rainy_night.widget.PostStoryGridView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ import java.util.List;
 public class PostStoryAdapter extends BaseAdapter {
 
     private Context mContext;
-    private List<String> mList=new ArrayList<String>();
+    private List<String> mList = new ArrayList<>();
     private LayoutInflater inflater;
 
     public PostStoryAdapter(Context mContext) {
@@ -32,14 +34,15 @@ public class PostStoryAdapter extends BaseAdapter {
     public void setData(List<String> list) {
         mList.clear();
         mList.addAll(list);
+        Log.e("发表帖子", "setData: " + mList.size());
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
         //return mList.size() + 1;//因为最后多了一个添加图片的ImageView
-        int count = mList == null ? 1 : mList.size() + 1;
-        if (count > ConstantUtil.MAX_PICTURES) {
+        int count = mList.size() + 1;
+        if (count > Constant.MAX_PICTURES) {
             return mList.size();
         } else {
             return count;
@@ -56,20 +59,40 @@ public class PostStoryAdapter extends BaseAdapter {
         return position;
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = inflater.inflate(R.layout.item_post_story, parent, false);
-        ImageView iv = (ImageView) convertView.findViewById(R.id.iv_item_post_story);
+        if (convertView == null) {
+            Log.e("发表帖子", "getView: null" );
+            convertView = inflater.inflate(R.layout.item_post_story, parent, false);
+            convertView.setTag(new ViewHolder(convertView));
+        }
+        if(((PostStoryGridView) parent).isOnMeasure){
+            //如果是onMeasure调用的就立即返回
+            return convertView;
+        }
+        initializeViews((ViewHolder) convertView.getTag(), position);
+        return convertView;
+    }
+
+    private void initializeViews(ViewHolder holder, int position) {
+        Log.e("发表帖子", "initializeViews: " + position);
         if (position < mList.size()) {
             //代表+号之前的需要正常显示图片
             //图片路径
-            String picUrl = mList.get(position);
-            GlideApp.with(mContext).load(picUrl).error(R.mipmap.img_picture_load_failed).into(iv);
+            GlideApp.with(mContext).load(mList.get(position)).error(R.mipmap.img_picture_load_failed)
+                    .into(holder.ivPostStory);
         } else {
             //最后一个显示加号图片
-            iv.setImageResource(R.mipmap.img_add_picture);
+            Log.e("发表帖子", "initializeViews: 显示加号");
+            holder.ivPostStory.setImageResource(R.mipmap.img_add_picture);
         }
-        return convertView;
+    }
+
+    private class ViewHolder {
+        private ImageView ivPostStory;
+
+        ViewHolder(View view) {
+            ivPostStory = view.findViewById(R.id.iv_item_post_story);
+        }
     }
 }

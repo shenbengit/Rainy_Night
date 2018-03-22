@@ -10,13 +10,12 @@ import android.util.Log;
 
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.bean.UserBean;
+import com.example.ben.rainy_night.fragment.mine_frag.contract.MyPersonalContract;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
-import com.example.ben.rainy_night.fragment.mine_frag.view.IMyPersonalView;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 import com.example.ben.rainy_night.util.CompressPictureUtil;
-import com.example.ben.rainy_night.util.ConstantUtil;
-import com.example.ben.rainy_night.util.SharedPreferencesUtil;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.ToastUtil;
 import com.vondear.rxtools.RxPhotoTool;
 import com.yalantis.ucrop.UCrop;
@@ -36,14 +35,14 @@ import cn.bmob.v3.listener.UploadFileListener;
  * @date 2018/1/8
  */
 
-public class MyPersonalPresentImpl implements MyPersonalPresenter {
+public class MyPersonalPresentImpl implements MyPersonalContract.Presenter {
 
-    private IMyPersonalView view;
+    private MyPersonalContract.View view;
     private UserModel model;
     private Uri mUri = null;
     private File mFile = null;
 
-    public MyPersonalPresentImpl(IMyPersonalView view) {
+    public MyPersonalPresentImpl(MyPersonalContract.View view) {
         this.view = view;
         model = new UserModelImpl();
     }
@@ -101,6 +100,11 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
      */
     @Override
     public void updateUser() {
+        if (!view.isNetworkAvailable()) {
+            view.showToast("当前网络不可用");
+            return;
+        }
+
         view.showDialog();
         if (mFile != null) {
             updateIncludeImage();
@@ -117,7 +121,7 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
     @Override
     public void isUpdateUserSuccess(String message) {
         view.cancelDialog();
-        if (TextUtils.equals(ConstantUtil.OK, message)) {
+        if (TextUtils.equals(Constant.OK, message)) {
             view.showToast("您的信息更新成功");
         } else {
             view.showToast(message);
@@ -200,12 +204,12 @@ public class MyPersonalPresentImpl implements MyPersonalPresenter {
     }
 
     private void updateInformation(BmobFile file) {
-        UserBean bean = new UserBean();
+        UserEntity entity = new UserEntity();
         if (file != null) {
-            bean.setHeadimg(file);
+            entity.setHeadimg(file);
         }
-        bean.setSex(view.getTextSex().getText().toString().trim());
-        bean.setBirthday(view.getTextBirthday().getText().toString().trim());
-        model.updateUser(ConstantUtil.REQUEST_PERSONAL, bean);
+        entity.setSex(view.getTextSex().getText().toString().trim());
+        entity.setBirthday(view.getTextBirthday().getText().toString().trim());
+        model.updateUser(Constant.REQUEST_PERSONAL, entity);
     }
 }

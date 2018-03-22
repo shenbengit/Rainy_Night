@@ -1,4 +1,4 @@
-package com.example.ben.rainy_night.bean;
+package com.example.ben.rainy_night.http.bmob.entity;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -10,7 +10,7 @@ import cn.bmob.v3.datatype.BmobFile;
  * @date 2018/1/15
  */
 
-public class UserBean extends BmobUser {
+public class UserEntity extends BmobUser {
 
     /**
      * 设置昵称
@@ -29,7 +29,7 @@ public class UserBean extends BmobUser {
      */
     private BmobFile headimg;
 
-    public UserBean() {
+    public UserEntity() {
 
     }
 
@@ -67,7 +67,7 @@ public class UserBean extends BmobUser {
 
     @Override
     public String toString() {
-        return "UserBean{" +
+        return "UserEntity{" +
                 "nickName='" + nickName + '\'' +
                 ", sex='" + sex + '\'' +
                 ", birthday='" + birthday + '\'' +

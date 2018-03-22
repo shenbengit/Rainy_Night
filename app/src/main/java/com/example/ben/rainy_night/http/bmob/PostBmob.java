@@ -1,12 +1,12 @@
-package com.example.ben.rainy_night.bmob;
+package com.example.ben.rainy_night.http.bmob;
 
 import android.util.Log;
 
-import com.example.ben.rainy_night.bean.PostBean;
-import com.example.ben.rainy_night.bean.UserBean;
+import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 import com.example.ben.rainy_night.fragment.event.OnPostEvent;
 import com.example.ben.rainy_night.manager.ThreadPoolManager;
-import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -47,15 +47,15 @@ public class PostBmob {
      * @param content 帖子内容
      * @param user    帖子作者
      */
-    public void publishPost(String content, UserBean user) {
-        PostBean post = new PostBean();
+    public void publishPost(String content, UserEntity user) {
+        PostEntity post = new PostEntity();
         post.setContent(content);
         post.setUser(user);
         post.save(new SaveListener<String>() {
             @Override
             public void done(String objectId, BmobException e) {
                 if (e == null) {
-                    EventBus.getDefault().post(new OnPostEvent(ConstantUtil.OK));
+                    EventBus.getDefault().post(new OnPostEvent(Constant.OK));
                 } else {
                     EventBus.getDefault().post(new OnPostEvent(e.getMessage() + ",ErrorCode: " + e.getErrorCode()));
                 }
@@ -71,12 +71,12 @@ public class PostBmob {
      * @param content 帖子内容
      * @param user    帖子作者
      */
-    public void publishPostWithPicture(final String[] paths, final String content, final UserBean user) {
+    public void publishPostWithPicture(final String[] paths, final String content, final UserEntity user) {
         Runnable runnable = () -> BmobFile.uploadBatch(paths, new UploadBatchListener() {
             @Override
             public void onSuccess(List<BmobFile> list, List<String> list1) {
                 if (list.size() == paths.length) {
-                    PostBean post = new PostBean();
+                    PostEntity post = new PostEntity();
                     post.setContent(content);
                     post.setPictures(list);
                     post.setUser(user);
@@ -84,7 +84,7 @@ public class PostBmob {
                         @Override
                         public void done(String objectId, BmobException e) {
                             if (e == null) {
-                                EventBus.getDefault().post(new OnPostEvent(ConstantUtil.OK));
+                                EventBus.getDefault().post(new OnPostEvent(Constant.OK));
                             } else {
                                 EventBus.getDefault().post(new OnPostEvent(e.getMessage() + ",ErrorCode: " + e.getErrorCode()));
                             }
@@ -112,11 +112,11 @@ public class PostBmob {
      */
     public void queryPost() {
         Runnable runable = () -> {
-            BmobQuery<PostBean> query = new BmobQuery<PostBean>();
+            BmobQuery<PostEntity> query = new BmobQuery<PostEntity>();
 //        query.addWhereEqualTo("createdAt", "");
 //        query.setLimit(10);
 //        query.order("createdAt");
-//                boolean isCache = query.hasCachedResult(PostBean.class);
+//                boolean isCache = query.hasCachedResult(PostEntity.class);
 //                if (isCache) {
 //                    //先从缓存读取，如果没有再从网络获取
 //                    query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
@@ -129,13 +129,13 @@ public class PostBmob {
 
             // 希望在查询帖子信息的同时也把发布人的信息查询出来
             query.include("user");
-            query.findObjects(new FindListener<PostBean>() {
+            query.findObjects(new FindListener<PostEntity>() {
                 @Override
-                public void done(List<PostBean> list, BmobException e) {
+                public void done(List<PostEntity> list, BmobException e) {
                     if (e == null) {
                         LoggerUtil.e(list.toString());
                         for (int i = 0; i < list.size(); i++) {
-                            UserBean bean = list.get(i).getUser();
+                            UserEntity bean = list.get(i).getUser();
                             String nickname = bean.getNickName();
                             String headimg = bean.getHeadimg().getUrl();
                         }

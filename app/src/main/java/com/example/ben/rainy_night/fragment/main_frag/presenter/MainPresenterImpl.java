@@ -1,9 +1,8 @@
 package com.example.ben.rainy_night.fragment.main_frag.presenter;
 
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.base.BasePresenter;
 import com.example.ben.rainy_night.fragment.home_frag.frag.HomeFragment;
-import com.example.ben.rainy_night.fragment.main_frag.view.IMainView;
+import com.example.ben.rainy_night.fragment.main_frag.contract.MainContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.MineFragment;
 import com.example.ben.rainy_night.fragment.night_frag.frag.NightFragment;
 import com.example.ben.rainy_night.fragment.share_frag.frag.ShareFragment;
@@ -15,8 +14,8 @@ import me.yokeyword.fragmentation.SupportFragment;
  * @date 2018/1/8
  */
 
-public class MainPresenterImpl implements MainPresenter {
-    private IMainView view;
+public class MainPresenterImpl implements MainContract.Presenter {
+    private MainContract.View view;
 
     private static final int FIRST = 0;
     private static final int SECOND = 1;
@@ -25,7 +24,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     private SupportFragment[] mFragments = new SupportFragment[4];
 
-    public MainPresenterImpl(IMainView view) {
+    public MainPresenterImpl(MainContract.View view) {
         this.view = view;
     }
 
@@ -41,10 +40,10 @@ public class MainPresenterImpl implements MainPresenter {
                     mFragments[FIRST], mFragments[SECOND],
                     mFragments[THIRD], mFragments[FOURTH]);
         } else {
-            mFragments[FIRST]=view.findChildFrag(HomeFragment.class);
-            mFragments[SECOND]=view.findChildFrag(NightFragment.class);
-            mFragments[THIRD]=view.findChildFrag(ShareFragment.class);
-            mFragments[FOURTH]=view.findChildFrag(MineFragment.class);
+            mFragments[FIRST] = view.findChildFrag(HomeFragment.class);
+            mFragments[SECOND] = view.findChildFrag(NightFragment.class);
+            mFragments[THIRD] = view.findChildFrag(ShareFragment.class);
+            mFragments[FOURTH] = view.findChildFrag(MineFragment.class);
         }
     }
 

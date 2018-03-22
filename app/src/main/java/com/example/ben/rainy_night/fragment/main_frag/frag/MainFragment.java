@@ -1,7 +1,6 @@
 package com.example.ben.rainy_night.fragment.main_frag.frag;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -9,12 +8,8 @@ import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.customer.BottomBar;
 import com.example.ben.rainy_night.customer.BottomBarTab;
-import com.example.ben.rainy_night.fragment.event.TabSelectedEvent;
-import com.example.ben.rainy_night.fragment.main_frag.presenter.MainPresenter;
+import com.example.ben.rainy_night.fragment.main_frag.contract.MainContract;
 import com.example.ben.rainy_night.fragment.main_frag.presenter.MainPresenterImpl;
-import com.example.ben.rainy_night.fragment.main_frag.view.IMainView;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import me.yokeyword.fragmentation.ISupportFragment;
@@ -23,7 +18,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 /**
  * @author Ben
  */
-public class MainFragment extends BaseFragment<MainPresenter> implements IMainView {
+public class MainFragment extends BaseFragment<MainContract.Presenter> implements MainContract.View {
 
     @BindView(R.id.container_activity_main)
     FrameLayout containerActivityMain;
@@ -88,8 +83,8 @@ public class MainFragment extends BaseFragment<MainPresenter> implements IMainVi
      * start other BrotherFragment
      * 回掉传值
      */
-    public void startBrotherFragmentForResult(SupportFragment targetFragment,int requestCode ) {
-        startForResult(targetFragment,requestCode);
+    public void startBrotherFragmentForResult(SupportFragment targetFragment, int requestCode) {
+        startForResult(targetFragment, requestCode);
     }
 
     @Override
@@ -114,6 +109,7 @@ public class MainFragment extends BaseFragment<MainPresenter> implements IMainVi
 
     /**
      * 按返回键返回主页面，不退出程序
+     *
      * @return
      */
     @Override

@@ -2,12 +2,11 @@ package com.example.ben.rainy_night.fragment.mine_frag.presenter;
 
 import android.text.TextUtils;
 
-import com.example.ben.rainy_night.bean.UserBean;
+import com.example.ben.rainy_night.fragment.mine_frag.contract.EmailContract;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
-import com.example.ben.rainy_night.fragment.mine_frag.view.IEmailView;
-import com.example.ben.rainy_night.util.ConstantUtil;
-import com.example.ben.rainy_night.util.SharedPreferencesUtil;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
+import com.example.ben.rainy_night.util.Constant;
 import com.vondear.rxtools.RxRegTool;
 
 /**
@@ -15,12 +14,12 @@ import com.vondear.rxtools.RxRegTool;
  * @date 2018/2/3
  */
 
-public class EmailPresenterImpl implements EmailPresenter {
-    private IEmailView view;
+public class EmailPresenterImpl implements EmailContract.Presenter {
+    private EmailContract.View view;
     private UserModel model;
     private String email;
 
-    public EmailPresenterImpl(IEmailView view) {
+    public EmailPresenterImpl(EmailContract.View view) {
         this.view = view;
         model = new UserModelImpl();
     }
@@ -39,10 +38,16 @@ public class EmailPresenterImpl implements EmailPresenter {
             view.showToast("请输入正确的邮箱地址!");
             return;
         }
+
+        if (!view.isNetworkAvailable()) {
+            view.showToast("当前网络不可用");
+            return;
+        }
+
         view.showDialog();
-        UserBean bean = new UserBean();
-        bean.setEmail(email);
-        model.updateUser(ConstantUtil.REQUEST_EMAIL,bean);
+        UserEntity entity = new UserEntity();
+        entity.setEmail(email);
+        model.updateUser(Constant.REQUEST_EMAIL, entity);
     }
 
     /**
@@ -53,7 +58,7 @@ public class EmailPresenterImpl implements EmailPresenter {
     @Override
     public void isChangeEmailSuccess(String message) {
         view.cancelDialog();
-        if (TextUtils.equals(ConstantUtil.OK, message)) {
+        if (TextUtils.equals(Constant.OK, message)) {
             view.showToast("邮箱地址更新成功");
         } else {
             view.showToast(message);

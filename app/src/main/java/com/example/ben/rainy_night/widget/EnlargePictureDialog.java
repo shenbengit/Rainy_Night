@@ -1,4 +1,4 @@
-package com.example.ben.rainy_night.view;
+package com.example.ben.rainy_night.widget;
 
 import android.content.Context;
 import android.content.DialogInterface;

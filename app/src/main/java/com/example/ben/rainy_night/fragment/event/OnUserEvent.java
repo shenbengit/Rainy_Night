@@ -1,6 +1,6 @@
 package com.example.ben.rainy_night.fragment.event;
 
-import com.example.ben.rainy_night.bean.UserBean;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 
 /**
  * @author Ben
@@ -20,12 +20,12 @@ public class OnUserEvent {
     /**
      * UserBean实体
      */
-    private UserBean bean;
+    private UserEntity bean;
 
     public OnUserEvent() {
     }
 
-    public OnUserEvent(String request, String result, UserBean bean) {
+    public OnUserEvent(String request, String result, UserEntity bean) {
         this.request = request;
         this.result = result;
         this.bean = bean;
@@ -47,11 +47,11 @@ public class OnUserEvent {
         this.request = request;
     }
 
-    public UserBean getBean() {
+    public UserEntity getBean() {
         return bean;
     }
 
-    public void setBean(UserBean bean) {
+    public void setBean(UserEntity bean) {
         this.bean = bean;
     }
 

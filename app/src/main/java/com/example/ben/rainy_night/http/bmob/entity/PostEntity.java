@@ -1,4 +1,4 @@
-package com.example.ben.rainy_night.bean;
+package com.example.ben.rainy_night.http.bmob.entity;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import cn.bmob.v3.datatype.BmobRelation;
  * @date 2018/2/7
  */
 
-public class PostBean extends BmobObject {
+public class PostEntity extends BmobObject {
     /**
      * 帖子内容
      */
@@ -21,7 +21,7 @@ public class PostBean extends BmobObject {
     /**
      * 帖子作者
      */
-    private UserBean user;
+    private UserEntity user;
     /**
      * 喜欢帖子的人
      */
@@ -32,7 +32,7 @@ public class PostBean extends BmobObject {
      */
     private List<BmobFile> pictures;
 
-    public PostBean() {
+    public PostEntity() {
 
     }
 
@@ -44,11 +44,11 @@ public class PostBean extends BmobObject {
         this.content = content;
     }
 
-    public UserBean getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(UserBean user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 
@@ -70,7 +70,7 @@ public class PostBean extends BmobObject {
 
     @Override
     public String toString() {
-        return "PostBean{" +
+        return "PostEntity{" +
                 "content='" + content + '\'' +
                 ", user=" + user +
                 ", likes=" + likes +

@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 
 import com.example.ben.rainy_night.App;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.bean.UserBean;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
+import com.example.ben.rainy_night.util.NetWorkUtil;
 import com.example.ben.rainy_night.util.ToastUtil;
 import com.gyf.barlibrary.ImmersionBar;
 import com.squareup.leakcanary.RefWatcher;
@@ -27,7 +28,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 public abstract class BaseFragment<T extends BasePresenter> extends SupportFragment {
     protected T presenter;
     protected ImmersionBar mImmersionBar;
-    protected UserBean mUserBean;
+    protected UserEntity mUserEntity;
     private Unbinder unbinder = null;
 
     @Nullable
@@ -41,7 +42,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
         if (v != null) {
             ImmersionBar.setStatusBarView(_mActivity, v);
         }
-        mUserBean = BmobUser.getCurrentUser(UserBean.class);
+        mUserEntity = BmobUser.getCurrentUser(UserEntity.class);
         setPresenter();
         initView();
         return view;
@@ -104,5 +105,14 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
      */
     protected void toastShow(String text) {
         ToastUtil.show(_mActivity.getApplicationContext(), text);
+    }
+
+    /**
+     * 当前网络是否可用
+     *
+     * @return true: 可用 false: 不可用
+     */
+    protected boolean isNetAvailable() {
+        return NetWorkUtil.isNetworkAvailable(_mActivity.getApplicationContext());
     }
 }

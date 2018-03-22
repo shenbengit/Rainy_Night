@@ -11,10 +11,9 @@ import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseBackFragment;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
-import com.example.ben.rainy_night.fragment.mine_frag.presenter.RegisterPresenter;
+import com.example.ben.rainy_night.fragment.mine_frag.contract.RegisterContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.RegisterPresenterImpl;
-import com.example.ben.rainy_night.fragment.mine_frag.view.IRegisterView;
-import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.DialogLoadingUtil;
 import com.vondear.rxtools.view.RxCaptcha;
 
@@ -30,7 +29,7 @@ import static com.vondear.rxtools.view.RxCaptcha.TYPE.NUMBER;
 /**
  * @author Ben
  */
-public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implements IRegisterView {
+public class RegisterFragment extends BaseBackFragment<RegisterContract.Presenter> implements RegisterContract.View {
 
     @BindView(R.id.base_toolbar)
     Toolbar baseToolbar;
@@ -83,8 +82,7 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
         }
     }
 
-    private static final int PHONE_LENGTH = 11;
-    private String pictureCode = "";
+    private String pictureCode;
 
     public static RegisterFragment newInstance() {
         return new RegisterFragment();
@@ -159,7 +157,7 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isRegisterSuccess(OnUserEvent event) {
-        if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_REGISTER)) {
+        if (TextUtils.equals(event.getRequest(), Constant.REQUEST_REGISTER)) {
             presenter.isRegisterSuccess(event.getResult(), event.getBean());
         }
     }
@@ -231,6 +229,16 @@ public class RegisterFragment extends BaseBackFragment<RegisterPresenter> implem
     @Override
     public String getStringPictureCode() {
         return pictureCode;
+    }
+
+    /**
+     * 当前网络是否可用
+     *
+     * @return true: 可用 false: 不可用
+     */
+    @Override
+    public boolean isNetworkAvailable() {
+        return isNetAvailable();
     }
 
     /**

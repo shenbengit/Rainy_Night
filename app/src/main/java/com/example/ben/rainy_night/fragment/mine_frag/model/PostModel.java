@@ -1,6 +1,6 @@
 package com.example.ben.rainy_night.fragment.mine_frag.model;
 
-import com.example.ben.rainy_night.bean.UserBean;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 
 /**
  * @author Ben
@@ -14,7 +14,7 @@ public interface PostModel {
      * @param content 帖子内容
      * @param user    帖子作者
      */
-    void publishPost(String content, UserBean user);
+    void publishPost(String content, UserEntity user);
 
     /**
      * 发表帖子，包含图片
@@ -23,7 +23,7 @@ public interface PostModel {
      * @param content 帖子内容
      * @param user    帖子作者
      */
-    void publishPostWithPicture(String[] paths, String content, UserBean user);
+    void publishPostWithPicture(String[] paths, String content, UserEntity user);
 
     /**
      * 查询帖子

@@ -1,7 +1,7 @@
 package com.example.ben.rainy_night.fragment.mine_frag.model;
 
-import com.example.ben.rainy_night.bean.UserBean;
-import com.example.ben.rainy_night.bmob.UserBmob;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
+import com.example.ben.rainy_night.http.bmob.UserBmob;
 
 /**
  * @author Ben
@@ -49,11 +49,11 @@ public class UserModelImpl implements UserModel {
      * 更新用户信息
      *
      * @param request
-     * @param userBean 用户实体
+     * @param userEntity 用户实体
      */
     @Override
-    public void updateUser(String request, UserBean userBean) {
-        UserBmob.getInstance().updateUser(request, userBean);
+    public void updateUser(String request, UserEntity userEntity) {
+        UserBmob.getInstance().updateUser(request, userEntity);
     }
 
     /**

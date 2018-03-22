@@ -1,7 +1,7 @@
 package com.example.ben.rainy_night.fragment.mine_frag.model;
 
-import com.example.ben.rainy_night.bean.UserBean;
-import com.example.ben.rainy_night.bmob.PostBmob;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
+import com.example.ben.rainy_night.http.bmob.PostBmob;
 
 /**
  * @author Ben
@@ -18,7 +18,7 @@ public class PostModelImpl implements PostModel {
      * @param user    帖子作者
      */
     @Override
-    public void publishPost(String content, UserBean user) {
+    public void publishPost(String content, UserEntity user) {
         PostBmob.getInstance().publishPost(content, user);
     }
 
@@ -30,7 +30,7 @@ public class PostModelImpl implements PostModel {
      * @param user    帖子作者
      */
     @Override
-    public void publishPostWithPicture(String[] paths, String content, UserBean user) {
+    public void publishPostWithPicture(String[] paths, String content, UserEntity user) {
         PostBmob.getInstance().publishPostWithPicture(paths, content, user);
     }
 

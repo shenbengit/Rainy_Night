@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.bean.PostBean;
+import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
 import com.jaeger.ninegridimageview.NineGridImageView;
 
 import org.json.JSONArray;
@@ -20,16 +20,16 @@ import java.util.List;
  * @date 2018/3/2
  */
 
-public class SpaceAdapter extends BaseQuickAdapter<PostBean, BaseViewHolder> {
+public class SpaceAdapter extends BaseQuickAdapter<PostEntity, BaseViewHolder> {
 
     private NineGridImageView<String> mNineGridView;
 
-    public SpaceAdapter(@Nullable List<PostBean> data) {
+    public SpaceAdapter(@Nullable List<PostEntity> data) {
         super(R.layout.item_recycler_space, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, PostBean item) {
+    protected void convert(BaseViewHolder helper, PostEntity item) {
         helper.setText(R.id.tv_item_space_nick, item.getUser().getNickName());
         helper.setText(R.id.tv_item_space_time, item.getCreatedAt());
         helper.setText(R.id.tv_item_space_content, item.getContent());

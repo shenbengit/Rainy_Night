@@ -2,12 +2,11 @@ package com.example.ben.rainy_night.fragment.mine_frag.presenter;
 
 import android.text.TextUtils;
 
-import com.example.ben.rainy_night.bean.UserBean;
+import com.example.ben.rainy_night.fragment.mine_frag.contract.LoginContract;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
-import com.example.ben.rainy_night.fragment.mine_frag.view.ILoginView;
-import com.example.ben.rainy_night.util.ConstantUtil;
-import com.example.ben.rainy_night.util.LoggerUtil;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 /**
@@ -15,11 +14,11 @@ import com.example.ben.rainy_night.util.SharedPreferencesUtil;
  * @date 2018/1/22
  */
 
-public class LoginPresenterImpl implements LoginPresenter {
-    private ILoginView view;
+public class LoginPresenterImpl implements LoginContract.Presenter {
+    private LoginContract.View view;
     private UserModel model;
 
-    public LoginPresenterImpl(ILoginView view) {
+    public LoginPresenterImpl(LoginContract.View view) {
         this.view = view;
         model = new UserModelImpl();
     }
@@ -30,8 +29,13 @@ public class LoginPresenterImpl implements LoginPresenter {
      */
     @Override
     public void login() {
+        if (!view.isNetworkAvailable()) {
+            view.showToast("当前网络不可用");
+            return;
+        }
+
         view.showDialog();
-        model.login(ConstantUtil.REQUEST_LOGIN, view.getEditPhone().getText().toString().trim(), view.getEditPassWord().getText().toString().trim());
+        model.login(Constant.REQUEST_LOGIN, view.getEditPhone().getText().toString().trim(), view.getEditPassWord().getText().toString().trim());
     }
 
     /**
@@ -41,9 +45,9 @@ public class LoginPresenterImpl implements LoginPresenter {
      * @param bean
      */
     @Override
-    public void isLoginSuccess(String message, UserBean bean) {
+    public void isLoginSuccess(String message, UserEntity bean) {
         view.cancelDialog();
-        if (TextUtils.equals(ConstantUtil.OK, message)) {
+        if (TextUtils.equals(Constant.OK, message)) {
             view.putSpValue(SharedPreferencesUtil.USER_PASSWORD,view.getEditPassWord().getText().toString().trim());
             view.putSpValue(SharedPreferencesUtil.USER_PHONE,bean.getMobilePhoneNumber());
             view.showToast("登陆成功");

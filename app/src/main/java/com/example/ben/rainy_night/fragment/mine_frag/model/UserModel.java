@@ -1,6 +1,6 @@
 package com.example.ben.rainy_night.fragment.mine_frag.model;
 
-import com.example.ben.rainy_night.bean.UserBean;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 
 /**
  * @author Ben
@@ -39,9 +39,9 @@ public interface UserModel {
      * 更新用户信息
      *
      * @param request
-     * @param userBean 用户实体
+     * @param userEntity 用户实体
      */
-    void updateUser(String request, UserBean userBean);
+    void updateUser(String request, UserEntity userEntity);
 
     /**
      * 用户更新账号密码

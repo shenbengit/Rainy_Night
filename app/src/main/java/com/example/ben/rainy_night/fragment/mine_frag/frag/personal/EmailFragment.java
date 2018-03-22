@@ -10,10 +10,9 @@ import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseBackFragment;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
-import com.example.ben.rainy_night.fragment.mine_frag.presenter.EmailPresenter;
+import com.example.ben.rainy_night.fragment.mine_frag.contract.EmailContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.EmailPresenterImpl;
-import com.example.ben.rainy_night.fragment.mine_frag.view.IEmailView;
-import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.DialogLoadingUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,7 +27,7 @@ import butterknife.OnClick;
  * @date 2018/2/3
  */
 
-public class EmailFragment extends BaseBackFragment<EmailPresenter> implements IEmailView {
+public class EmailFragment extends BaseBackFragment<EmailContract.Presenter> implements EmailContract.View {
 
     private static final String ARG_NAME = "arg_name";
 
@@ -111,7 +110,7 @@ public class EmailFragment extends BaseBackFragment<EmailPresenter> implements I
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void isChangeEmailSuccess(OnUserEvent event) {
-        if (TextUtils.equals(event.getRequest(), ConstantUtil.REQUEST_EMAIL)) {
+        if (TextUtils.equals(event.getRequest(), Constant.REQUEST_EMAIL)) {
             presenter.isChangeEmailSuccess(event.getResult());
         }
     }
@@ -132,6 +131,16 @@ public class EmailFragment extends BaseBackFragment<EmailPresenter> implements I
     @Override
     public PowerfulEditText getTextEmail() {
         return petEmail;
+    }
+
+    /**
+     * 当前网络是否可用
+     *
+     * @return true: 可用 false: 不可用
+     */
+    @Override
+    public boolean isNetworkAvailable() {
+        return isNetAvailable();
     }
 
     /**

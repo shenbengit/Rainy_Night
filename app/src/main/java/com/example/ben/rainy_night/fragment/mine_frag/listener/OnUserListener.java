@@ -1,6 +1,6 @@
 package com.example.ben.rainy_night.fragment.mine_frag.listener;
 
-import com.example.ben.rainy_night.bean.UserBean;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 
 /**
  *
@@ -17,7 +17,7 @@ public interface OnUserListener {
          * 用户注册|登陆 成功
          * @param bean
          */
-        void onSuccess(UserBean bean);
+        void onSuccess(UserEntity bean);
 
         /**
          * 用户注册|登陆 失败
@@ -50,7 +50,7 @@ public interface OnUserListener {
          * 查询用户信息成功
          * @param bean
          */
-        void onSuccess(UserBean bean);
+        void onSuccess(UserEntity bean);
 
         /**
          * 查询用户信息失败

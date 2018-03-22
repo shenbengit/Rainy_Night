@@ -16,10 +16,10 @@ import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseBackFragment;
 import com.example.ben.rainy_night.fragment.event.OnActivityResultEvent;
 import com.example.ben.rainy_night.fragment.event.OnPostEvent;
-import com.example.ben.rainy_night.fragment.mine_frag.presenter.PostStoryPresenter;
+import com.example.ben.rainy_night.fragment.mine_frag.contract.PostStoryContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.PostStoryPresenterImpl;
-import com.example.ben.rainy_night.fragment.mine_frag.view.IPostStoryView;
 import com.example.ben.rainy_night.util.DialogLoadingUtil;
+import com.example.ben.rainy_night.widget.PostStoryGridView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,7 +33,7 @@ import butterknife.OnClick;
  * @date 2018/2/22
  */
 
-public class PostStoryFragment extends BaseBackFragment<PostStoryPresenter> implements IPostStoryView {
+public class PostStoryFragment extends BaseBackFragment<PostStoryContract.Presenter> implements PostStoryContract.View {
 
     @BindView(R.id.tv_publish_post)
     TextView tvPublishPost;
@@ -42,7 +42,7 @@ public class PostStoryFragment extends BaseBackFragment<PostStoryPresenter> impl
     @BindView(R.id.et_post_story)
     EditText etPostStory;
     @BindView(R.id.gv_add_picture)
-    GridView gvAddPicture;
+    PostStoryGridView gvAddPicture;
 
     @OnClick({R.id.tv_publish_post})
     public void viewOnClick(View view) {
@@ -91,12 +91,7 @@ public class PostStoryFragment extends BaseBackFragment<PostStoryPresenter> impl
         mDialog = new DialogLoadingUtil(_mActivity);
 
         postToolbar.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
-        postToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _mActivity.onBackPressed();
-            }
-        });
+        postToolbar.setNavigationOnClickListener(v -> _mActivity.onBackPressed());
 
         etPostStory.addTextChangedListener(new TextWatcher() {
             @Override
@@ -201,6 +196,16 @@ public class PostStoryFragment extends BaseBackFragment<PostStoryPresenter> impl
     @Override
     public EditText getEditText() {
         return etPostStory;
+    }
+
+    /**
+     * 当前网络是否可用
+     *
+     * @return true: 可用 false: 不可用
+     */
+    @Override
+    public boolean isNetworkAvailable() {
+        return isNetAvailable();
     }
 
     /**

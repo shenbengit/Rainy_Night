@@ -5,11 +5,11 @@ import android.os.CountDownTimer;
 import android.text.TextUtils;
 
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.bean.UserBean;
+import com.example.ben.rainy_night.fragment.mine_frag.contract.RegisterContract;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
-import com.example.ben.rainy_night.fragment.mine_frag.view.IRegisterView;
-import com.example.ben.rainy_night.util.ConstantUtil;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
+import com.example.ben.rainy_night.util.Constant;
 import com.vondear.rxtools.RxRegTool;
 
 import cn.bmob.v3.BmobSMS;
@@ -22,13 +22,13 @@ import cn.bmob.v3.listener.UpdateListener;
  * @date 2018/1/22
  */
 
-public class RegisterPresenterImpl implements RegisterPresenter {
+public class RegisterPresenterImpl implements RegisterContract.Presenter {
 
-    private IRegisterView view;
+    private RegisterContract.View view;
     private UserModel model;
     private CountDownTimer mTimer;
 
-    public RegisterPresenterImpl(IRegisterView view) {
+    public RegisterPresenterImpl(RegisterContract.View view) {
         this.view = view;
         model = new UserModelImpl();
     }
@@ -39,6 +39,11 @@ public class RegisterPresenterImpl implements RegisterPresenter {
     @Override
     public void sendPhoneCode() {
         if (!isMatch()) {
+            return;
+        }
+
+        if (!view.isNetworkAvailable()) {
+            view.showToast("当前网络不可用");
             return;
         }
 
@@ -86,6 +91,12 @@ public class RegisterPresenterImpl implements RegisterPresenter {
         if (!isMatch()) {
             return;
         }
+
+        if (!view.isNetworkAvailable()) {
+            view.showToast("当前网络不可用");
+            return;
+        }
+
         BmobSMS.verifySmsCode(view.getEditPhone().getText().toString().trim(),
                 view.getEditPhoneCode().getText().toString().trim(),
                 new UpdateListener() {
@@ -93,7 +104,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
                     public void done(BmobException e) {
                         if (e == null) {
                             view.showDialog();
-                            model.register(ConstantUtil.REQUEST_REGISTER,
+                            model.register(Constant.REQUEST_REGISTER,
                                     view.getEditPhone().getText().toString().trim(),
                                     view.getEditName().getText().toString().trim(),
                                     view.getEditPassWord().getText().toString().trim());
@@ -112,9 +123,9 @@ public class RegisterPresenterImpl implements RegisterPresenter {
      * @param bean
      */
     @Override
-    public void isRegisterSuccess(String message, UserBean bean) {
+    public void isRegisterSuccess(String message, UserEntity bean) {
         view.cancelDialog();
-        if (TextUtils.equals(ConstantUtil.OK, message)) {
+        if (TextUtils.equals(Constant.OK, message)) {
             view.showToast("注册成功");
         } else {
             view.showToast(message);

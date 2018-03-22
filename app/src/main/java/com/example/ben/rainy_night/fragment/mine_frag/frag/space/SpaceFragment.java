@@ -15,8 +15,6 @@ import android.widget.TextView;
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseBackFragment;
-import com.example.ben.rainy_night.bean.UserBean;
-import com.example.ben.rainy_night.util.LoggerUtil;
 import com.flyco.roundview.RoundTextView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
@@ -27,7 +25,6 @@ import com.scwang.smartrefresh.layout.util.DensityUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -168,23 +165,23 @@ public class SpaceFragment extends BaseBackFragment {
     @Override
     public void onEnterAnimationEnd(Bundle savedInstanceState) {
         super.onEnterAnimationEnd(savedInstanceState);
-        if (mUserBean == null) {
+        if (mUserEntity == null) {
             tvSpaceNickName.setText("");
             tvSpaceToolbarNickName.setText("");
             civSpaceHead.setImageResource(R.mipmap.ic_head);
             civSpaceToolbarHead.setImageResource(R.mipmap.ic_head);
             return;
         }
-        tvSpaceNickName.setText(mUserBean.getNickName());
-        tvSpaceToolbarNickName.setText(mUserBean.getNickName());
-        if (mUserBean.getHeadimg() != null) {
+        tvSpaceNickName.setText(mUserEntity.getNickName());
+        tvSpaceToolbarNickName.setText(mUserEntity.getNickName());
+        if (mUserEntity.getHeadimg() != null) {
             GlideApp.with(_mActivity)
-                    .load(mUserBean.getHeadimg().getFileUrl())
+                    .load(mUserEntity.getHeadimg().getFileUrl())
                     .placeholder(R.mipmap.ic_head)
                     .error(R.mipmap.ic_head)
                     .into(civSpaceHead);
             GlideApp.with(_mActivity)
-                    .load(mUserBean.getHeadimg().getFileUrl())
+                    .load(mUserEntity.getHeadimg().getFileUrl())
                     .placeholder(R.mipmap.ic_head)
                     .error(R.mipmap.ic_head)
                     .into(civSpaceToolbarHead);
