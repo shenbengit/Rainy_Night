@@ -16,14 +16,14 @@ public class Constant {
      * 海豚睡眠 api接口
      * baseUrl
      */
-    public static final String BASEURL_HAITUN = "https://api.clife.cn/";
+    public static final String HAITUN_BASEURL = "https://api.clife.cn/";
 
     public static final int GET_MUSIC_OK = 0;
     public static final int HAITUN_NATURAL_MUSIC = 1;
     public static final int HAITUN_LIGHT_MUSIC = 2;
 
     public static final String HAITUN_MUSIC = "v1/app/csleep/scene/getSceneList?appId=30639&sceneIds=";
-    public static final String HAITUN_SHARE = "v1/app/csleep/operate/getPictureList?appId=30639&sleepRegion=1";
+    public static final String HAITUN_SHARE = "/v1/app/csleep/operate/getPictureList?appId=30639&sleepRegion=1";
 
     /**
      * EventBus 避免消息错乱

@@ -12,13 +12,26 @@ import android.telephony.TelephonyManager;
 
 public class NetWorkUtil {
 
+    private static NetWorkUtil mUtil;
+
+    private NetWorkUtil() {
+    }
+
+    public static NetWorkUtil getInstance() {
+        return mUtil == null ? (mUtil = newUtil()) : mUtil;
+    }
+
+    private static NetWorkUtil newUtil() {
+        return new NetWorkUtil();
+    }
+
     /**
      * 判断是否有网络连接
      *
      * @param context
      * @return
      */
-    public static boolean isNetworkAvailable(Context context) {
+    public boolean isNetworkAvailable(Context context) {
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -39,7 +52,7 @@ public class NetWorkUtil {
      * @param context
      * @return
      */
-    public static boolean isWifiConnected(Context context) {
+    public boolean isWifiConnected(Context context) {
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -59,7 +72,7 @@ public class NetWorkUtil {
      * @param context
      * @return
      */
-    public static boolean isMobileConnected(Context context) {
+    public boolean isMobileConnected(Context context) {
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -79,7 +92,7 @@ public class NetWorkUtil {
      * @param context
      * @return
      */
-    public static int getConnectedType(Context context) {
+    public int getConnectedType(Context context) {
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -98,7 +111,7 @@ public class NetWorkUtil {
      * @param context
      * @return
      */
-    public static int getAPNType(Context context) {
+    public int getAPNType(Context context) {
         int netType = 0;
         ConnectivityManager connMgr = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
