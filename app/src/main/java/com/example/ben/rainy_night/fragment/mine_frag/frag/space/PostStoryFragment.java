@@ -70,7 +70,7 @@ public class PostStoryFragment extends BaseBackFragment<PostStoryContract.Presen
      */
     @Override
     protected int getLayout() {
-        return R.layout.post_story_fragment;
+        return R.layout.fragment_post_story;
     }
 
     /**

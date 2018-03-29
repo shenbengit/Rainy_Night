@@ -74,7 +74,7 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
 
     @Override
     public int getLayout() {
-        return R.layout.mine_fragment;
+        return R.layout.fragment_mine;
     }
 
     @Override

@@ -84,7 +84,7 @@ public class SettingFragment extends BaseBackFragment<SettingContract.Presenter>
      */
     @Override
     protected int getLayout() {
-        return R.layout.setting_fragment;
+        return R.layout.fragment_setting;
     }
 
     /**

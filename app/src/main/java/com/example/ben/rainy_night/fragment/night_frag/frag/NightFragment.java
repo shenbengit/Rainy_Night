@@ -1,6 +1,5 @@
 package com.example.ben.rainy_night.fragment.night_frag.frag;
 
-import android.os.Bundle;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 
@@ -15,7 +14,7 @@ public class NightFragment extends BaseFragment {
 
     @Override
     public int getLayout() {
-        return R.layout.night_fragment;
+        return R.layout.fragment_night;
     }
 
     @Override

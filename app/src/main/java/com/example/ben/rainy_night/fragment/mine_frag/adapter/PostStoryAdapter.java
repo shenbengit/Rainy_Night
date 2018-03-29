@@ -34,7 +34,6 @@ public class PostStoryAdapter extends BaseAdapter {
     public void setData(List<String> list) {
         mList.clear();
         mList.addAll(list);
-        Log.e("发表帖子", "setData: " + mList.size());
         notifyDataSetChanged();
     }
 
@@ -62,7 +61,6 @@ public class PostStoryAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            Log.e("发表帖子", "getView: null" );
             convertView = inflater.inflate(R.layout.item_post_story, parent, false);
             convertView.setTag(new ViewHolder(convertView));
         }
@@ -75,7 +73,6 @@ public class PostStoryAdapter extends BaseAdapter {
     }
 
     private void initializeViews(ViewHolder holder, int position) {
-        Log.e("发表帖子", "initializeViews: " + position);
         if (position < mList.size()) {
             //代表+号之前的需要正常显示图片
             //图片路径
@@ -83,7 +80,6 @@ public class PostStoryAdapter extends BaseAdapter {
                     .into(holder.ivPostStory);
         } else {
             //最后一个显示加号图片
-            Log.e("发表帖子", "initializeViews: 显示加号");
             holder.ivPostStory.setImageResource(R.mipmap.img_add_picture);
         }
     }

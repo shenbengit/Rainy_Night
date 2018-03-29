@@ -83,7 +83,7 @@ public class LoginFragment extends BaseBackFragment<LoginContract.Presenter> imp
      */
     @Override
     public int getLayout() {
-        return R.layout.login_fragment;
+        return R.layout.fragment_login;
     }
 
     /**

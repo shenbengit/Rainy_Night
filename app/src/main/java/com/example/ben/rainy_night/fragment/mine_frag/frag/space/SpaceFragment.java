@@ -56,8 +56,6 @@ public class SpaceFragment extends BaseBackFragment {
     CircleImageView civSpaceHead;
     @BindView(R.id.collapse)
     CollapsingToolbarLayout collapse;
-    @BindView(R.id.top_view)
-    View topView;
     @BindView(R.id.civ_space_toolbar_head)
     CircleImageView civSpaceToolbarHead;
     @BindView(R.id.tv_space_toolbar_nickName)
@@ -86,7 +84,7 @@ public class SpaceFragment extends BaseBackFragment {
      */
     @Override
     protected int getLayout() {
-        return R.layout.space_fragment;
+        return R.layout.fragment_space;
     }
 
     /**
@@ -102,12 +100,7 @@ public class SpaceFragment extends BaseBackFragment {
      */
     @Override
     protected void initView() {
-        refreshLayoutSpace.setOnLoadmoreListener(new OnLoadmoreListener() {
-            @Override
-            public void onLoadmore(RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadmore(2000);
-            }
-        });
+        refreshLayoutSpace.setOnLoadmoreListener(refreshlayout -> refreshlayout.finishLoadmore(2000));
         refreshLayoutSpace.setOnMultiPurposeListener(new SimpleMultiPurposeListener() {
             @Override
             public void onHeaderPulling(RefreshHeader header, float percent, int offset, int bottomHeight, int extendHeight) {

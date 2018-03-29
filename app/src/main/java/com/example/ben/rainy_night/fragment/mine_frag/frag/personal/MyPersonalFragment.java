@@ -132,7 +132,7 @@ public class MyPersonalFragment extends BaseBackFragment<MyPersonalContract.Pres
      */
     @Override
     public int getLayout() {
-        return R.layout.my_personal_fragment;
+        return R.layout.fragment_my_personal;
     }
 
     /**

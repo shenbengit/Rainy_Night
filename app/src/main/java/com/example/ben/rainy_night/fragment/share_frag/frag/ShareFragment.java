@@ -1,6 +1,5 @@
 package com.example.ben.rainy_night.fragment.share_frag.frag;
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -42,7 +41,7 @@ public class ShareFragment extends BaseFragment{
      */
     @Override
     public int getLayout() {
-        return R.layout.share_fragment;
+        return R.layout.fragment_share;
     }
 
     /**
@@ -72,11 +71,8 @@ public class ShareFragment extends BaseFragment{
         recyShare.setLayoutManager(linearLayoutManager);
         recyShare.setAdapter(mAdapter);
 
-        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
+        mAdapter.setOnLoadMoreListener(() -> {
 
-            }
         },recyShare);
     }
 

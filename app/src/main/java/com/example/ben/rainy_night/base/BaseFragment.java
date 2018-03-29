@@ -113,6 +113,6 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
      * @return true: 可用 false: 不可用
      */
     protected boolean isNetAvailable() {
-        return NetWorkUtil.isNetworkAvailable(_mActivity.getApplicationContext());
+        return NetWorkUtil.getInstance().isNetworkAvailable(_mActivity.getApplicationContext());
     }
 }

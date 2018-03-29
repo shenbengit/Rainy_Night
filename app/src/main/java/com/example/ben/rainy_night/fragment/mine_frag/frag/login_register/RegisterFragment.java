@@ -105,7 +105,7 @@ public class RegisterFragment extends BaseBackFragment<RegisterContract.Presente
      */
     @Override
     public int getLayout() {
-        return R.layout.register_fragment;
+        return R.layout.fragment_register;
     }
 
     /**

@@ -68,7 +68,7 @@ public class NickNameFragment extends BaseBackFragment<NickNameContract.Presente
      */
     @Override
     protected int getLayout() {
-        return R.layout.nick_name_fragment;
+        return R.layout.fragment_nick_name;
     }
 
     /**

@@ -12,6 +12,7 @@ import com.example.ben.rainy_night.util.LoggerUtil;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
@@ -113,19 +114,19 @@ public class PostBmob {
     public void queryPost() {
         Runnable runable = () -> {
             BmobQuery<PostEntity> query = new BmobQuery<PostEntity>();
-//        query.addWhereEqualTo("createdAt", "");
-//        query.setLimit(10);
-//        query.order("createdAt");
-//                boolean isCache = query.hasCachedResult(PostEntity.class);
-//                if (isCache) {
-//                    //先从缓存读取，如果没有再从网络获取
-//                    query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
-//                } else {
-//                    //只会从网络获取，同时会在本地缓存数据
-//                    query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ONLY);
-//                }
-//                //表示缓存一天
-//                query.setMaxCacheAge(TimeUnit.DAYS.toMillis(1));
+        query.addWhereEqualTo("createdAt", "");
+        query.setLimit(10);
+        query.order("createdAt");
+                boolean isCache = query.hasCachedResult(PostEntity.class);
+                if (isCache) {
+                    //先从缓存读取，如果没有再从网络获取
+                    query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+                } else {
+                    //只会从网络获取，同时会在本地缓存数据
+                    query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ONLY);
+                }
+                //表示缓存一天
+                query.setMaxCacheAge(TimeUnit.DAYS.toMillis(1));
 
             // 希望在查询帖子信息的同时也把发布人的信息查询出来
             query.include("user");

@@ -5,11 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/colorPrimary" />
+    <include layout="@layout/view" />
 
     <include layout="@layout/toolbar" />
 
@@ -26,7 +22,7 @@
         android:orientation="horizontal">
 
         <com.chaychan.viewlib.PowerfulEditText
-            android:id="@+id/pet_email"
+            android:id="@+id/pet_petName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -42,10 +38,10 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
-        android:text="请输入正确的邮箱地址！" />
+        android:text="3-8位字符，可由中文、英文大小写、数字、“_”组成!" />
 
     <Button
-        android:id="@+id/btn_changeEmail"
+        android:id="@+id/btn_changePetName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"

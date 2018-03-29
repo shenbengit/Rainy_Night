@@ -66,7 +66,7 @@ public class ChangePasswordFragment extends BaseBackFragment<ChangePasswordContr
      */
     @Override
     protected int getLayout() {
-        return R.layout.change_password_fragment;
+        return R.layout.fragment_change_password;
     }
 
     /**

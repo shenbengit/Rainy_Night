@@ -33,7 +33,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
 
     @Override
     public int getLayout() {
-        return R.layout.main_fragment;
+        return R.layout.fragment_main;
     }
 
     @Override

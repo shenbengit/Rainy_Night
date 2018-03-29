@@ -64,7 +64,7 @@ public class EmailFragment extends BaseBackFragment<EmailContract.Presenter> imp
      */
     @Override
     protected int getLayout() {
-        return R.layout.email_fragment;
+        return R.layout.fragment_email;
     }
 
     /**
