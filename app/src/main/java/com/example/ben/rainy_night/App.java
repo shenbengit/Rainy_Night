@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
-import com.example.ben.rainy_night.http.rxhttp.factory.RetrofitFactory;
+import com.example.ben.rainy_night.http.okgo.factory.OkGoFactory;
 import com.example.ben.rainy_night.util.LoggerUtil;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
@@ -43,10 +43,14 @@ public class App extends Application {
                     LoggerUtil.e("Fragmentation异常: " + e.getMessage());
                 })
                 .install();
+
+        //OkGo初始化
+        OkGoFactory.init(this);
+
         //Bmob初始化
         BmobConfig config = new BmobConfig.Builder(this)
                 .setApplicationId("066dc84797cf2e222e1d914eb7d1a297")
-                .setConnectTimeout(7)
+                .setConnectTimeout(10)
                 .build();
         Bmob.initialize(config);
 
@@ -71,7 +75,6 @@ public class App extends Application {
         }
         refWatcher = LeakCanary.install(this);
 
-        RetrofitFactory.initOkHttpClient();
     }
 
     public static RefWatcher getRefWatcher(Context context) {
