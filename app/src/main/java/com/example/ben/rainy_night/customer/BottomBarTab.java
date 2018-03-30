@@ -19,7 +19,9 @@ import android.widget.TextView;
 import com.example.ben.rainy_night.R;
 
 /**
- * Created by YoKeyword on 16/6/3.
+ *
+ * @author YoKeyword
+ * @date 16/6/3
  */
 public class BottomBarTab extends FrameLayout {
     private ImageView mIcon;
@@ -97,8 +99,8 @@ public class BottomBarTab extends FrameLayout {
     public void setSelected(boolean selected) {
         super.setSelected(selected);
         if (selected) {
-            mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary));
-            mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+            mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.bottom_bar_seleted));
+            mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.bottom_bar_seleted));
         } else {
             mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.tab_unselect));
             mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.tab_unselect));

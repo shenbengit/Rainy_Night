@@ -2,6 +2,7 @@ package com.example.ben.rainy_night.fragment.home_frag.frag.music;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 
@@ -9,8 +10,11 @@ import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicListContract;
 import com.example.ben.rainy_night.fragment.home_frag.presenter.SleepMusicListPresenter;
+import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
+import com.example.ben.rainy_night.util.NetWorkUtil;
 
 import butterknife.BindView;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @author Ben
@@ -60,6 +64,7 @@ public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.
         if (bundle != null) {
             sceneType = bundle.getString(SCENE_TYPE);
         }
+        presenter.initRecyclerView(sceneType);
     }
 
     /**
@@ -67,10 +72,13 @@ public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.
      */
     @Override
     protected void initData() {
-        if (TextUtils.isEmpty(sceneType)) {
-            return;
-        }
-        presenter.getMusic(sceneType);
+
+    }
+
+    @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
+        presenter.getMusic();
     }
 
     /**
@@ -127,5 +135,16 @@ public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.
     @Override
     public Context getCon() {
         return _mActivity;
+    }
+
+    @Override
+    public void startBrotherFragment(SupportFragment fragment) {
+        assert (getParentFragment()) != null;
+        ((SleepMusicFragment) getParentFragment()).startBrotherFragment(fragment);
+    }
+
+    @Override
+    public int getAPNType() {
+        return NetWorkUtil.getInstance().getAPNType(_mActivity.getApplicationContext());
     }
 }

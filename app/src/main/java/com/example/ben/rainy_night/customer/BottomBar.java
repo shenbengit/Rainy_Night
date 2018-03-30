@@ -13,12 +13,16 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
+import com.example.ben.rainy_night.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * Created by YoKeyword on 16/6/3.
+ *
+ * @author YoKeyword
+ * @date 16/6/3
  */
 public class BottomBar extends LinearLayout {
     private static final int TRANSLATE_DURATION_MILLIS = 200;
@@ -50,12 +54,8 @@ public class BottomBar extends LinearLayout {
     private void init(Context context, AttributeSet attrs) {
         setOrientation(VERTICAL);
 
-//        ImageView shadowView = new ImageView(context);
-//        shadowView.setBackgroundResource(R.drawable.actionbar_shadow_up);
-//        addView(shadowView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
         mTabLayout = new LinearLayout(context);
-        mTabLayout.setBackgroundColor(Color.WHITE);
+        mTabLayout.setBackgroundColor(Color.rgb(26,38,62));
         mTabLayout.setOrientation(LinearLayout.HORIZONTAL);
         addView(mTabLayout, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -64,21 +64,20 @@ public class BottomBar extends LinearLayout {
     }
 
     public BottomBar addItem(final BottomBarTab tab) {
-        tab.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener == null) return;
+        tab.setOnClickListener(v -> {
+            if (mListener == null) {
+                return;
+            }
 
-                int pos = tab.getTabPosition();
-                if (mCurrentPosition == pos) {
-                    mListener.onTabReselected(pos);
-                } else {
-                    mListener.onTabSelected(pos, mCurrentPosition);
-                    tab.setSelected(true);
-                    mListener.onTabUnselected(mCurrentPosition);
-                    mTabs.get(mCurrentPosition).setSelected(false);
-                    mCurrentPosition = pos;
-                }
+            int pos = tab.getTabPosition();
+            if (mCurrentPosition == pos) {
+                mListener.onTabReselected(pos);
+            } else {
+                mListener.onTabSelected(pos, mCurrentPosition);
+                tab.setSelected(true);
+                mListener.onTabUnselected(mCurrentPosition);
+                mTabs.get(mCurrentPosition).setSelected(false);
+                mCurrentPosition = pos;
             }
         });
         tab.setTabPosition(mTabLayout.getChildCount());
@@ -109,7 +108,9 @@ public class BottomBar extends LinearLayout {
      * 获取 Tab
      */
     public BottomBarTab getItem(int index) {
-        if (mTabs.size() < index) return null;
+        if (mTabs.size() < index) {
+            return null;
+        }
         return mTabs.get(index);
     }
 
@@ -159,10 +160,12 @@ public class BottomBar extends LinearLayout {
         }
 
         public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
+            @Override
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
 
+            @Override
             public SavedState[] newArray(int size) {
                 return new SavedState[size];
             }

@@ -1,20 +1,35 @@
 package com.example.ben.rainy_night.fragment.home_frag.presenter;
 
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.fragment.home_frag.adapter.SleepMusicListAdapter;
 import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicListContract;
+import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicAudioFragment;
+import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicFragment;
 import com.example.ben.rainy_night.http.okgo.callback.JsonCallBack;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.util.Constant;
+import com.example.ben.rainy_night.util.LoggerUtil;
+import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.db.DownloadManager;
+import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
+import com.lzy.okserver.OkDownload;
+import com.lzy.okserver.download.DownloadTask;
+import com.vondear.rxtools.view.dialog.RxDialogSureCancel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +44,13 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
     private SleepMusicListContract.View view;
     private SleepMusicListAdapter mAdapter;
     private List<MusicEntity.DataBean> mLists;
+    private View mViewNetError;
+    private View mViewDataError;
+    /**
+     * 音乐类型
+     */
+    private String mSceneType;
+
 
     private Handler mHandler = new Handler() {
         @Override
@@ -49,15 +71,19 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
 
     public SleepMusicListPresenter(SleepMusicListContract.View view) {
         this.view = view;
+        OkDownload.getInstance().setFolder(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RainyNight/dolphin");
+        OkDownload.getInstance().getThreadPool().setCorePoolSize(5);
+
+        LoggerUtil.e(OkDownload.getInstance().getFolder());
     }
 
-    /**
-     * 获取音乐数据
-     *
-     * @param sceneType 1: 自然音符 ,2: 轻音乐
-     */
     @Override
-    public void getMusic(String sceneType) {
+    public void initRecyclerView(String sceneType) {
+        if (TextUtils.isEmpty(sceneType)) {
+            return;
+        }
+        mSceneType = sceneType;
+
         mLists = new ArrayList<>();
         mAdapter = new SleepMusicListAdapter(mLists);
         LinearLayoutManager manager = new LinearLayoutManager(view.getCon(),
@@ -67,21 +93,44 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
         mAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
         view.getRecycler().setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListener((adapter, view1, position) -> {
-            view.showToast(mLists.get(position).getSceneName());
+        mViewNetError = LayoutInflater.from(view.getCon())
+                .inflate(R.layout.item_net_error, (ViewGroup) view.getRecycler().getParent(), false);
+        mViewNetError.setOnClickListener(v -> {
+            new Handler().postDelayed(this::getMusic, 1000);
         });
 
+        mViewDataError = LayoutInflater.from(view.getCon())
+                .inflate(R.layout.item_data_error, (ViewGroup) view.getRecycler().getParent(), false);
+        mViewDataError.setOnClickListener(v -> {
+            new Handler().postDelayed(this::getMusic, 1000);
+        });
+
+//        mAdapter.setOnItemClickListener(this::clickMusicList);
+    }
+
+    @Override
+    public void getMusic() {
+        if (!view.isNetworkAvailable()) {
+            mAdapter.setEmptyView(mViewNetError);
+            return;
+        }
+        if (!TextUtils.isEmpty(mSceneType)) {
+            mAdapter.setEmptyView(mViewDataError);
+            return;
+        }
         OkGo.<MusicEntity>get(Constant.HAITUN_BASEURL + Constant.HAITUN_MUSIC)
-                .params("sceneType", sceneType)
+                .params("sceneType", mSceneType)
                 .params("timestamp", System.currentTimeMillis())
                 .cacheMode(CacheMode.IF_NONE_CACHE_REQUEST)
-                .cacheKey("dolphin_music" + sceneType)
+                .cacheKey("dolphin_music" + mSceneType)
                 .execute(new JsonCallBack<MusicEntity>(MusicEntity.class) {
                     @Override
                     public void onSuccess(Response<MusicEntity> response) {
                         if (response.body().getCode() == 0) {
                             mLists = response.body().getData();
                             mHandler.sendEmptyMessage(1);
+                        } else {
+                            mAdapter.setEmptyView(mViewDataError);
                         }
                     }
 
@@ -91,6 +140,8 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
                         if (response.body().getCode() == 0) {
                             mLists = response.body().getData();
                             mHandler.sendEmptyMessage(2);
+                        } else {
+                            mAdapter.setEmptyView(mViewDataError);
                         }
                     }
                 });

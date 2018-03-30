@@ -11,6 +11,7 @@ import com.example.ben.rainy_night.base.BaseBackFragment;
 import com.example.ben.rainy_night.fragment.home_frag.adapter.SleepMusicFragmentAdapter;
 
 import butterknife.BindView;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @author Ben
@@ -82,5 +83,12 @@ public class SleepMusicFragment extends BaseBackFragment {
         super.onLazyInitView(savedInstanceState);
         vpSleepMusic.setAdapter(new SleepMusicFragmentAdapter(getChildFragmentManager(), "自然音符", "轻音乐"));
         tabSleepMusic.setupWithViewPager(vpSleepMusic);
+    }
+
+    /**
+     * start other BrotherFragment
+     */
+    public void startBrotherFragment(SupportFragment targetFragment) {
+        start(targetFragment);
     }
 }

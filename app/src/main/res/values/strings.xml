@@ -38,4 +38,6 @@
     <string name="login_out">退出登陆</string>
 
     <string name="publish">发表</string>
+    <string name="net_error">无网络连接，请检查网络!</string>
+    <string name="data_error">没有数据啦，点我重试!</string>
 </resources>

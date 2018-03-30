@@ -39,4 +39,9 @@ public class Constant {
     public static final String REQUEST_CHANGE_PASSWORD = "change_password";
     public static final String ADD_PICTURE = "add_picture";
 
+
+    /**
+     * 是否允许使用数据流量下载
+     */
+    public static final String CAN_MOBILE_DOWNLOAD = "can_mobile_download";
 }
