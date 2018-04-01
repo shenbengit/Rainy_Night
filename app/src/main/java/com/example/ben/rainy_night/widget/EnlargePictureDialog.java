@@ -183,33 +183,22 @@ public class EnlargePictureDialog extends RxDialog {
             }
         });
 
-        mDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setMessage("确定删除这张图片吗？")
-                        .setPositiveButton("确定", new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (mListenerDelete == null) {
-                                    ToastUtil.show(mContext, "删除失败");
-                                    dialog.cancel();
-                                    cancel();
-                                    return;
-                                }
-                                mListenerDelete.isDeleteListener(index[0]);
-                                dialog.cancel();
-                                cancel();
-                            }
-                        })
-                        .setNegativeButton("取消", new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                builder.show();
-            }
+        mDelete.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setMessage("确定删除这张图片吗？")
+                    .setPositiveButton("确定", (dialog, which) -> {
+                        if (mListenerDelete == null) {
+                            ToastUtil.show(mContext, "删除失败");
+                            dialog.cancel();
+                            cancel();
+                            return;
+                        }
+                        mListenerDelete.isDeleteListener(index[0]);
+                        dialog.cancel();
+                        cancel();
+                    })
+                    .setNegativeButton("取消", (dialog, which) -> dialog.cancel());
+            builder.show();
         });
     }
 
@@ -243,12 +232,9 @@ public class EnlargePictureDialog extends RxDialog {
             GlideApp.with(mContext).load(mData.get(position)).error(R.mipmap.img_picture_load_failed).into(img);
 
             if (!isCanDeletePicture) {
-                img.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        savePicture(mData.get(position));
-                        return false;
-                    }
+                img.setOnLongClickListener(v -> {
+                    savePicture(mData.get(position));
+                    return false;
                 });
             }
             container.addView(view);
@@ -292,44 +278,36 @@ public class EnlargePictureDialog extends RxDialog {
             View view = LayoutInflater.from(context).inflate(R.layout.dialog_save_picture, null);
             TextView tv_save = view.findViewById(R.id.tv_saveToPhone);
             TextView tv_cacel = view.findViewById(R.id.tv_cancelToSave);
-            tv_save.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (TextUtils.isEmpty(url)) {
-                        ToastUtil.show(context, "图片保存失败");
-                        cancel();
-                        return;
-                    }
-                    BmobFile file = new BmobFile(url.substring(48), "", url);
-                    File saveFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), file.getFilename());
-                    LoggerUtil.e(file.getFilename());
-                    file.download(saveFile, new DownloadFileListener() {
-                        @Override
-                        public void done(String s, BmobException e) {
-                            if (e == null) {
-                                ToastUtil.show(context, "图片已经保存到目录: " + s);
-                                // MediaScanner 扫描更新图库图片
-                                MediaScannerConnection.scanFile(context, new String[]{s}, null, null);
-                            } else {
-                                ToastUtil.show(context, e.getMessage());
-                            }
-                            cancel();
-                        }
-
-                        @Override
-                        public void onProgress(Integer integer, long l) {
-
-                        }
-                    });
-                }
-            });
-
-            tv_cacel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            tv_save.setOnClickListener(v -> {
+                if (TextUtils.isEmpty(url)) {
+                    ToastUtil.show(context, "图片保存失败");
                     cancel();
+                    return;
                 }
+                BmobFile file = new BmobFile(url.substring(48), "", url);
+                File saveFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), file.getFilename());
+                LoggerUtil.e(file.getFilename());
+                file.download(saveFile, new DownloadFileListener() {
+                    @Override
+                    public void done(String s, BmobException e) {
+                        if (e == null) {
+                            ToastUtil.show(context, "图片已经保存到目录: " + s);
+                            // MediaScanner 扫描更新图库图片
+                            MediaScannerConnection.scanFile(context, new String[]{s}, null, null);
+                        } else {
+                            ToastUtil.show(context, e.getMessage());
+                        }
+                        cancel();
+                    }
+
+                    @Override
+                    public void onProgress(Integer integer, long l) {
+
+                    }
+                });
             });
+
+            tv_cacel.setOnClickListener(v -> cancel());
             setContentView(view);
             mLayoutParams.gravity = 80;
         }

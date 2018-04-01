@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import com.example.ben.rainy_night.base.BasePresenter;
 import com.example.ben.rainy_night.base.BaseView;
 
-import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -58,5 +57,10 @@ public interface SleepMusicListContract {
          * 获取音乐数据
          */
         void getMusic();
+
+        /**
+         * 取消网络请求
+         */
+        void unRegister();
     }
 }

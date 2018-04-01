@@ -81,6 +81,12 @@ public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.
         presenter.getMusic();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.unRegister();
+    }
+
     /**
      * 当前网络是否可用
      *

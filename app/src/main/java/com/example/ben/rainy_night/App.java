@@ -2,10 +2,12 @@ package com.example.ben.rainy_night;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Environment;
 import android.support.multidex.MultiDex;
 
 import com.example.ben.rainy_night.http.okgo.factory.OkGoFactory;
 import com.example.ben.rainy_night.util.LoggerUtil;
+import com.lzy.okserver.OkDownload;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
@@ -75,6 +77,9 @@ public class App extends Application {
         }
         refWatcher = LeakCanary.install(this);
 
+        //设置OkDownload下载路径及最大一起下载数
+        OkDownload.getInstance().setFolder(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RainyNight");
+        OkDownload.getInstance().getThreadPool().setCorePoolSize(5);
     }
 
     public static RefWatcher getRefWatcher(Context context) {
