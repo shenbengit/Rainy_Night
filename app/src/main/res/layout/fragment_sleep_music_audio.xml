@@ -5,9 +5,17 @@
 
     <include layout="@layout/view" />
 
+    <ImageView
+        android:id="@+id/iv_sleep_music_picture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:visibility="gone" />
+
     <VideoView
         android:id="@+id/video_music"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 </RelativeLayout>

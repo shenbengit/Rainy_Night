@@ -13,6 +13,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.fragment.home_frag.adapter.SleepMusicListAdapter;
 import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicListContract;
+import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicAudioFragment;
 import com.example.ben.rainy_night.http.okgo.callback.JsonCallBack;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.util.Constant;
@@ -35,6 +36,7 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
     private List<MusicEntity.DataBean> mLists;
     private View mViewNetError;
     private View mViewDataError;
+    private View mViewLoading;
     /**
      * 音乐类型
      */
@@ -78,13 +80,33 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
         mViewNetError = LayoutInflater.from(view.getCon())
                 .inflate(R.layout.item_net_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewNetError.setOnClickListener(v -> {
+            mAdapter.setEmptyView(mViewLoading);
             new Handler().postDelayed(this::getMusic, 1000);
         });
+
+        mViewLoading = LayoutInflater.from(view.getCon())
+                .inflate(R.layout.item_loading, (ViewGroup) view.getRecycler().getParent(), false);
 
         mViewDataError = LayoutInflater.from(view.getCon())
                 .inflate(R.layout.item_data_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewDataError.setOnClickListener(v -> {
+            mAdapter.setEmptyView(mViewLoading);
             new Handler().postDelayed(this::getMusic, 1000);
+        });
+
+        mAdapter.setOnItemChildClickListener((adapter, view1, position) -> {
+            if (mLists.isEmpty()) {
+                return;
+            }
+
+            if (TextUtils.equals(sceneType, String.valueOf(Constant.HAITUN_NATURAL_MUSIC))) {
+                view.startBrotherFragment(SleepMusicAudioFragment.newInstance(mLists.get(position).getVideoPictureUrl(),
+                        mLists.get(position).getVideoUrl(), mLists.get(position).getAudioUrl()));
+            } else if (TextUtils.equals(sceneType, String.valueOf(Constant.HAITUN_LIGHT_MUSIC))) {
+                view.startBrotherFragment(SleepMusicAudioFragment.newInstance(mLists.get(position).getAudioPictureUrl(),
+                        null, mLists.get(position).getAudioUrl()));
+            }
+
         });
     }
 
@@ -125,15 +147,5 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
                         }
                     }
                 });
-    }
-
-    /**
-     * 取消网络请求
-     */
-    @Override
-    public void unRegister() {
-        if (mAdapter!=null){
-            mAdapter.unRegister();
-        }
     }
 }

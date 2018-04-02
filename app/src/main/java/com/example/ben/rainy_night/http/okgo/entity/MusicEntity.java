@@ -83,9 +83,9 @@ public class MusicEntity implements Serializable{
         private String sceneName;
         private String coverUrl;
         private int coverSize;
-        private Object voiceUrl;
+        private String voiceUrl;
         private int voiceSize;
-        private Object alphaUrl;
+        private String alphaUrl;
         private int alphaSize;
         private String videoUrl;
         private int videoSize;
@@ -93,7 +93,7 @@ public class MusicEntity implements Serializable{
         private int videoPictureSize;
         private String audioUrl;
         private int audioSize;
-        private Object audioPictureUrl;
+        private String audioPictureUrl;
         private int audioPictureSize;
         private int priority;
         private String applyType;
@@ -101,7 +101,7 @@ public class MusicEntity implements Serializable{
         private String publishTime;
         private String updateTime;
         private String createTime;
-        private Object sceneDetail;
+        private String sceneDetail;
         private int totalsize;
 
         public int getSceneId() {
@@ -144,11 +144,11 @@ public class MusicEntity implements Serializable{
             this.coverSize = coverSize;
         }
 
-        public Object getVoiceUrl() {
+        public String getVoiceUrl() {
             return voiceUrl;
         }
 
-        public void setVoiceUrl(Object voiceUrl) {
+        public void setVoiceUrl(String voiceUrl) {
             this.voiceUrl = voiceUrl;
         }
 
@@ -160,11 +160,11 @@ public class MusicEntity implements Serializable{
             this.voiceSize = voiceSize;
         }
 
-        public Object getAlphaUrl() {
+        public String getAlphaUrl() {
             return alphaUrl;
         }
 
-        public void setAlphaUrl(Object alphaUrl) {
+        public void setAlphaUrl(String alphaUrl) {
             this.alphaUrl = alphaUrl;
         }
 
@@ -224,11 +224,11 @@ public class MusicEntity implements Serializable{
             this.audioSize = audioSize;
         }
 
-        public Object getAudioPictureUrl() {
+        public String getAudioPictureUrl() {
             return audioPictureUrl;
         }
 
-        public void setAudioPictureUrl(Object audioPictureUrl) {
+        public void setAudioPictureUrl(String audioPictureUrl) {
             this.audioPictureUrl = audioPictureUrl;
         }
 
@@ -288,11 +288,11 @@ public class MusicEntity implements Serializable{
             this.createTime = createTime;
         }
 
-        public Object getSceneDetail() {
+        public String getSceneDetail() {
             return sceneDetail;
         }
 
-        public void setSceneDetail(Object sceneDetail) {
+        public void setSceneDetail(String sceneDetail) {
             this.sceneDetail = sceneDetail;
         }
 

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicListFragment;
+import com.example.ben.rainy_night.util.Constant;
 
 /**
  *
@@ -25,9 +26,9 @@ public class SleepMusicFragmentAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return SleepMusicListFragment.newInstance("1");
+            return SleepMusicListFragment.newInstance(String.valueOf(Constant.HAITUN_NATURAL_MUSIC));
         } else if (position == 1) {
-            return SleepMusicListFragment.newInstance("2");
+            return SleepMusicListFragment.newInstance(String.valueOf(Constant.HAITUN_LIGHT_MUSIC));
         }
         return null;
     }

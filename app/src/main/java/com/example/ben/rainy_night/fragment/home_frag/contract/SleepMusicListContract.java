@@ -57,10 +57,5 @@ public interface SleepMusicListContract {
          * 获取音乐数据
          */
         void getMusic();
-
-        /**
-         * 取消网络请求
-         */
-        void unRegister();
     }
 }
