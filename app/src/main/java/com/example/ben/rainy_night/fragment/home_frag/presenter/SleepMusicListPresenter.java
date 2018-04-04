@@ -1,6 +1,7 @@
 package com.example.ben.rainy_night.fragment.home_frag.presenter;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,9 +15,12 @@ import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.fragment.home_frag.adapter.SleepMusicListAdapter;
 import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicListContract;
 import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicAudioFragment;
+import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicVideoFragment;
 import com.example.ben.rainy_night.http.okgo.callback.JsonCallBack;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.util.Constant;
+import com.example.ben.rainy_night.util.LoggerUtil;
+import com.example.ben.rainy_night.util.ToastUtil;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
@@ -43,7 +47,7 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
     private String mSceneType;
 
 
-    private Handler mHandler = new Handler() {
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -81,7 +85,7 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
                 .inflate(R.layout.item_net_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewNetError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
-            new Handler().postDelayed(this::getMusic, 1000);
+            new Handler(Looper.getMainLooper()).postDelayed(this::getMusic, 1000);
         });
 
         mViewLoading = LayoutInflater.from(view.getCon())
@@ -91,22 +95,17 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
                 .inflate(R.layout.item_data_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewDataError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
-            new Handler().postDelayed(this::getMusic, 1000);
+            new Handler(Looper.getMainLooper()).postDelayed(this::getMusic, 1000);
         });
 
-        mAdapter.setOnItemChildClickListener((adapter, view1, position) -> {
-            if (mLists.isEmpty()) {
-                return;
-            }
-
+        mAdapter.setOnItemClickListener((adapter, view1, position) -> {
             if (TextUtils.equals(sceneType, String.valueOf(Constant.HAITUN_NATURAL_MUSIC))) {
-                view.startBrotherFragment(SleepMusicAudioFragment.newInstance(mLists.get(position).getVideoPictureUrl(),
-                        mLists.get(position).getVideoUrl(), mLists.get(position).getAudioUrl()));
+                view.startBrotherFragment(SleepMusicVideoFragment.newInstance(mLists.get(position).getVideoUrl(),
+                        mLists.get(position).getVideoPictureUrl(), mLists.get(position).getAudioUrl()));
             } else if (TextUtils.equals(sceneType, String.valueOf(Constant.HAITUN_LIGHT_MUSIC))) {
-                view.startBrotherFragment(SleepMusicAudioFragment.newInstance(mLists.get(position).getAudioPictureUrl(),
-                        null, mLists.get(position).getAudioUrl()));
+                view.startBrotherFragment(SleepMusicAudioFragment.newInstance(mLists.get(position).getAudioUrl(),
+                        mLists.get(position).getAudioPictureUrl()));
             }
-
         });
     }
 

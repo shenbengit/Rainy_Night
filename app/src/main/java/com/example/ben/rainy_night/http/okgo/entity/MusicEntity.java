@@ -303,5 +303,36 @@ public class MusicEntity implements Serializable{
         public void setTotalsize(int totalsize) {
             this.totalsize = totalsize;
         }
+
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "sceneId=" + sceneId +
+                    ", sceneType=" + sceneType +
+                    ", sceneName='" + sceneName + '\'' +
+                    ", coverUrl='" + coverUrl + '\'' +
+                    ", coverSize=" + coverSize +
+                    ", voiceUrl='" + voiceUrl + '\'' +
+                    ", voiceSize=" + voiceSize +
+                    ", alphaUrl='" + alphaUrl + '\'' +
+                    ", alphaSize=" + alphaSize +
+                    ", videoUrl='" + videoUrl + '\'' +
+                    ", videoSize=" + videoSize +
+                    ", videoPictureUrl='" + videoPictureUrl + '\'' +
+                    ", videoPictureSize=" + videoPictureSize +
+                    ", audioUrl='" + audioUrl + '\'' +
+                    ", audioSize=" + audioSize +
+                    ", audioPictureUrl='" + audioPictureUrl + '\'' +
+                    ", audioPictureSize=" + audioPictureSize +
+                    ", priority=" + priority +
+                    ", applyType='" + applyType + '\'' +
+                    ", publishStatus=" + publishStatus +
+                    ", publishTime='" + publishTime + '\'' +
+                    ", updateTime='" + updateTime + '\'' +
+                    ", createTime='" + createTime + '\'' +
+                    ", sceneDetail='" + sceneDetail + '\'' +
+                    ", totalsize=" + totalsize +
+                    '}';
+        }
     }
 }

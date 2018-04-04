@@ -2,7 +2,9 @@ package com.example.ben.rainy_night.widget;
 
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.widget.VideoView;
 
 /**
@@ -16,22 +18,22 @@ public class FullScreenVideoView extends VideoView {
     public FullScreenVideoView(Context context) {
         super(context);
     }
-
     public FullScreenVideoView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
-    public FullScreenVideoView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    public FullScreenVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        //我们重新计算高度
+        int width = getDefaultSize(0, widthMeasureSpec);
+        int height = getDefaultSize(0, heightMeasureSpec);
+        setMeasuredDimension(width, height);
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        //得到默认的大小（0，宽度测量规范）
-        int width = getDefaultSize(0, widthMeasureSpec);
-        //得到默认的大小（0，高度度测量规范）
-        int height = getDefaultSize(0, heightMeasureSpec);
-        //设置测量尺寸,将高和宽放进去
-        setMeasuredDimension(width, height);
+    public void setOnPreparedListener(MediaPlayer.OnPreparedListener l) {
+        super.setOnPreparedListener(l);
     }
 }

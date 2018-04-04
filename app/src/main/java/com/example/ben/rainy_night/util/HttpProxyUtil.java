@@ -25,7 +25,7 @@ public class HttpProxyUtil {
     private static HttpProxyCacheServer newProxy(Context context) {
         return new HttpProxyCacheServer.Builder(context)
                 .maxCacheSize(10)
-                .maxCacheSize(1024 * 1024 * 50)
+                .maxCacheSize(1024 * 1024 * 100)
                 .build();
     }
 }

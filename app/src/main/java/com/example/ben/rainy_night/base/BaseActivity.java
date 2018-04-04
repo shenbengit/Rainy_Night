@@ -32,9 +32,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setPresenter();
         setContentView(getLayout());
         ButterKnife.bind(this);
+        setPresenter();
         initView();
         initData();
     }
