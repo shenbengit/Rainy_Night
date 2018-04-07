@@ -27,7 +27,7 @@ public interface SleepMusicVideoContract {
          *
          * @return
          */
-        SurfaceView getVideoView();
+        FullScreenVideoView getVideoView();
 
         /**
          * 获取ImageView
@@ -49,11 +49,6 @@ public interface SleepMusicVideoContract {
          * 开始播放视频
          */
         void startVideo();
-
-        /**
-         * 暂停播放视频
-         */
-        void pauseVideo();
 
         /**
          * 停止播放视频

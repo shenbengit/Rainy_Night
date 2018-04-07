@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ib_music_previous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/music_previous" />
+
+        <ImageButton
+            android:id="@+id/ib_music_isPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@mipmap/music_pause" />
+
+        <ImageButton
+            android:id="@+id/ib_music_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/music_next" />
+    </LinearLayout>
+
+    <com.vondear.rxtools.view.RxSeekBar
+        android:id="@+id/rsb_music_time"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        app:cellMode="other"
+        app:hintBGHeight="50dp"
+        app:lineColorEdge="@color/color_hint_text"
+        app:lineColorSelected="@color/colorWhite"
+        app:markTextArray="@array/music_time"
+        app:maxProgress="60"
+        app:seekBarHeight="2dp"
+        app:seekBarMode="single"
+        app:textPadding="17dp"
+        app:textSize="16sp"
+        app:thumbSize="15dp" />
+</LinearLayout>

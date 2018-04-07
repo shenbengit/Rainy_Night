@@ -1,8 +1,12 @@
 package com.example.ben.rainy_night.activity;
 
+import android.content.Context;
+import android.content.Intent;
+
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseActivity;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
+import com.example.ben.rainy_night.service.MusicPlayerService;
 import com.gyf.barlibrary.ImmersionBar;
 
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
@@ -30,6 +34,8 @@ public class MainActivity extends BaseActivity {
     public void initView() {
         mImmersionBar = ImmersionBar.with(this);
         mImmersionBar.keyboardEnable(true).navigationBarWithKitkatEnable(false).init();
+        //启动播放音乐的服务
+        startService(new Intent(this, MusicPlayerService.class));
     }
 
     @Override
@@ -55,5 +61,6 @@ public class MainActivity extends BaseActivity {
         if (mImmersionBar != null) {
             mImmersionBar.destroy();
         }
+        stopService(new Intent(this, MusicPlayerService.class));
     }
 }

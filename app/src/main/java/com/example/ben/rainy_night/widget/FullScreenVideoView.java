@@ -31,9 +31,4 @@ public class FullScreenVideoView extends VideoView {
         int height = getDefaultSize(0, heightMeasureSpec);
         setMeasuredDimension(width, height);
     }
-
-    @Override
-    public void setOnPreparedListener(MediaPlayer.OnPreparedListener l) {
-        super.setOnPreparedListener(l);
-    }
 }

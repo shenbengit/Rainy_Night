@@ -46,7 +46,6 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
      */
     private String mSceneType;
 
-
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {

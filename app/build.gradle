@@ -99,7 +99,7 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     //OkGo 网络请求
     compile 'com.lzy.net:okgo:3.0.4'
-    //文件下载
+    //OkGo 文件下载
     compile 'com.lzy.net:okserver:2.0.5'
     //视频缓存、边下边播库
     compile 'com.danikula:videocache:2.7.0'
