@@ -7,7 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.base.BaseBackFragment;
+import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.home_frag.adapter.SleepMusicFragmentAdapter;
 
 import butterknife.BindView;
@@ -18,7 +18,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  * @date 2018/3/28
  */
 
-public class SleepMusicFragment extends BaseBackFragment {
+public class SleepMusicFragment extends BaseFragment {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -68,11 +68,6 @@ public class SleepMusicFragment extends BaseBackFragment {
 
     }
 
-    /**
-     * 是否透明化状态栏
-     *
-     * @return
-     */
     @Override
     protected boolean isTransparentStatusBar() {
         return false;

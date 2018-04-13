@@ -31,4 +31,9 @@ public class NightFragment extends BaseFragment {
     public void initData() {
 
     }
+
+    @Override
+    protected boolean isTransparentStatusBar() {
+        return false;
+    }
 }

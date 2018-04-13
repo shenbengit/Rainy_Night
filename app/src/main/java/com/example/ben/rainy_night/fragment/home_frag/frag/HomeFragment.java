@@ -9,6 +9,7 @@ import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicFragment;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
+import com.example.ben.rainy_night.util.LoggerUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -19,8 +20,6 @@ import butterknife.OnClick;
  */
 public class HomeFragment extends BaseFragment {
 
-    @BindView(R.id.base_toolbar)
-    Toolbar baseToolbar;
     @BindView(R.id.btn_home_sleep)
     Button btnHomeSleep;
 
@@ -70,5 +69,10 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void initData() {
 
+    }
+
+    @Override
+    protected boolean isTransparentStatusBar() {
+        return false;
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#141F31</color>
-    <color name="colorPrimaryDark">#141F27</color>
+    <color name="colorPrimary">#1C2640</color>
+    <color name="colorPrimaryDark">#0B122D</color>
     <color name="colorPrimaryOverlay">#cc0094ff</color>
     <color name="colorAccent">#FF4081</color>
     <color name="tab_unselect">#c9c9c9</color>
@@ -18,7 +18,8 @@
     <color name="colorTextTitle">#333333</color>
     <color name="colorDivison">#33aaaaaa</color>
 
-    <color name="rainy_night_statusbar">#141F31</color>
+    <color name="rainy_night_statusbar">#0B122D</color>
+    <color name="rainy_night_bar">#141F31</color>
     <color name="rainy_night_background">#1B273D</color>
     <color name="bottom_bar">#1A263E</color>
     <color name="bottom_bar_seleted">#38E0FA</color>

@@ -61,3 +61,5 @@
 -keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
      <init>(...);
 }
+#ImmersionBar
+ -keep class com.gyf.barlibrary.* {*;}

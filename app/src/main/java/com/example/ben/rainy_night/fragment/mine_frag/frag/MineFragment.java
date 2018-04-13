@@ -65,9 +65,6 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
         }
     }
 
-    private String account = "";
-    private String password = "";
-
     public static MineFragment newInstance() {
         return new MineFragment();
     }
@@ -90,15 +87,15 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
     @Override
     public void initData() {
         if (mUserEntity != null) {
-            account = mUserEntity.getMobilePhoneNumber();
-            password = String.valueOf(SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(SharedPreferencesUtil.USER_PASSWORD, ""));
+            String account = mUserEntity.getMobilePhoneNumber();
+            String password = String.valueOf(SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(SharedPreferencesUtil.USER_PASSWORD, ""));
             presenter.loginUser(Constant.REQUEST_LOGIN_MINE, account, password);
-        } else {
-            civMineHead.setImageResource(R.mipmap.ic_head);
-            tvMineName.setText(getString(R.string.login_register));
         }
+    }
 
-
+    @Override
+    protected boolean isTransparentStatusBar() {
+        return false;
     }
 
     /**

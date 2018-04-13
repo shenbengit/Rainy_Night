@@ -89,6 +89,11 @@ public class ShareFragment extends BaseFragment{
         mAdapter.setNewData(mItemList);
     }
 
+    @Override
+    protected boolean isTransparentStatusBar() {
+        return false;
+    }
+
     private List<String> addData() {
         List<String> data = new ArrayList<>();
         for (int i = mItemList.size() + 1; i <= mItemList.size() + 3; i++) {

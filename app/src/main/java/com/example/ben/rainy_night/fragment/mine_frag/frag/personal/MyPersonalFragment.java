@@ -14,7 +14,7 @@ import com.bigkoo.pickerview.OptionsPickerView;
 import com.bigkoo.pickerview.TimePickerView;
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.base.BaseBackFragment;
+import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.event.OnActivityResultEvent;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.MyPersonalContract;
@@ -43,7 +43,7 @@ import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TIT
 /**
  * @author Ben
  */
-public class MyPersonalFragment extends BaseBackFragment<MyPersonalContract.Presenter> implements MyPersonalContract.View {
+public class MyPersonalFragment extends BaseFragment<MyPersonalContract.Presenter> implements MyPersonalContract.View {
 
     @BindView(R.id.base_toolbar)
     Toolbar mToolBar;

@@ -7,6 +7,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.cookie.CookieJarImpl;
+import com.lzy.okgo.cookie.store.DBCookieStore;
 import com.lzy.okgo.cookie.store.SPCookieStore;
 import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
@@ -39,7 +40,7 @@ public class OkGoFactory {
                 .readTimeout(10000, TimeUnit.SECONDS)
                 .writeTimeout(10000, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .cookieJar(new CookieJarImpl(new SPCookieStore(application)))
+                .cookieJar(new CookieJarImpl(new DBCookieStore(application)))
                 .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
                 .hostnameVerifier(HttpsUtils.UnSafeHostnameVerifier)
                 .build();

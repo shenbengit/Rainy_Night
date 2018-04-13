@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.base.BaseBackFragment;
+import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.LoginContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.LoginPresenterImpl;
@@ -28,7 +28,7 @@ import butterknife.OnClick;
 /**
  * @author Ben
  */
-public class LoginFragment extends BaseBackFragment<LoginContract.Presenter> implements LoginContract.View {
+public class LoginFragment extends BaseFragment<LoginContract.Presenter> implements LoginContract.View {
 
 
     @BindView(R.id.base_toolbar)

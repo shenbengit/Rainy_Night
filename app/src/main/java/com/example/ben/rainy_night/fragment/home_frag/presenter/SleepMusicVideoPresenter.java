@@ -1,12 +1,10 @@
 package com.example.ben.rainy_night.fragment.home_frag.presenter;
 
-import android.media.MediaPlayer;
-import android.os.Handler;
-import android.text.TextUtils;
-import android.view.View;
-
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.devbrackets.android.exomedia.core.video.scale.ScaleType;
+import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicVideoContract;
+import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.util.HttpProxyUtil;
 
 import java.net.URLDecoder;
@@ -19,61 +17,87 @@ import java.net.URLDecoder;
 public class SleepMusicVideoPresenter implements SleepMusicVideoContract.Presenter {
 
     private SleepMusicVideoContract.View view;
-
-    private String mVideoUrl;
+    private HttpProxyCacheServer mServer;
+    private MusicEntity mEntity;
+    private int mPosition;
 
     public SleepMusicVideoPresenter(SleepMusicVideoContract.View view) {
         this.view = view;
     }
 
     @Override
-    public void initProxy(String videoUrl) {
-        if (TextUtils.isEmpty(videoUrl)) {
-            view.showToast("暂无视频数据");
-            return;
-        }
-        HttpProxyCacheServer mServer = HttpProxyUtil.getProxy(view.getCon().getApplicationContext());
-        mVideoUrl = mServer.getProxyUrl(URLDecoder.decode(videoUrl));
+    public void initProxy(int position) {
+        mServer = HttpProxyUtil.getProxy(view.getCon().getApplicationContext());
+        mPosition = position;
+        mEntity = view.getEntity();
     }
 
     @Override
     public void startVideo() {
-        view.getVideoView().setVideoPath(mVideoUrl);
-//        view.getVideoView().setOnPreparedListener(mp -> {
-//            mp.start();
-//            mp.setLooping(true);
-//            mp.setOnInfoListener((mp1, what, extra) -> {
-//                if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-//                    new Handler().postDelayed(() -> view.getImageView().setVisibility(View.GONE),500);
-//                    return true;
-//                }
-//                return false;
-//            });
-//        });
+        start(mPosition);
+    }
 
-        view.getVideoView().setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.start();
-                mp.setLooping(true);
-                mp.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-                    @Override
-                    public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                        if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                            new Handler().postDelayed(() -> view.getImageView().setVisibility(View.GONE),500);
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-            }
-        });
+    @Override
+    public void resumeVideo() {
+        if (!view.getVideoView().isPlaying()) {
+            view.getVideoView().start();
+        }
+    }
+
+    @Override
+    public void pauseVideo() {
+        if (view.getVideoView().isPlaying()) {
+            view.getVideoView().pause();
+        }
     }
 
     @Override
     public void stopVideo() {
-        view.getVideoView().suspend();
-        view.getVideoView().stopPlayback();
+        view.getVideoView().release();
     }
 
+    @Override
+    public void startPrevious() {
+        if (mPosition == 0) {
+            view.showToast("已经是第一个了哦");
+            return;
+        }
+        view.getVideoView().stopPlayback();
+        mPosition--;
+        start(mPosition);
+    }
+
+    @Override
+    public void startNext() {
+        if (mPosition == mEntity.getData().size() - 1) {
+            view.showToast("已经是最后一个了哦");
+            return;
+        }
+        view.getVideoView().stopPlayback();
+        mPosition++;
+        start(mPosition);
+    }
+
+    /**
+     * 获取代理地址
+     *
+     * @param videoUrl 视频地址
+     * @return 代理地址
+     */
+    private String getProxyUrl(String videoUrl) {
+        return mServer.getProxyUrl(URLDecoder.decode(videoUrl));
+    }
+
+    /**
+     * 播放
+     *
+     * @param position
+     */
+    private void start(int position) {
+        view.getVideoView().setScaleType(ScaleType.FIT_XY);
+        GlideApp.with(view.getCon()).load(mEntity.getData().get(position).getVideoPictureUrl()).into(view.getVideoView().getPreviewImageView());
+        view.getVideoView().setVideoPath(getProxyUrl(mEntity.getData().get(position).getVideoUrl()));
+        view.getVideoView().setRepeatMode(2);
+        view.getVideoView().setOnPreparedListener(() -> view.getVideoView().start());
+    }
 }

@@ -91,8 +91,9 @@ dependencies {
     compile 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.9'
     //空间列表模板
     compile 'com.jaeger.ninegridimageview:library:1.1.1'
-    //沉浸式状态栏和沉浸式导航栏管理
+    //ImmersionBar 沉浸式状态栏和沉浸式导航栏管理
     compile 'com.gyf.barlibrary:barlibrary:2.3.0'
+    //multidex
     compile 'com.android.support:multidex:1.0.1'
     //检测内存泄漏工具
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
@@ -101,6 +102,6 @@ dependencies {
     compile 'com.lzy.net:okgo:3.0.4'
     //OkGo 文件下载
     compile 'com.lzy.net:okserver:2.0.5'
-    //视频缓存、边下边播库
-    compile 'com.danikula:videocache:2.7.0'
+    //exomedia
+    compile project(':exomedia')
 }

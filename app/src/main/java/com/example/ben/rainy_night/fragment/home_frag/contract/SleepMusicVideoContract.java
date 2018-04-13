@@ -1,12 +1,13 @@
 package com.example.ben.rainy_night.fragment.home_frag.contract;
 
 import android.content.Context;
-import android.view.SurfaceView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.example.ben.rainy_night.base.BasePresenter;
 import com.example.ben.rainy_night.base.BaseView;
-import com.example.ben.rainy_night.widget.FullScreenVideoView;
+import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 
 /**
  * @author Ben
@@ -14,6 +15,7 @@ import com.example.ben.rainy_night.widget.FullScreenVideoView;
  */
 
 public interface SleepMusicVideoContract {
+
     interface View extends BaseView {
         /**
          * 获取Context
@@ -27,23 +29,30 @@ public interface SleepMusicVideoContract {
          *
          * @return
          */
-        FullScreenVideoView getVideoView();
+        VideoView getVideoView();
 
         /**
-         * 获取ImageView
+         * 获取Linearlayout
          *
          * @return
          */
-        ImageView getImageView();
+        LinearLayout getLinear();
+
+        /**
+         * 获取音频列表信息
+         *
+         * @return
+         */
+        MusicEntity getEntity();
     }
 
     interface Presenter extends BasePresenter {
         /**
          * 初始化音频播放代理
          *
-         * @param videoUrl        视频地址
+         * @param position        当前音频播放的位置
          */
-        void initProxy(String videoUrl);
+        void initProxy(int position);
 
         /**
          * 开始播放视频
@@ -51,8 +60,28 @@ public interface SleepMusicVideoContract {
         void startVideo();
 
         /**
+         * 继续播放视频
+         */
+        void resumeVideo();
+
+        /**
+         * 暂停播放视频
+         */
+        void pauseVideo();
+
+        /**
          * 停止播放视频
          */
         void stopVideo();
+
+        /**
+         * 播放上一个
+         */
+        void startPrevious();
+
+        /**
+         * 播放下一个
+         */
+        void startNext();
     }
 }

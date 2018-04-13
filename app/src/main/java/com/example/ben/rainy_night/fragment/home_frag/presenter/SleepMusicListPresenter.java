@@ -20,7 +20,6 @@ import com.example.ben.rainy_night.http.okgo.callback.JsonCallBack;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
-import com.example.ben.rainy_night.util.ToastUtil;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
@@ -98,12 +97,10 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
         });
 
         mAdapter.setOnItemClickListener((adapter, view1, position) -> {
-            if (TextUtils.equals(sceneType, String.valueOf(Constant.HAITUN_NATURAL_MUSIC))) {
-                view.startBrotherFragment(SleepMusicVideoFragment.newInstance(mLists.get(position).getVideoUrl(),
-                        mLists.get(position).getVideoPictureUrl(), mLists.get(position).getAudioUrl()));
-            } else if (TextUtils.equals(sceneType, String.valueOf(Constant.HAITUN_LIGHT_MUSIC))) {
-                view.startBrotherFragment(SleepMusicAudioFragment.newInstance(mLists.get(position).getAudioUrl(),
-                        mLists.get(position).getAudioPictureUrl()));
+            if (TextUtils.equals(sceneType, String.valueOf(Constant.DOLPHIN_NATURAL_MUSIC))) {
+                view.startBrotherFragment(SleepMusicVideoFragment.newInstance(position));
+            } else if (TextUtils.equals(sceneType, String.valueOf(Constant.DOLPHIN_LIGHT_MUSIC))) {
+                view.startBrotherFragment(SleepMusicAudioFragment.newInstance(position));
             }
         });
     }
@@ -118,11 +115,11 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
             mAdapter.setEmptyView(mViewDataError);
             return;
         }
-        OkGo.<MusicEntity>get(Constant.HAITUN_BASEURL + Constant.HAITUN_MUSIC)
+        OkGo.<MusicEntity>get(Constant.DOLPHIN_BASEURL + Constant.DOLPHIN_MUSIC)
                 .params("sceneType", mSceneType)
                 .params("timestamp", System.currentTimeMillis())
                 .cacheMode(CacheMode.IF_NONE_CACHE_REQUEST)
-                .cacheKey("dolphin_music" + mSceneType)
+                .cacheKey(Constant.DOLPHIN_MUSIC_CACHE + mSceneType)
                 .execute(new JsonCallBack<MusicEntity>(MusicEntity.class) {
                     @Override
                     public void onSuccess(Response<MusicEntity> response) {

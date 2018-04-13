@@ -1,79 +1,29 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag.space;
 
-
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.ButtonBarLayout;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.base.BaseBackFragment;
-import com.flyco.roundview.RoundTextView;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshHeader;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
-import com.scwang.smartrefresh.layout.listener.SimpleMultiPurposeListener;
-import com.scwang.smartrefresh.layout.util.DensityUtil;
+import com.example.ben.rainy_night.base.BaseFragment;
 
 import butterknife.BindView;
-import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @author Ben
  * @date 2018/2/9
  */
 
-public class SpaceFragment extends BaseBackFragment {
+public class SpaceFragment extends BaseFragment {
 
-    @BindView(R.id.parallax_space)
-    ImageView parallaxSpace;
-    @BindView(R.id.toolbar_space)
-    Toolbar toolbarSpace;
-    @BindView(R.id.buttonBarLayout_space)
-    ButtonBarLayout buttonBarLayoutSpace;
-    @BindView(R.id.refreshLayout_space)
-    SmartRefreshLayout refreshLayoutSpace;
-    @BindView(R.id.scrollView_space)
-    NestedScrollView scrollViewSpace;
-    @BindView(R.id.rtv_post_story)
-    RoundTextView rtvPostStory;
-    @BindView(R.id.recy_space)
-    RecyclerView recySpace;
-    @BindView(R.id.tv_space_nickName)
-    TextView tvSpaceNickName;
-    @BindView(R.id.tv_signature)
-    TextView tvSignature;
-    @BindView(R.id.civ_space_head)
-    CircleImageView civSpaceHead;
-    @BindView(R.id.collapse)
-    CollapsingToolbarLayout collapse;
-    @BindView(R.id.civ_space_toolbar_head)
-    CircleImageView civSpaceToolbarHead;
-    @BindView(R.id.tv_space_toolbar_nickName)
-    TextView tvSpaceToolbarNickName;
 
-    @OnClick({R.id.rtv_post_story})
-    public void viewOnClick(View view) {
-        switch (view.getId()) {
-            case R.id.rtv_post_story:
-                start(PostStoryFragment.newInstance());
-                break;
-            default:
-                break;
-        }
-    }
-
-    private int mOffset = 0;
-    private int mScrollY = 0;
+    @BindView(R.id.image)
+    ImageView image;
 
     public static SpaceFragment newInstance() {
         return new SpaceFragment();
@@ -100,41 +50,7 @@ public class SpaceFragment extends BaseBackFragment {
      */
     @Override
     protected void initView() {
-        refreshLayoutSpace.setOnLoadmoreListener(refreshlayout -> refreshlayout.finishLoadmore(2000));
-        refreshLayoutSpace.setOnMultiPurposeListener(new SimpleMultiPurposeListener() {
-            @Override
-            public void onHeaderPulling(RefreshHeader header, float percent, int offset, int bottomHeight, int extendHeight) {
-                mOffset = offset / 2;
-                parallaxSpace.setTranslationY(mOffset - mScrollY);
-                buttonBarLayoutSpace.setAlpha(0);
-            }
 
-            @Override
-            public void onHeaderReleasing(RefreshHeader header, float percent, int offset, int bottomHeight, int extendHeight) {
-                mOffset = offset / 2;
-                parallaxSpace.setTranslationY(mOffset - mScrollY);
-                toolbarSpace.setAlpha(1 - Math.min(percent, 1));
-            }
-        });
-        scrollViewSpace.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            private int lastScrollY = 0;
-            private int h = DensityUtil.dp2px(170);
-            private int color = ContextCompat.getColor(_mActivity, R.color.colorPrimary) & 0x00ffffff;
-
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (lastScrollY < h) {
-                    scrollY = Math.min(h, scrollY);
-                    mScrollY = scrollY > h ? h : scrollY;
-                    buttonBarLayoutSpace.setAlpha(1f * mScrollY / h);
-                    toolbarSpace.setBackgroundColor(((255 * mScrollY / h) << 24) | color);
-                    parallaxSpace.setTranslationY(mOffset - mScrollY);
-                }
-                lastScrollY = scrollY;
-            }
-        });
-        buttonBarLayoutSpace.setAlpha(0);
-        toolbarSpace.setBackgroundColor(0);
     }
 
     /**
@@ -142,44 +58,11 @@ public class SpaceFragment extends BaseBackFragment {
      */
     @Override
     protected void initData() {
-
+        GlideApp.with(_mActivity).load("http://fileserver1.clife.net:8080/group1/M00/23/AA/Cvtlp1n67bSAWyLkAAHhZ23UF1k330.png").into(image);
     }
 
-    /**
-     * 是否透明化状态栏
-     *
-     * @return
-     */
     @Override
     protected boolean isTransparentStatusBar() {
         return true;
-    }
-
-    @Override
-    public void onEnterAnimationEnd(Bundle savedInstanceState) {
-        super.onEnterAnimationEnd(savedInstanceState);
-        if (mUserEntity == null) {
-            tvSpaceNickName.setText("");
-            tvSpaceToolbarNickName.setText("");
-            civSpaceHead.setImageResource(R.mipmap.ic_head);
-            civSpaceToolbarHead.setImageResource(R.mipmap.ic_head);
-            return;
-        }
-        tvSpaceNickName.setText(mUserEntity.getNickName());
-        tvSpaceToolbarNickName.setText(mUserEntity.getNickName());
-        if (mUserEntity.getHeadimg() != null) {
-            GlideApp.with(_mActivity)
-                    .load(mUserEntity.getHeadimg().getFileUrl())
-                    .placeholder(R.mipmap.ic_head)
-                    .error(R.mipmap.ic_head)
-                    .into(civSpaceHead);
-            GlideApp.with(_mActivity)
-                    .load(mUserEntity.getHeadimg().getFileUrl())
-                    .placeholder(R.mipmap.ic_head)
-                    .error(R.mipmap.ic_head)
-                    .into(civSpaceToolbarHead);
-        }
-
-
     }
 }

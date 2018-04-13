@@ -4,13 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicListContract;
 import com.example.ben.rainy_night.fragment.home_frag.presenter.SleepMusicListPresenter;
-import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
 import com.example.ben.rainy_night.util.NetWorkUtil;
 
 import butterknife.BindView;
@@ -73,6 +71,11 @@ public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.
     @Override
     protected void initData() {
 
+    }
+
+    @Override
+    protected boolean isTransparentStatusBar() {
+        return false;
     }
 
     @Override

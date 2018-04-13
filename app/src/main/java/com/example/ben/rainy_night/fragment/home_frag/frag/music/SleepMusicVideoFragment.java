@@ -1,45 +1,43 @@
 package com.example.ben.rainy_night.fragment.home_frag.frag.music;
 
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Message;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.danikula.videocache.HttpProxyCacheServer;
-import com.example.ben.rainy_night.GlideApp;
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.base.BaseBackFragment;
+import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicVideoContract;
 import com.example.ben.rainy_night.fragment.home_frag.presenter.SleepMusicVideoPresenter;
-import com.example.ben.rainy_night.manager.MusicPlayManager;
-import com.example.ben.rainy_night.util.HttpProxyUtil;
-import com.example.ben.rainy_night.widget.FullScreenVideoView;
+import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
+import com.example.ben.rainy_night.manager.MusicActionManager;
+import com.example.ben.rainy_night.util.Constant;
+import com.lzy.okgo.cache.CacheEntity;
+import com.lzy.okgo.db.CacheManager;
 import com.vondear.rxtools.view.RxSeekBar;
-
-import java.net.URLDecoder;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 
 /**
  * @author Ben
  * @date 2018/4/3
  */
 
-public class SleepMusicVideoFragment extends BaseBackFragment<SleepMusicVideoContract.Presenter> implements SleepMusicVideoContract.View {
+public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContract.Presenter> implements SleepMusicVideoContract.View {
 
-    private static final String VIDEO_URL = "video_url";
-    private static final String VIDEO_PICTURE_URL = "video_picture_url";
-    private static final String AUDIO_URL = "audio_url";
+    private static final String POSITION = "position";
 
     @BindView(R.id.video)
-    FullScreenVideoView video;
-    @BindView(R.id.iv_sleep_music_video_picture)
-    ImageView ivSleepMusicVideoPicture;
+    VideoView video;
     @BindView(R.id.ib_music_previous)
     ImageButton ibMusicPrevious;
     @BindView(R.id.ib_music_isPlay)
@@ -50,47 +48,121 @@ public class SleepMusicVideoFragment extends BaseBackFragment<SleepMusicVideoCon
     RxSeekBar rsbMusicTime;
     @BindView(R.id.linear_music)
     LinearLayout linearMusic;
+    @BindView(R.id.frame_sleep_music_video)
+    FrameLayout frameSleepMusicVideo;
 
-    @OnClick({R.id.ib_music_previous, R.id.ib_music_isPlay, R.id.ib_music_next})
+    @OnClick({R.id.ib_sleep_video_back, R.id.ib_music_previous, R.id.ib_music_isPlay, R.id.ib_music_next})
     public void viewOnClick(View view) {
         switch (view.getId()) {
+            case R.id.ib_sleep_video_back:
+                _mActivity.onBackPressed();
+                break;
             case R.id.ib_music_previous:
-
+                mTimer.cancel();
+                MusicActionManager.getInstance().startPrevious();
+                presenter.startPrevious();
+                mTimer.start();
                 break;
             case R.id.ib_music_isPlay:
-                if (isPlaying) {
+                mTimer.cancel();
+                if (!isPlaying) {
                     ibMusicIsPlay.setBackgroundResource(R.mipmap.music_pause);
-                    MusicPlayManager.gerInstance().pause();
-                    isPlaying = false;
-                } else {
-                    ibMusicIsPlay.setBackgroundResource(R.mipmap.music_start1);
-                    MusicPlayManager.gerInstance().resume();
+                    MusicActionManager.getInstance().resume();
+                    presenter.resumeVideo();
                     isPlaying = true;
+                } else {
+                    ibMusicIsPlay.setBackgroundResource(R.mipmap.music_start);
+                    MusicActionManager.getInstance().pause();
+                    presenter.pauseVideo();
+                    isPlaying = false;
                 }
+                mTimer.start();
                 break;
             case R.id.ib_music_next:
-
+                mTimer.cancel();
+                MusicActionManager.getInstance().startNext();
+                presenter.startNext();
+                mTimer.start();
                 break;
             default:
                 break;
         }
     }
 
-    private String mVideoUrl;
-    private String mVideoPictureUrl;
-    private String mAudioUrl;
+    @OnTouch({R.id.frame_sleep_music_video, R.id.rsb_music_time})
+    public boolean viewOnTouch(View view, MotionEvent event) {
+        switch (view.getId()) {
+            case R.id.frame_sleep_music_video:
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mTimer.cancel();
+                        linearMusic.setVisibility(View.VISIBLE);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        mTimer.start();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case R.id.rsb_music_time:
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mTimer.cancel();
+                        linearMusic.setVisibility(View.VISIBLE);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        mHandler.sendEmptyMessage(2);
+                        mTimer.start();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+        return false;
+    }
 
-    private boolean isPlaying = true;
-
-    public static SleepMusicVideoFragment newInstance(String videoUrl, String videoPictureUrl, String audioUrl) {
+    public static SleepMusicVideoFragment newInstance(int position) {
         Bundle bundle = new Bundle();
         SleepMusicVideoFragment fragment = new SleepMusicVideoFragment();
-        bundle.putString(VIDEO_URL, videoUrl);
-        bundle.putString(VIDEO_PICTURE_URL, videoPictureUrl);
-        bundle.putString(AUDIO_URL, audioUrl);
+        bundle.putInt(POSITION, position);
         fragment.setArguments(bundle);
         return fragment;
     }
+
+    private MusicEntity mEntity;
+    private int mPosition;
+    private CountDownTimer mTimer;
+    private boolean isPlaying = true;
+    private int mCurrentTime = -1;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    linearMusic.setVisibility(View.GONE);
+                    break;
+                case 2:
+                    float[] values = rsbMusicTime.getCurrentRange();
+                    if (mCurrentTime == (int) values[0]) {
+                        return;
+                    }
+                    mCurrentTime = (int) values[0];
+                    if (mCurrentTime != -1) {
+                        //设置定时时间
+                        MusicActionManager.getInstance().setRemainTime(mCurrentTime);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     protected int getLayout() {
@@ -106,35 +178,64 @@ public class SleepMusicVideoFragment extends BaseBackFragment<SleepMusicVideoCon
     protected void initView() {
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mVideoPictureUrl = bundle.getString(VIDEO_PICTURE_URL);
-            mVideoUrl = bundle.getString(VIDEO_URL);
-            mAudioUrl = bundle.getString(AUDIO_URL);
+            mPosition = bundle.getInt(POSITION);
         }
+        mTimer = new CountDownTimer(3 * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
 
-        MusicPlayManager.gerInstance().start(mAudioUrl);
+            }
+
+            @Override
+            public void onFinish() {
+                mHandler.sendEmptyMessage(1);
+            }
+        };
+        mTimer.start();
+        rsbMusicTime.setValue(30);
     }
 
     @Override
     protected void initData() {
-        GlideApp.with(_mActivity).load(mVideoPictureUrl).into(ivSleepMusicVideoPicture);
-        presenter.initProxy(mVideoUrl);
-    }
-
-    @Override
-    protected boolean isTransparentStatusBar() {
-        return true;
+        CacheEntity<MusicEntity> cache = CacheManager.getInstance().get(Constant.DOLPHIN_MUSIC_CACHE + Constant.DOLPHIN_NATURAL_MUSIC, MusicEntity.class);
+        if (cache != null) {
+            mEntity = cache.getData();
+            MusicActionManager.getInstance().start(mEntity, mPosition, Constant.SINGLE_CYCLE, 30);
+        }
+        presenter.initProxy(mPosition);
+        presenter.startVideo();
     }
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        presenter.startVideo();
+        presenter.resumeVideo();
     }
 
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+        presenter.pauseVideo();
+        mHandler.removeMessages(1);
+        mHandler.removeMessages(2);
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
         presenter.stopVideo();
+        super.onDestroyView();
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+    }
+
+    @Override
+    protected boolean isTransparentStatusBar() {
+        return true;
     }
 
     @Override
@@ -144,7 +245,7 @@ public class SleepMusicVideoFragment extends BaseBackFragment<SleepMusicVideoCon
 
     @Override
     public void showToast(String text) {
-
+        toastShow(text);
     }
 
     @Override
@@ -163,12 +264,17 @@ public class SleepMusicVideoFragment extends BaseBackFragment<SleepMusicVideoCon
     }
 
     @Override
-    public FullScreenVideoView getVideoView() {
+    public VideoView getVideoView() {
         return video;
     }
 
     @Override
-    public ImageView getImageView() {
-        return ivSleepMusicVideoPicture;
+    public LinearLayout getLinear() {
+        return linearMusic;
+    }
+
+    @Override
+    public MusicEntity getEntity() {
+        return mEntity;
     }
 }

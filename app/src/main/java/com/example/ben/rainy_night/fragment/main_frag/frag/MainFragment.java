@@ -27,17 +27,19 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     @BindView(R.id.bottomBar)
     BottomBar mBottomBar;
 
+
     public static MainFragment newInstance() {
         return new MainFragment();
     }
 
+
     @Override
-    public int getLayout() {
+    protected int getLayout() {
         return R.layout.fragment_main;
     }
 
     @Override
-    public void setPresenter() {
+    protected void setPresenter() {
         presenter = new MainPresenterImpl(this);
     }
 
@@ -66,11 +68,19 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
             public void onTabReselected(int position) {
                 // 在FirstPagerFragment,FirstHomeFragment中接收, 因为是嵌套的Fragment
                 // 主要为了交互: 重选tab 如果列表不在顶部则移动到顶部,如果已经在顶部,则刷新
-//                EventBus.getDefault().post(new TabSelectedEvent(position));
             }
         });
     }
 
+    @Override
+    public void initData() {
+        presenter.loadRootFragment();
+    }
+
+    @Override
+    protected boolean isTransparentStatusBar() {
+        return false;
+    }
 
     /**
      * start other BrotherFragment
@@ -87,10 +97,6 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         startForResult(targetFragment, requestCode);
     }
 
-    @Override
-    public void initData() {
-        presenter.loadRootFragment();
-    }
 
     @Override
     public SupportFragment findChildFrag(Class fragmentClass) {

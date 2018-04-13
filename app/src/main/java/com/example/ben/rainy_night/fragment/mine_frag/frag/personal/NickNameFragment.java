@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.base.BaseBackFragment;
+import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.NickNameContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.NickNamePresenterImpl;
@@ -27,7 +27,7 @@ import butterknife.OnClick;
  * @date 2018/1/26
  */
 
-public class NickNameFragment extends BaseBackFragment<NickNameContract.Presenter> implements NickNameContract.View {
+public class NickNameFragment extends BaseFragment<NickNameContract.Presenter> implements NickNameContract.View {
 
     private static final String ARG_NAME = "arg_name";
 

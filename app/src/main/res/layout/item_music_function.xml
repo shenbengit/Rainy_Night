@@ -17,20 +17,23 @@
             android:id="@+id/ib_music_previous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@mipmap/music_previous" />
+            android:background="@mipmap/music_previous"
+            android:stateListAnimator="@anim/button_press" />
 
         <ImageButton
             android:id="@+id/ib_music_isPlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:background="@mipmap/music_pause" />
+            android:background="@mipmap/music_pause"
+            android:stateListAnimator="@anim/button_press" />
 
         <ImageButton
             android:id="@+id/ib_music_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@mipmap/music_next" />
+            android:background="@mipmap/music_next"
+            android:stateListAnimator="@anim/button_press" />
     </LinearLayout>
 
     <com.vondear.rxtools.view.RxSeekBar
@@ -40,7 +43,6 @@
         android:layout_marginEnd="50dp"
         android:layout_marginStart="50dp"
         app:cellMode="other"
-        app:hintBGHeight="50dp"
         app:lineColorEdge="@color/color_hint_text"
         app:lineColorSelected="@color/colorWhite"
         app:markTextArray="@array/music_time"

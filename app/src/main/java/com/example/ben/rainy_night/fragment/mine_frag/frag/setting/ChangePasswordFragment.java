@@ -7,7 +7,7 @@ import android.widget.Button;
 
 import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.base.BaseBackFragment;
+import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.ChangePasswordContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
@@ -28,7 +28,7 @@ import butterknife.OnClick;
  * @date 2018/3/7
  */
 
-public class ChangePasswordFragment extends BaseBackFragment<ChangePasswordContract.Presenter> implements ChangePasswordContract.View {
+public class ChangePasswordFragment extends BaseFragment<ChangePasswordContract.Presenter> implements ChangePasswordContract.View {
 
     @BindView(R.id.base_toolbar)
     Toolbar baseToolbar;

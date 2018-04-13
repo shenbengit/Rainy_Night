@@ -13,7 +13,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.base.BaseBackFragment;
+import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.event.OnActivityResultEvent;
 import com.example.ben.rainy_night.fragment.event.OnPostEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.PostStoryContract;
@@ -33,7 +33,7 @@ import butterknife.OnClick;
  * @date 2018/2/22
  */
 
-public class PostStoryFragment extends BaseBackFragment<PostStoryContract.Presenter> implements PostStoryContract.View {
+public class PostStoryFragment extends BaseFragment<PostStoryContract.Presenter> implements PostStoryContract.View {
 
     @BindView(R.id.tv_publish_post)
     TextView tvPublishPost;

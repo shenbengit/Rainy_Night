@@ -28,8 +28,8 @@ public class PostStoryGridView extends GridView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        isOnMeasure = true;
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        isOnMeasure = true;
     }
 
     @Override

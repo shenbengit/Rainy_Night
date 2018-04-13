@@ -1,12 +1,21 @@
 package com.example.ben.rainy_night;
 
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
 
 import com.example.ben.rainy_night.http.okgo.factory.OkGoFactory;
+import com.example.ben.rainy_night.receiver.MyPlayerReceiver;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
+import com.lzx.musiclibrary.cache.CacheConfig;
+import com.lzx.musiclibrary.cache.CacheUtils;
+import com.lzx.musiclibrary.manager.MusicManager;
+import com.lzx.musiclibrary.notification.NotificationCreater;
+import com.lzx.musiclibrary.utils.BaseUtil;
 import com.lzy.okserver.OkDownload;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
@@ -27,6 +36,12 @@ import me.yokeyword.fragmentation.Fragmentation;
 
 public class App extends Application {
     private RefWatcher refWatcher;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {
@@ -71,15 +86,37 @@ public class App extends Application {
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
             return;
         }
         refWatcher = LeakCanary.install(this);
 
         //设置OkDownload下载路径及最大一起下载数
-        OkDownload.getInstance().setFolder(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RainyNight");
+        OkDownload.getInstance().setFolder(Environment.getExternalStorageDirectory().getPath() + "/RainyNight/Cache/");
         OkDownload.getInstance().getThreadPool().setCorePoolSize(5);
+
+        //初始化音乐播放器
+        if (!BaseUtil.getCurProcessName(this).contains(":musicLibrary")) {
+            //通知栏配置
+            NotificationCreater creater = new NotificationCreater.Builder()
+                    .setTargetClass("com.example.ben.rainy_night.activity.MainActivity")
+                    .setCloseIntent(getPendingIntent(Constant.ACTION_CLOSE))
+                    .setFavoriteIntent(getPendingIntent(Constant.ACTION_FAVORITE))
+                    .setLyricsIntent(getPendingIntent(Constant.ACTION_LYRICS))
+                    .setCreateSystemNotification(true)
+                    .build();
+
+            //边播边存配置
+            CacheConfig cacheConfig = new CacheConfig.Builder()
+                    .setOpenCacheWhenPlaying(true)
+                    .setCachePath(CacheUtils.getStorageDirectoryPath() + "/RainyNight/Music/")
+                    .build();
+
+            MusicManager.get()
+                    .setContext(this)
+                    .setNotificationCreater(creater)
+                    .setCacheConfig(cacheConfig)
+                    .init();
+        }
     }
 
     public static RefWatcher getRefWatcher(Context context) {
@@ -87,9 +124,9 @@ public class App extends Application {
         return application.refWatcher;
     }
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
+    private PendingIntent getPendingIntent(String action) {
+        Intent intent = new Intent(action);
+        intent.setClass(this, MyPlayerReceiver.class);
+        return PendingIntent.getBroadcast(this, 0, intent, 0);
     }
 }

@@ -3,13 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@mipmap/bg_rainy"
     android:orientation="vertical"
     tools:context="com.example.ben.rainy_night.fragment.home_frag.frag.HomeFragment">
 
     <include layout="@layout/view" />
-
-    <include layout="@layout/toolbar" />
 
     <Button
         android:id="@+id/btn_home_sleep"

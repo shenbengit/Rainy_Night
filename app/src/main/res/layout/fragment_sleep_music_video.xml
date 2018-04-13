@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame_sleep_music_video"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/view" />
-
-    <com.example.ben.rainy_night.widget.FullScreenVideoView
+    <com.devbrackets.android.exomedia.ui.widget.VideoView
         android:id="@+id/video"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <ImageView
-        android:id="@+id/iv_sleep_music_video_picture"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY" />
 
     <LinearLayout
         android:id="@+id/linear_music"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical">
 
         <include layout="@layout/item_music_function" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/ib_sleep_video_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@mipmap/ic_arrow_back_white_24dp" />
 </FrameLayout>

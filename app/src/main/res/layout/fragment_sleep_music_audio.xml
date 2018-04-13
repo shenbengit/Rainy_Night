@@ -3,11 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/view" />
+    <HorizontalScrollView
+        android:id="@+id/hsv_audio_picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
-    <ImageView
-        android:id="@+id/iv_sleep_music_audio_picture"
+        <ImageView
+            android:id="@+id/iv_sleep_music_audio_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="matrix" />
+    </HorizontalScrollView>
+
+    <FrameLayout
+        android:id="@+id/frame_sleep_music_audio"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="matrix" />
+        android:background="@color/transparent"
+        android:clickable="true">
+
+        <LinearLayout
+            android:id="@+id/linear_music"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="50dp"
+            android:orientation="vertical">
+
+            <include layout="@layout/item_music_function" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/ib_sleep_audio_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@mipmap/ic_arrow_back_white_24dp" />
+    </FrameLayout>
+
 </FrameLayout>

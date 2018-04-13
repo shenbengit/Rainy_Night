@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.base.BaseBackFragment;
+import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.RegisterContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.RegisterPresenterImpl;
@@ -29,7 +29,7 @@ import static com.vondear.rxtools.view.RxCaptcha.TYPE.NUMBER;
 /**
  * @author Ben
  */
-public class RegisterFragment extends BaseBackFragment<RegisterContract.Presenter> implements RegisterContract.View {
+public class RegisterFragment extends BaseFragment<RegisterContract.Presenter> implements RegisterContract.View {
 
     @BindView(R.id.base_toolbar)
     Toolbar baseToolbar;

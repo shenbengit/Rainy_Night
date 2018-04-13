@@ -45,6 +45,16 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <service android:name=".service.MusicPlayerService"/>
+
+        <receiver
+            android:name=".receiver.MyPlayerReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.lzx.nicemusic.android.Action_CLOSE"/>
+                <action android:name="com.lzx.nicemusic.android.Action_FAVORITE"/>
+                <action android:name="com.lzx.nicemusic.android.Action_Lyrics"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

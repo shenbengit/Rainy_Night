@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.base.BaseBackFragment;
+import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.SettingContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.personal.MyPersonalFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.SettingPresenterImpl;
@@ -28,7 +28,7 @@ import me.yokeyword.fragmentation.ISupportFragment;
  * @date 2018/3/5
  */
 
-public class SettingFragment extends BaseBackFragment<SettingContract.Presenter> implements SettingContract.View {
+public class SettingFragment extends BaseFragment<SettingContract.Presenter> implements SettingContract.View {
 
     @BindView(R.id.view)
     View view;

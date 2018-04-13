@@ -2,7 +2,9 @@ package com.example.ben.rainy_night.base;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +29,10 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 public abstract class BaseFragment<T extends BasePresenter> extends SupportFragment {
     protected T presenter;
-    protected ImmersionBar mImmersionBar;
     protected UserEntity mUserEntity;
+    protected ImmersionBar mImmersionBar;
     private Unbinder unbinder = null;
+    private View mStatusView;
 
     @Nullable
     @Override
@@ -37,15 +40,20 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
             Bundle savedInstanceState) {
         View view = inflater.inflate(getLayout(), container, false);
         unbinder = ButterKnife.bind(this, view);
-        mImmersionBar = ImmersionBar.with(_mActivity);
-        View v = view.findViewById(setStatusBarView());
-        if (v != null) {
-            ImmersionBar.setStatusBarView(_mActivity, v);
-        }
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         mUserEntity = BmobUser.getCurrentUser(UserEntity.class);
+        mImmersionBar = ImmersionBar.with(this);
+        mStatusView = view.findViewById(setStatusBarView());
+        if (mStatusView != null) {
+            ImmersionBar.setStatusBarView(_mActivity, mStatusView);
+        }
         setPresenter();
         initView();
-        return view;
     }
 
     @Override
@@ -57,19 +65,29 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        mImmersionBar.statusBarColor(R.color.colorPrimaryDark).init();
+        if (isTransparentStatusBar()) {
+            mImmersionBar.transparentStatusBar().init();
+        } else {
+            if (mStatusView != null) {
+                mImmersionBar.statusBarColor(R.color.colorPrimaryDark).init();
+            }
+        }
     }
 
     protected int setStatusBarView() {
         return R.id.view;
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         //fragment 销毁时ButterKnife解绑
         unbinder.unbind();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         if (mImmersionBar != null) {
             mImmersionBar.destroy();
         }
@@ -78,6 +96,8 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     }
 
     /**
+     * 获取界面布局
+     *
      * @return 返回界面layout
      */
     @LayoutRes
@@ -97,6 +117,23 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
      * 初始化数据
      */
     protected abstract void initData();
+
+    /**
+     * 是否透明化状态栏
+     *
+     * @return 是 或 否
+     */
+    protected abstract boolean isTransparentStatusBar();
+
+    /**
+     * 设置ToolBar
+     *
+     * @param toolbar 传入子类中的ToolBar
+     */
+    protected void initToolbarNav(Toolbar toolbar) {
+        toolbar.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(v1 -> _mActivity.onBackPressed());
+    }
 
     /**
      * 显示Toast

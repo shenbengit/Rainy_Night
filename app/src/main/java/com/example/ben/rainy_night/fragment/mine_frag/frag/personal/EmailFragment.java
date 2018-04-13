@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.base.BaseBackFragment;
+import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.EmailContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.EmailPresenterImpl;
@@ -27,7 +27,7 @@ import butterknife.OnClick;
  * @date 2018/2/3
  */
 
-public class EmailFragment extends BaseBackFragment<EmailContract.Presenter> implements EmailContract.View {
+public class EmailFragment extends BaseFragment<EmailContract.Presenter> implements EmailContract.View {
 
     private static final String ARG_NAME = "arg_name";
 
