@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.ben.rainy_night.R;
+import com.example.ben.rainy_night.fragment.event.OnMusicDataTypeEvent;
+import com.example.ben.rainy_night.fragment.event.OnMusicPlayerEvent;
 import com.example.ben.rainy_night.fragment.home_frag.adapter.SleepMusicListAdapter;
 import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicListContract;
 import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicAudioFragment;
@@ -19,10 +21,11 @@ import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicVideo
 import com.example.ben.rainy_night.http.okgo.callback.JsonCallBack;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.util.Constant;
-import com.example.ben.rainy_night.util.LoggerUtil;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,6 +129,7 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
                         if (response.body().getCode() == 0) {
                             mLists = response.body().getData();
                             mHandler.sendEmptyMessage(1);
+                            EventBus.getDefault().post(new OnMusicDataTypeEvent(Constant.DOLPHIN_MUSIC_CACHE + mSceneType));
                         } else {
                             mAdapter.setEmptyView(mViewDataError);
                         }
@@ -137,6 +141,7 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
                         if (response.body().getCode() == 0) {
                             mLists = response.body().getData();
                             mHandler.sendEmptyMessage(2);
+                            EventBus.getDefault().post(new OnMusicDataTypeEvent(Constant.DOLPHIN_MUSIC_CACHE + mSceneType));
                         } else {
                             mAdapter.setEmptyView(mViewDataError);
                         }

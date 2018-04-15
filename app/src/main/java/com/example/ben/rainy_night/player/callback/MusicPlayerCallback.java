@@ -1,6 +1,8 @@
 package com.example.ben.rainy_night.player.callback;
 
-import android.content.Context;
+import com.lzx.musiclibrary.aidl.model.SongInfo;
+
+import java.util.List;
 
 /**
  * @author Ben
@@ -11,13 +13,10 @@ public interface MusicPlayerCallback {
     /**
      * 开始播放
      *
-     * @param context   context
-     * @param data      音乐数据
-     * @param position  当前播放位置
-     * @param cycleMode 循环模式
-     * @param time      定时时间，单位分钟
+     * @param list      播放音乐的列表
+     * @param postition 开始播放的位置
      */
-    void start(Context context, Object data, int position, String cycleMode, int time);
+    void start(List<SongInfo> list, int postition);
 
     /**
      * 暂停
@@ -49,34 +48,19 @@ public interface MusicPlayerCallback {
      *
      * @param position
      */
-    void seekTo(long position);
+    void seekTo(int position);
 
     /**
      * 设置播放状态
      *
-     * @param state
+     * @param isListLooping
      */
-    void setState(int state);
+    void setPlayMode(boolean isListLooping);
 
     /**
      * 获取当前的播放状态
      */
     int getState();
-
-    /**
-     * 设置是否单循环
-     *
-     * @param looping
-     */
-    void setLooping(boolean looping);
-
-    /**
-     * 设置循环列表
-     * 仅在setLooping(false)有效
-     *
-     * @param object 音乐数据
-     */
-    void setLoopList(Object object);
 
     /**
      * 是否正在播放
@@ -90,12 +74,6 @@ public interface MusicPlayerCallback {
      */
     long getCurrentStreamPosition();
 
-    /**
-     * 设置当前播放音频的id
-     *
-     * @param mediaId
-     */
-    void setmCurrentMediaId(int mediaId);
 
     /**
      * 获取当前播放音频的id
@@ -117,39 +95,4 @@ public interface MusicPlayerCallback {
      * @param time 定时时间，单位分钟
      */
     void setRemainTime(int time);
-
-    /**
-     * 设置Callback
-     *
-     * @param callback
-     */
-    void setCallback(Callback callback);
-
-    interface Callback {
-        /**
-         * 当前音乐播放完毕
-         */
-        void onPlayCompletion();
-
-        /**
-         * 在播放状态改变时，可以实现这个回调来更新媒体会话的播放状态。
-         *
-         * @param state
-         */
-        void onPlaybackStatusChanged(int state);
-
-        /**
-         * 错误提示
-         *
-         * @param error
-         */
-        void onError(String error);
-
-        /**
-         * 设置正在播放音频的id
-         *
-         * @param mediaId
-         */
-        void setCurrentMediaId(String mediaId);
-    }
 }

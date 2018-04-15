@@ -35,10 +35,13 @@ public class Constant {
     public static final String DOLPHIN_SHARE = "/v1/app/csleep/operate/getPictureList?appId=30639&sleepRegion=1";
 
     /**
-     * cache 数据缓存
+     * cache 数据缓存||音乐类型
      */
 
     public static final String DOLPHIN_MUSIC_CACHE = "dolphin_music";
+
+    public static final String DOLPHIN_NATURAL_MUSIC_CACHE = "dolphin_music1";
+    public static final String DOLPHIN_LIGHT_MUSIC_CACHE = "dolphin_music2";
 
     /**
      * EventBus 避免消息错乱
@@ -63,14 +66,14 @@ public class Constant {
     /**
      * 音乐动作
      */
-    public static final int MUSIC_START = 0x00000001;
-    public static final int MUSIC_RESUME = 0x00000002;
-    public static final int MUSIC_PAUSE = 0x00000003;
-    public static final int MUSIC_STOP = 0x00000004;
-    public static final int MUSIC_PREVIOUS = 0x00000005;
-    public static final int MUSIC_NEXT = 0x00000006;
-    public static final int MUSIC_SET_CYCLE_MODE = 0x00000007;
-    public static final int MUSIC_SET_TIME = 0x00000008;
+    public static final String MUSIC_START = "MUSIC_START";
+    public static final String MUSIC_RESUME = "MUSIC_RESUME";
+    public static final String MUSIC_PAUSE = "MUSIC_PAUSE";
+    public static final String MUSIC_STOP = "MUSIC_STOP";
+    public static final String MUSIC_PREVIOUS = "MUSIC_PREVIOUS";
+    public static final String MUSIC_NEXT = "MUSIC_NEXT";
+    public static final String MUSIC_SET_CYCLE_MODE = "MUSIC_SET_CYCLE_MODE";
+    public static final String MUSIC_SET_TIME = "MUSIC_SET_TIME";
 
     /**
      * 是否允许使用数据流量下载

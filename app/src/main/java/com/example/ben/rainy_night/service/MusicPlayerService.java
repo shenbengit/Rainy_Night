@@ -1,32 +1,26 @@
 package com.example.ben.rainy_night.service;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.danikula.videocache.HttpProxyCacheServer;
-import com.example.ben.rainy_night.R;
+import com.example.ben.rainy_night.fragment.event.OnMusicDataTypeEvent;
 import com.example.ben.rainy_night.fragment.event.OnMusicPlayerEvent;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.util.Constant;
-import com.example.ben.rainy_night.util.HttpProxyUtil;
 import com.example.ben.rainy_night.util.LoggerUtil;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
+import com.lzx.musiclibrary.aidl.model.SongInfo;
+import com.lzy.okgo.cache.CacheEntity;
+import com.lzy.okgo.db.CacheManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.vondear.rxtools.view.progressing.animation.AnimationUtils.stop;
 
@@ -36,44 +30,25 @@ import static com.vondear.rxtools.view.progressing.animation.AnimationUtils.stop
  */
 
 public class MusicPlayerService extends Service {
-
-    private HttpProxyCacheServer mServer;
-    private SimpleExoPlayer mPlayer;
-    private Handler mHandler;
-
     /**
-     * 音乐数据
+     * 自然音乐集合
      */
-    private MusicEntity mEntity;
+    private List<SongInfo> mListNatural;
     /**
-     * 当前播放位置
+     * 轻音乐集合
      */
-    private int mPosition = 0;
+    private List<SongInfo> mListLight;
     /**
-     * 循环模式
+     * 当前播放音乐的种类
      */
-    private String mCycle = Constant.SINGLE_CYCLE;
-    /**
-     * 定时时间 ，仅针对伴我睡有效
-     * 对于其他不需要定时器的地方传: -1
-     * 单位分钟
-     */
-    private int mTime = 30;
+    private String mMusicType;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mServer = HttpProxyUtil.getProxy(getApplicationContext());
         EventBus.getDefault().register(this);
-
-//        // 1. Create a default TrackSelector
-//        mHandler = new Handler();
-//        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-//        TrackSelection.Factory videoTrackSelectionFactory =
-//                new AdaptiveTrackSelection.Factory(bandwidthMeter);
-//        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-//        // 2. Create the player
-//        mPlayer = ExoPlayerFactory.newSimpleInstance(getApplicationContext(), trackSelector);
+        mListNatural = new ArrayList<>();
+        mListLight = new ArrayList<>();
 
     }
 
@@ -83,17 +58,71 @@ public class MusicPlayerService extends Service {
         return null;
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
+    public void setMusicData(OnMusicDataTypeEvent event) {
+        switch (event.getMusicType()) {
+            case Constant.DOLPHIN_NATURAL_MUSIC_CACHE:
+                mListNatural.clear();
+                CacheEntity<MusicEntity> cache_natural = CacheManager.getInstance().get(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, MusicEntity.class);
+                MusicEntity entity1;
+                if (cache_natural != null) {
+                    entity1 = cache_natural.getData();
+                    List<MusicEntity.DataBean> beans = entity1.getData();
+                    MusicEntity.DataBean bean;
+                    for (int i = 0; i < beans.size(); i++) {
+                        SongInfo info = new SongInfo();
+                        bean = beans.get(i);
+                        info.setSongId(String.valueOf(bean.getSceneId()));
+                        info.setSongUrl(bean.getAudioUrl());
+                        info.setDownloadUrl(bean.getAudioUrl());
+                        info.setSongName(bean.getSceneName());
+                        info.setSize(String.valueOf(bean.getAudioSize()));
+                        info.setSongRectCover(bean.getCoverUrl());
+                        info.setSongCover(bean.getCoverUrl());
+                        mListNatural.add(info);
+                    }
+                    LoggerUtil.e("自然音乐长度：" + mListNatural.size());
+                }
+                break;
+            case Constant.DOLPHIN_LIGHT_MUSIC_CACHE:
+                mListLight.clear();
+                CacheEntity<MusicEntity> cache_light = CacheManager.getInstance().get(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, MusicEntity.class);
+                MusicEntity entity2;
+                if (cache_light != null) {
+                    entity2 = cache_light.getData();
+                    List<MusicEntity.DataBean> beans = entity2.getData();
+                    MusicEntity.DataBean bean;
+                    for (int i = 0; i < beans.size(); i++) {
+                        SongInfo info = new SongInfo();
+                        bean = beans.get(i);
+                        info.setSongId(String.valueOf(bean.getSceneId()));
+                        info.setSongUrl(bean.getAudioUrl());
+                        info.setDownloadUrl(bean.getAudioUrl());
+                        info.setSongName(bean.getSceneName());
+                        info.setSize(String.valueOf(bean.getAudioSize()));
+                        info.setSongRectCover(bean.getCoverUrl());
+                        info.setSongCover(bean.getCoverUrl());
+                        mListLight.add(info);
+                    }
+                    LoggerUtil.e("轻音乐长度：" + mListLight.size());
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void setMusicPlayer(OnMusicPlayerEvent event) {
-        LoggerUtil.e("音乐动作：" + event.getAction());
-        switch (event.getAction()) {
+        if (TextUtils.isEmpty(event.getMusicAction())) {
+            return;
+        }
+        LoggerUtil.e("音乐动作：" + event.getMusicAction());
+        switch (event.getMusicAction()) {
             case Constant.MUSIC_START:
-                if (event.getData() instanceof MusicEntity) {
-                    mEntity = (MusicEntity) event.getData();
-                }
-                mPosition = event.getPosition();
-                mCycle = event.getCycleMode();
-                mTime = event.getTime();
+                mMusicType = event.getMusicType();
                 start();
                 break;
             case Constant.MUSIC_RESUME:
@@ -112,13 +141,9 @@ public class MusicPlayerService extends Service {
                 next();
                 break;
             case Constant.MUSIC_SET_CYCLE_MODE:
-                if (!TextUtils.isEmpty(event.getCycleMode())) {
-                    mCycle = event.getCycleMode();
-                    setCycleMode();
-                }
+
                 break;
             case Constant.MUSIC_SET_TIME:
-                mTime = event.getTime();
                 setTime();
                 break;
             default:
@@ -181,20 +206,5 @@ public class MusicPlayerService extends Service {
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
-    }
-
-    /**
-     * 获取代理地址
-     *
-     * @param videoUrl 音乐地址
-     * @return 音乐地址
-     */
-    private String getProxyUrl(String videoUrl) {
-        return mServer.getProxyUrl(URLDecoder.decode(videoUrl));
-    }
-
-    private DataSource.Factory buildDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultDataSourceFactory(context,
-                Util.getUserAgent(context, context.getString(R.string.app_name)), bandwidthMeter);
     }
 }

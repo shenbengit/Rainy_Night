@@ -1,7 +1,6 @@
 package com.example.ben.rainy_night.fragment.home_frag.frag;
 
 
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
@@ -9,7 +8,6 @@ import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicFragment;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
-import com.example.ben.rainy_night.util.LoggerUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;

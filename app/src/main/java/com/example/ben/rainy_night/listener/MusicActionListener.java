@@ -7,51 +7,61 @@ package com.example.ben.rainy_night.listener;
 
 public interface MusicActionListener {
     /**
-     * 音乐播放
+     * 开始播放
      *
-     * @param data      音乐数据
-     * @param position  当前播放位置
-     * @param cycleMode 循环模式
-     * @param time      定时时间，单位分钟
+     * @param musicType 当前播放的音乐的种类
+     * @param position  播放的位置
      */
-    void start(Object data, int position, String cycleMode, int time);
+    void start(String musicType, int position);
+
+    /**
+     * 暂停
+     *
+     * @param musicType 当前播放的音乐的种类
+     */
+    void pause(String musicType);
 
     /**
      * 继续播放
+     *
+     * @param musicType 当前播放的音乐的种类
      */
-    void resume();
+    void resume(String musicType);
 
     /**
-     * 音乐暂停
+     * 停止
+     *
+     * @param musicType 当前播放的音乐的种类
      */
-    void pause();
-
-    /**
-     * 音乐停止
-     */
-    void stop();
+    void stop(String musicType);
 
     /**
      * 播放上一个
+     *
+     * @param musicType 当前播放的音乐的种类
      */
-    void startPrevious();
+    void startPrevious(String musicType);
 
     /**
      * 播放下一个
+     *
+     * @param musicType 当前播放的音乐的种类
      */
-    void startNext();
+    void startNext(String musicType);
 
     /**
      * 设置循环模式
      *
-     * @param cycleMode 单曲循环、列表循环
+     * @param musicType 当前播放的音乐的种类
+     * @param playMode  循环模式
      */
-    void setCycleMode(String cycleMode);
+    void setPlayMode(String musicType, String playMode);
 
     /**
-     * 设置定时时间
+     * 设置倒计时
      *
-     * @param time 定时时间，单位分钟
+     * @param musicType  当前播放的音乐的种类
+     * @param remainTime 剩余时间
      */
-    void setRemainTime(int time);
+    void setRemainTime(String musicType, long remainTime);
 }

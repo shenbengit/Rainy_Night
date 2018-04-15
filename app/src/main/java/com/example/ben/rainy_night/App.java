@@ -8,13 +8,10 @@ import android.os.Environment;
 import android.support.multidex.MultiDex;
 
 import com.example.ben.rainy_night.http.okgo.factory.OkGoFactory;
-import com.example.ben.rainy_night.receiver.MyPlayerReceiver;
-import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
 import com.lzx.musiclibrary.cache.CacheConfig;
 import com.lzx.musiclibrary.cache.CacheUtils;
 import com.lzx.musiclibrary.manager.MusicManager;
-import com.lzx.musiclibrary.notification.NotificationCreater;
 import com.lzx.musiclibrary.utils.BaseUtil;
 import com.lzy.okserver.OkDownload;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -96,15 +93,6 @@ public class App extends Application {
 
         //初始化音乐播放器
         if (!BaseUtil.getCurProcessName(this).contains(":musicLibrary")) {
-            //通知栏配置
-            NotificationCreater creater = new NotificationCreater.Builder()
-                    .setTargetClass("com.example.ben.rainy_night.activity.MainActivity")
-                    .setCloseIntent(getPendingIntent(Constant.ACTION_CLOSE))
-                    .setFavoriteIntent(getPendingIntent(Constant.ACTION_FAVORITE))
-                    .setLyricsIntent(getPendingIntent(Constant.ACTION_LYRICS))
-                    .setCreateSystemNotification(true)
-                    .build();
-
             //边播边存配置
             CacheConfig cacheConfig = new CacheConfig.Builder()
                     .setOpenCacheWhenPlaying(true)
@@ -113,7 +101,6 @@ public class App extends Application {
 
             MusicManager.get()
                     .setContext(this)
-                    .setNotificationCreater(creater)
                     .setCacheConfig(cacheConfig)
                     .init();
         }
@@ -122,11 +109,5 @@ public class App extends Application {
     public static RefWatcher getRefWatcher(Context context) {
         App application = (App) context.getApplicationContext();
         return application.refWatcher;
-    }
-
-    private PendingIntent getPendingIntent(String action) {
-        Intent intent = new Intent(action);
-        intent.setClass(this, MyPlayerReceiver.class);
-        return PendingIntent.getBroadcast(this, 0, intent, 0);
     }
 }

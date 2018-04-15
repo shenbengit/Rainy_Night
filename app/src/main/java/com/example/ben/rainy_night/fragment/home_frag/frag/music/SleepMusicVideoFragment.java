@@ -59,7 +59,7 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
                 break;
             case R.id.ib_music_previous:
                 mTimer.cancel();
-                MusicActionManager.getInstance().startPrevious();
+//                MusicActionManager.getInstance().startPrevious();
                 presenter.startPrevious();
                 mTimer.start();
                 break;
@@ -67,12 +67,12 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
                 mTimer.cancel();
                 if (!isPlaying) {
                     ibMusicIsPlay.setBackgroundResource(R.mipmap.music_pause);
-                    MusicActionManager.getInstance().resume();
+//                    MusicActionManager.getInstance().resume();
                     presenter.resumeVideo();
                     isPlaying = true;
                 } else {
                     ibMusicIsPlay.setBackgroundResource(R.mipmap.music_start);
-                    MusicActionManager.getInstance().pause();
+//                    MusicActionManager.getInstance().pause();
                     presenter.pauseVideo();
                     isPlaying = false;
                 }
@@ -80,7 +80,7 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
                 break;
             case R.id.ib_music_next:
                 mTimer.cancel();
-                MusicActionManager.getInstance().startNext();
+//                MusicActionManager.getInstance().startNext();
                 presenter.startNext();
                 mTimer.start();
                 break;
@@ -155,7 +155,7 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
                     mCurrentTime = (int) values[0];
                     if (mCurrentTime != -1) {
                         //设置定时时间
-                        MusicActionManager.getInstance().setRemainTime(mCurrentTime);
+//                        MusicActionManager.getInstance().setRemainTime(mCurrentTime);
                     }
                     break;
                 default:
@@ -197,11 +197,7 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
 
     @Override
     protected void initData() {
-        CacheEntity<MusicEntity> cache = CacheManager.getInstance().get(Constant.DOLPHIN_MUSIC_CACHE + Constant.DOLPHIN_NATURAL_MUSIC, MusicEntity.class);
-        if (cache != null) {
-            mEntity = cache.getData();
-            MusicActionManager.getInstance().start(mEntity, mPosition, Constant.SINGLE_CYCLE, 30);
-        }
+
         presenter.initProxy(mPosition);
         presenter.startVideo();
     }

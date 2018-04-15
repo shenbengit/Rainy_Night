@@ -1,7 +1,13 @@
 package com.example.ben.rainy_night.manager;
 
-import com.example.ben.rainy_night.listener.MusicActionListener;
+import android.text.TextUtils;
+
+import com.example.ben.rainy_night.fragment.event.OnMusicPlayerEvent;
 import com.example.ben.rainy_night.impl.MusicActionListenerImpl;
+import com.example.ben.rainy_night.listener.MusicActionListener;
+import com.example.ben.rainy_night.util.Constant;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 音乐播放工具类
@@ -27,83 +33,93 @@ public class MusicActionManager {
     }
 
     /**
-     * 音乐播放
+     * 开始播放
      *
-     * @param data      音乐数据
-     * @param position  当前播放位置
-     * @param cycleMode 循环模式
-     * @param time      定时时间
+     * @param musicType 当前播放的音乐的种类
+     * @param position  播放的位置
      */
-    public void start(Object data, int position, String cycleMode, int time) {
+    public void start(String musicType, int position) {
         if (mListener != null) {
-            mListener.start(data, position, cycleMode, time);
+            mListener.start(musicType, position);
+        }
+    }
+
+    /**
+     * 暂停
+     *
+     * @param musicType 当前播放的音乐的种类
+     */
+    public void pause(String musicType) {
+        if (mListener != null) {
+            mListener.pause(musicType);
         }
     }
 
     /**
      * 继续播放
+     *
+     * @param musicType 当前播放的音乐的种类
      */
-    public void resume() {
+    public void resume(String musicType) {
         if (mListener != null) {
-            mListener.resume();
+            mListener.resume(musicType);
         }
     }
 
     /**
-     * 音乐暂停
+     * 停止
+     *
+     * @param musicType 当前播放的音乐的种类
      */
-    public void pause() {
+    public void stop(String musicType) {
         if (mListener != null) {
-            mListener.pause();
-        }
-    }
-
-    /**
-     * 音乐停止
-     */
-    public void stop() {
-        if (mListener != null) {
-            mListener.stop();
+            mListener.stop(musicType);
         }
     }
 
     /**
      * 播放上一个
+     *
+     * @param musicType 当前播放的音乐的种类
      */
-    public void startPrevious() {
+    public void startPrevious(String musicType) {
         if (mListener != null) {
-            mListener.startPrevious();
+            mListener.startPrevious(musicType);
         }
     }
 
     /**
      * 播放下一个
+     *
+     * @param musicType 当前播放的音乐的种类
      */
-    public void startNext() {
+    public void startNext(String musicType) {
         if (mListener != null) {
-            mListener.startNext();
+            mListener.startNext(musicType);
         }
     }
 
     /**
      * 设置循环模式
      *
-     * @param cycleMode 单曲循环、列表循环
+     * @param musicType 当前播放的音乐的种类
+     * @param playMode  循环模式
      */
-    public void setCycleMode(String cycleMode) {
+    public void setPlayMode(String musicType, String playMode) {
         if (mListener != null) {
-            mListener.setCycleMode(cycleMode);
+            mListener.setPlayMode(musicType, playMode);
         }
     }
 
     /**
-     * 设置定时时间
+     * 设置倒计时
      *
-     * @param time 定时时间，单位分钟
+     * @param musicType  当前播放的音乐的种类
+     * @param remainTime 剩余时间
      */
-    public void setRemainTime(int time) {
+    public void setRemainTime(String musicType, long remainTime) {
         if (mListener != null) {
-            mListener.setRemainTime(time);
+            mListener.setRemainTime(musicType, remainTime);
         }
     }
 }

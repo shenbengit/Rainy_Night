@@ -1,5 +1,7 @@
 package com.example.ben.rainy_night.impl;
 
+import android.text.TextUtils;
+
 import com.example.ben.rainy_night.fragment.event.OnMusicPlayerEvent;
 import com.example.ben.rainy_night.listener.MusicActionListener;
 import com.example.ben.rainy_night.util.Constant;
@@ -21,75 +23,89 @@ public class MusicActionListenerImpl implements MusicActionListener {
     }
 
     /**
-     * 音乐播放
+     * 开始播放
      *
-     * @param data      音乐数据
-     * @param position  当前播放位置
-     * @param cycleMode 循环模式
-     * @param time      定时时间，单位分钟
+     * @param musicType 当前播放的音乐的种类
+     * @param position  播放的位置
      */
     @Override
-    public void start(Object data, int position, String cycleMode, int time) {
-        EventBus.getDefault().post(new OnMusicPlayerEvent(Constant.MUSIC_START, data, position, cycleMode, time));
+    public void start(String musicType, int position) {
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_START, position));
+    }
+
+    /**
+     * 暂停
+     *
+     * @param musicType 当前播放的音乐的种类
+     */
+    @Override
+    public void pause(String musicType) {
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_PAUSE));
     }
 
     /**
      * 继续播放
+     *
+     * @param musicType 当前播放的音乐的种类
      */
     @Override
-    public void resume() {
-        EventBus.getDefault().post(new OnMusicPlayerEvent(Constant.MUSIC_RESUME));
+    public void resume(String musicType) {
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_PAUSE));
     }
 
     /**
-     * 音乐暂停
+     * 停止
+     *
+     * @param musicType 当前播放的音乐的种类
      */
     @Override
-    public void pause() {
-        EventBus.getDefault().post(new OnMusicPlayerEvent(Constant.MUSIC_PAUSE));
-    }
-
-    /**
-     * 音乐停止
-     */
-    @Override
-    public void stop() {
-        EventBus.getDefault().post(new OnMusicPlayerEvent(Constant.MUSIC_STOP));
+    public void stop(String musicType) {
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_PAUSE));
     }
 
     /**
      * 播放上一个
+     *
+     * @param musicType 当前播放的音乐的种类
      */
     @Override
-    public void startPrevious() {
-        EventBus.getDefault().post(new OnMusicPlayerEvent(Constant.MUSIC_PREVIOUS));
+    public void startPrevious(String musicType) {
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_PAUSE));
     }
 
     /**
      * 播放下一个
+     *
+     * @param musicType 当前播放的音乐的种类
      */
     @Override
-    public void startNext() {
-        EventBus.getDefault().post(new OnMusicPlayerEvent(Constant.MUSIC_NEXT));
+    public void startNext(String musicType) {
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_PAUSE));
     }
 
     /**
      * 设置循环模式
      *
-     * @param cycleMode 单曲循环、列表循环
+     * @param musicType 当前播放的音乐的种类
+     * @param playMode  循环模式
      */
     @Override
-    public void setCycleMode(String cycleMode) {
-        EventBus.getDefault().post(new OnMusicPlayerEvent(Constant.MUSIC_SET_CYCLE_MODE, cycleMode));
+    public void setPlayMode(String musicType, String playMode) {
+        if (TextUtils.equals(playMode, Constant.LIST_CYCLE)) {
+            EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, true));
+        } else if (TextUtils.equals(playMode, Constant.SINGLE_CYCLE)) {
+            EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, false));
+        }
     }
 
     /**
-     * 设置定时时间
+     * 设置倒计时
      *
-     * @param time 定时时间，单位分钟
+     * @param musicType  当前播放的音乐的种类
+     * @param remainTime 剩余时间
      */
     @Override
-    public void setRemainTime(int time) {
-        EventBus.getDefault().post(new OnMusicPlayerEvent(Constant.MUSIC_SET_TIME, time));
+    public void setRemainTime(String musicType, long remainTime) {
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, remainTime));
     }
 }
