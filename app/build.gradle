@@ -104,4 +104,6 @@ dependencies {
     compile 'com.lzy.net:okserver:2.0.5'
     //exomedia
     compile project(':exomedia')
+    //腾讯bugly
+    compile 'com.tencent.bugly:crashreport:latest.release'
 }

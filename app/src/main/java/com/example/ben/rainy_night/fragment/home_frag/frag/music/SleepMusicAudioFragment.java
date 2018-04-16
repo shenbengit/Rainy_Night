@@ -18,6 +18,8 @@ import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
+import com.example.ben.rainy_night.manager.MusicActionManager;
+import com.example.ben.rainy_night.player.manager.MusicPlayerManager;
 import com.example.ben.rainy_night.util.Constant;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.db.CacheManager;
@@ -61,19 +63,19 @@ public class SleepMusicAudioFragment extends BaseFragment {
                 break;
             case R.id.ib_music_previous:
                 mTimer.cancel();
-//                MusicActionManager.getInstance().startPrevious();
+                MusicActionManager.getInstance().startPrevious(Constant.DOLPHIN_LIGHT_MUSIC_CACHE);
                 mTimer.start();
                 break;
             case R.id.ib_music_isPlay:
                 mTimer.cancel();
                 if (!isPlaying) {
                     ibMusicIsPlay.setBackgroundResource(R.mipmap.music_pause);
-//                    MusicActionManager.getInstance().resume();
+                    MusicActionManager.getInstance().resume(Constant.DOLPHIN_LIGHT_MUSIC_CACHE);
                     mHandler.sendEmptyMessage(1);
                     isPlaying = true;
                 } else {
                     ibMusicIsPlay.setBackgroundResource(R.mipmap.music_start);
-//                    MusicActionManager.getInstance().pause();
+                    MusicActionManager.getInstance().pause(Constant.DOLPHIN_LIGHT_MUSIC_CACHE);
                     mHandler.removeMessages(1);
                     isPlaying = false;
                 }
@@ -81,7 +83,7 @@ public class SleepMusicAudioFragment extends BaseFragment {
                 break;
             case R.id.ib_music_next:
                 mTimer.cancel();
-//                MusicActionManager.getInstance().startNext();
+                MusicActionManager.getInstance().startNext(Constant.DOLPHIN_LIGHT_MUSIC_CACHE);
                 mTimer.start();
                 break;
             default:
@@ -198,7 +200,7 @@ public class SleepMusicAudioFragment extends BaseFragment {
                     mCurrentTime = (int) values[0];
                     if (mCurrentTime != -1) {
                         //设置定时时间
-//                        MusicActionManager.getInstance().setRemainTime(mCurrentTime);
+                        MusicActionManager.getInstance().setRemainTime(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, mCurrentTime);
                     }
                     break;
                 default:
@@ -247,10 +249,12 @@ public class SleepMusicAudioFragment extends BaseFragment {
     protected void initData() {
         CacheEntity<MusicEntity> cache = CacheManager.getInstance()
                 .get(Constant.DOLPHIN_MUSIC_CACHE + Constant.DOLPHIN_LIGHT_MUSIC, MusicEntity.class);
-        if (cache != null) {
-            mEntity = cache.getData();
-//            MusicActionManager.getInstance().start(mEntity, mPosition, Constant.SINGLE_CYCLE, 30);
+        if (cache == null) {
+            toastShow("暂无数据");
+            return;
         }
+        mEntity = cache.getData();
+        MusicActionManager.getInstance().start(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, mPosition, false, 30);
         GlideApp.with(_mActivity).load(mEntity.getData().get(mPosition).getAudioPictureUrl()).into(ivSleepMusicAudioPicture);
     }
 
@@ -291,6 +295,7 @@ public class SleepMusicAudioFragment extends BaseFragment {
             mTimer.cancel();
             mTimer = null;
         }
+        MusicActionManager.getInstance().stop(Constant.DOLPHIN_LIGHT_MUSIC_CACHE);
     }
 
     @Override

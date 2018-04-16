@@ -15,6 +15,25 @@ public interface MusicActionListener {
     void start(String musicType, int position);
 
     /**
+     * 开始播放
+     *
+     * @param musicType     当前播放的音乐的种类
+     * @param position      播放的位置
+     * @param isListLopping 是否列表循环
+     */
+    void start(String musicType, int position, boolean isListLopping);
+
+    /**
+     * 开始播放
+     *
+     * @param musicType     当前播放的音乐的种类
+     * @param position      播放的位置
+     * @param isListLopping 是否列表循环
+     * @param remainTime    剩余时间
+     */
+    void start(String musicType, int position, boolean isListLopping, int remainTime);
+
+    /**
      * 暂停
      *
      * @param musicType 当前播放的音乐的种类

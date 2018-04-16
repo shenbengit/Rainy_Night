@@ -1,7 +1,12 @@
 package com.example.ben.rainy_night.player.callback;
 
+import android.content.Context;
+import android.os.Handler;
+
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.util.Constant;
+import com.example.ben.rainy_night.util.LoggerUtil;
+import com.example.ben.rainy_night.util.ToastUtil;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
 import com.lzx.musiclibrary.constans.PlayMode;
 import com.lzx.musiclibrary.manager.MusicManager;
@@ -16,24 +21,7 @@ import java.util.List;
 
 public class MusicPlayerImpl implements MusicPlayerCallback {
 
-    /**
-     * 音乐数据
-     */
-    private MusicEntity mEntity;
-    /**
-     * 当前播放位置
-     */
-    private int mCurrentMediaId = 0;
-    /**
-     * 循环模式
-     */
-    private String mCycle = Constant.SINGLE_CYCLE;
-    /**
-     * 定时时间 ，仅针对伴我睡有效
-     * 对于其他不需要定时器的地方传: -1
-     * 单位分钟
-     */
-    private int mTime = 30;
+    private Context mContext;
 
     private List<SongInfo> mList = new ArrayList<>();
 
@@ -46,6 +34,16 @@ public class MusicPlayerImpl implements MusicPlayerCallback {
     }
 
     /**
+     * 获取Context
+     *
+     * @param context
+     */
+    @Override
+    public void initContext(Context context) {
+        this.mContext = context;
+    }
+
+    /**
      * 开始播放
      *
      * @param list      播放音乐的列表
@@ -54,8 +52,10 @@ public class MusicPlayerImpl implements MusicPlayerCallback {
     @Override
     public void start(List<SongInfo> list, int postition) {
         mList.clear();
-        this.mList = list;
-        MusicManager.get().setPlayListWithIndex(mList, postition);
+        mList.addAll(list);
+        MusicManager.get().playMusic(mList, postition);
+
+        new Handler().postDelayed(() -> LoggerUtil.e("当前播放的音乐地址：" + MusicManager.get().getCurrPlayingMusic().getSongUrl() + ",循环模式: " + MusicManager.get().getPlayMode()+",是否正在播放: "+MusicManager.isPlaying()),2000);
     }
 
     /**
@@ -127,7 +127,7 @@ public class MusicPlayerImpl implements MusicPlayerCallback {
     }
 
     /**
-     * 获取当前的播放状态
+     * 设置播放模式
      */
     @Override
     public int getState() {

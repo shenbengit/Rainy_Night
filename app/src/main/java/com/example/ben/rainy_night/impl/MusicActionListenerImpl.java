@@ -34,6 +34,32 @@ public class MusicActionListenerImpl implements MusicActionListener {
     }
 
     /**
+     * 开始播放
+     *
+     * @param musicType     当前播放的音乐的种类
+     * @param position      播放的位置
+     * @param isListLopping 是否列表循环
+     */
+    @Override
+    public void start(String musicType, int position, boolean isListLopping) {
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_START, position, isListLopping));
+
+    }
+
+    /**
+     * 开始播放
+     *
+     * @param musicType     当前播放的音乐的种类
+     * @param position      播放的位置
+     * @param isListLopping 是否列表循环
+     * @param remainTime    剩余时间
+     */
+    @Override
+    public void start(String musicType, int position, boolean isListLopping, int remainTime) {
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_START, position, isListLopping, remainTime));
+    }
+
+    /**
      * 暂停
      *
      * @param musicType 当前播放的音乐的种类
@@ -50,7 +76,7 @@ public class MusicActionListenerImpl implements MusicActionListener {
      */
     @Override
     public void resume(String musicType) {
-        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_PAUSE));
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_RESUME));
     }
 
     /**
@@ -60,7 +86,7 @@ public class MusicActionListenerImpl implements MusicActionListener {
      */
     @Override
     public void stop(String musicType) {
-        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_PAUSE));
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_STOP));
     }
 
     /**
@@ -70,7 +96,7 @@ public class MusicActionListenerImpl implements MusicActionListener {
      */
     @Override
     public void startPrevious(String musicType) {
-        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_PAUSE));
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_PREVIOUS));
     }
 
     /**
@@ -80,7 +106,7 @@ public class MusicActionListenerImpl implements MusicActionListener {
      */
     @Override
     public void startNext(String musicType) {
-        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_PAUSE));
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_NEXT));
     }
 
     /**
@@ -92,9 +118,9 @@ public class MusicActionListenerImpl implements MusicActionListener {
     @Override
     public void setPlayMode(String musicType, String playMode) {
         if (TextUtils.equals(playMode, Constant.LIST_CYCLE)) {
-            EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, true));
+            EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_SET_CYCLE_MODE, true));
         } else if (TextUtils.equals(playMode, Constant.SINGLE_CYCLE)) {
-            EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, false));
+            EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_SET_CYCLE_MODE, false));
         }
     }
 
@@ -106,6 +132,6 @@ public class MusicActionListenerImpl implements MusicActionListener {
      */
     @Override
     public void setRemainTime(String musicType, long remainTime) {
-        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, remainTime));
+        EventBus.getDefault().post(new OnMusicPlayerEvent(musicType, Constant.MUSIC_SET_TIME, remainTime));
     }
 }

@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
+import android.text.TextUtils;
 
 import com.example.ben.rainy_night.http.okgo.factory.OkGoFactory;
 import com.example.ben.rainy_night.util.LoggerUtil;
 import com.lzx.musiclibrary.cache.CacheConfig;
 import com.lzx.musiclibrary.cache.CacheUtils;
 import com.lzx.musiclibrary.manager.MusicManager;
+import com.lzx.musiclibrary.notification.NotificationCreater;
 import com.lzx.musiclibrary.utils.BaseUtil;
 import com.lzy.okserver.OkDownload;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -20,7 +22,12 @@ import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.vondear.rxtools.RxTool;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
@@ -43,6 +50,17 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // 获取当前包名
+        String packageName = this.getPackageName();
+        // 获取当前进程名
+        String processName = getProcessName(android.os.Process.myPid());
+        // 设置是否为上报进程
+        CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(this);
+        strategy.setUploadProcess(processName == null || processName.equals(packageName));
+        // 初始化Bugly
+        CrashReport.initCrashReport(getApplicationContext(), "cbccf91af7", true, strategy);
+
         //Fragmentation初始化
         Fragmentation.builder()
                 // 设置 栈视图 模式为 悬浮球模式   SHAKE: 摇一摇唤出  默认NONE：隐藏， 仅在Debug环境生效
@@ -109,5 +127,34 @@ public class App extends Application {
     public static RefWatcher getRefWatcher(Context context) {
         App application = (App) context.getApplicationContext();
         return application.refWatcher;
+    }
+
+    /**
+     * 获取进程号对应的进程名
+     *
+     * @param pid 进程号
+     * @return 进程名
+     */
+    private static String getProcessName(int pid) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("/proc/" + pid + "/cmdline"));
+            String processName = reader.readLine();
+            if (!TextUtils.isEmpty(processName)) {
+                processName = processName.trim();
+            }
+            return processName;
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+        return null;
     }
 }

@@ -62,4 +62,7 @@
      <init>(...);
 }
 #ImmersionBar
- -keep class com.gyf.barlibrary.* {*;}
+-keep class com.gyf.barlibrary.* {*;}
+#腾讯bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}

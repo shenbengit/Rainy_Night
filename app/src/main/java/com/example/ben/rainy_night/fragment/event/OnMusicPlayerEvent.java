@@ -36,7 +36,7 @@ public class OnMusicPlayerEvent {
      * 对于其他不需要定时器的地方传: -1
      * 单位分钟
      */
-    private long time;
+    private long remainTime = -1;
 
     public OnMusicPlayerEvent() {
 
@@ -45,8 +45,9 @@ public class OnMusicPlayerEvent {
     /**
      * 播放音乐
      *
-     * @param musicType 音乐种类
-     * @param position  从第几个开始播放
+     * @param musicType   音乐种类
+     * @param musicAction 音乐播放
+     * @param position    从第几个开始播放
      */
     public OnMusicPlayerEvent(String musicType, String musicAction, int position) {
         this.musicType = musicType;
@@ -55,13 +56,48 @@ public class OnMusicPlayerEvent {
     }
 
     /**
+     * 播放音乐
+     *
+     * @param musicType     音乐种类
+     * @param musicAction   音乐播放
+     * @param position      从第几个开始播放
+     * @param isListLooping 是否列表循环
+     */
+    public OnMusicPlayerEvent(String musicType, String musicAction, int position, boolean isListLooping) {
+        this.musicType = musicType;
+        this.musicAction = musicAction;
+        this.position = position;
+        this.isListLooping = isListLooping;
+    }
+
+    /**
+     * 播放音乐
+     *
+     * @param musicType     音乐种类
+     * @param musicAction   音乐播放
+     * @param position      从第几个开始播放
+     * @param isListLooping 是否列表循环
+     * @param remainTime    设置剩余时
+     */
+    public OnMusicPlayerEvent(String musicType, String musicAction, int position, boolean isListLooping, int remainTime) {
+        this.musicType = musicType;
+        this.musicAction = musicAction;
+        this.position = position;
+        this.isListLooping = isListLooping;
+        this.remainTime = remainTime;
+    }
+
+    /**
      * 设置定时时间
      *
-     * @param time
+     * @param musicType
+     * @param musicAction
+     * @param remainTime
      */
-    public OnMusicPlayerEvent(String musicType, long time) {
+    public OnMusicPlayerEvent(String musicType, String musicAction, long remainTime) {
         this.musicType = musicType;
-        this.time = time;
+        this.musicAction = musicAction;
+        this.remainTime = remainTime;
     }
 
     /**
@@ -79,11 +115,13 @@ public class OnMusicPlayerEvent {
      * 设置循环模式
      *
      * @param musicType     音乐种类
+     * @param musicAction   音乐动作
      * @param isListLooping 是否是列表循环
      */
 
-    public OnMusicPlayerEvent(String musicType, boolean isListLooping) {
+    public OnMusicPlayerEvent(String musicType, String musicAction, boolean isListLooping) {
         this.musicType = musicType;
+        this.musicAction = musicAction;
         this.isListLooping = isListLooping;
     }
 
@@ -119,11 +157,11 @@ public class OnMusicPlayerEvent {
         isListLooping = listLooping;
     }
 
-    public long getTime() {
-        return time;
+    public long getRemainTime() {
+        return remainTime;
     }
 
-    public void setTime(long time) {
-        this.time = time;
+    public void setRemainTime(long remainTime) {
+        this.remainTime = remainTime;
     }
 }

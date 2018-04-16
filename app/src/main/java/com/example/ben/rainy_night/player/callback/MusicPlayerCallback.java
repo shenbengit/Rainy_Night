@@ -1,5 +1,7 @@
 package com.example.ben.rainy_night.player.callback;
 
+import android.content.Context;
+
 import com.lzx.musiclibrary.aidl.model.SongInfo;
 
 import java.util.List;
@@ -10,6 +12,13 @@ import java.util.List;
  */
 
 public interface MusicPlayerCallback {
+    /**
+     * 获取Context
+     *
+     * @param context
+     */
+    void initContext(Context context);
+
     /**
      * 开始播放
      *
@@ -51,7 +60,7 @@ public interface MusicPlayerCallback {
     void seekTo(int position);
 
     /**
-     * 设置播放状态
+     * 设置播放模式
      *
      * @param isListLooping
      */

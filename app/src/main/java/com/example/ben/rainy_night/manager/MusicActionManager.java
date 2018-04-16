@@ -1,7 +1,5 @@
 package com.example.ben.rainy_night.manager;
 
-import android.text.TextUtils;
-
 import com.example.ben.rainy_night.fragment.event.OnMusicPlayerEvent;
 import com.example.ben.rainy_night.impl.MusicActionListenerImpl;
 import com.example.ben.rainy_night.listener.MusicActionListener;
@@ -41,6 +39,33 @@ public class MusicActionManager {
     public void start(String musicType, int position) {
         if (mListener != null) {
             mListener.start(musicType, position);
+        }
+    }
+
+    /**
+     * 开始播放
+     *
+     * @param musicType     当前播放的音乐的种类
+     * @param position      播放的位置
+     * @param isListLopping 是否列表循环
+     */
+    public void start(String musicType, int position, boolean isListLopping) {
+        if (mListener != null) {
+            mListener.start(musicType, position, isListLopping);
+        }
+    }
+
+    /**
+     * 开始播放
+     *
+     * @param musicType     当前播放的音乐的种类
+     * @param position      播放的位置
+     * @param isListLopping 是否列表循环
+     * @param remainTime    剩余时间
+     */
+    public void start(String musicType, int position, boolean isListLopping, int remainTime) {
+        if (mListener != null) {
+            mListener.start(musicType, position, isListLopping, remainTime);
         }
     }
 
@@ -117,9 +142,9 @@ public class MusicActionManager {
      * @param musicType  当前播放的音乐的种类
      * @param remainTime 剩余时间
      */
-    public void setRemainTime(String musicType, long remainTime) {
+    public void setRemainTime(String musicType, int remainTime) {
         if (mListener != null) {
-            mListener.setRemainTime(musicType, remainTime);
+            mListener.setRemainTime(musicType, (long) remainTime);
         }
     }
 }

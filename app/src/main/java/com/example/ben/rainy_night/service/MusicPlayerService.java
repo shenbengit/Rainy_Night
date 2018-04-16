@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.example.ben.rainy_night.fragment.event.OnMusicDataTypeEvent;
 import com.example.ben.rainy_night.fragment.event.OnMusicPlayerEvent;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
+import com.example.ben.rainy_night.player.manager.MusicPlayerManager;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
@@ -19,6 +20,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,7 @@ public class MusicPlayerService extends Service {
         mListNatural = new ArrayList<>();
         mListLight = new ArrayList<>();
 
+        MusicPlayerManager.getInstance().initContext(getApplicationContext());
     }
 
     @Nullable
@@ -58,7 +61,11 @@ public class MusicPlayerService extends Service {
         return null;
     }
 
-
+    /**
+     * 先加载音乐数据
+     *
+     * @param event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void setMusicData(OnMusicDataTypeEvent event) {
         switch (event.getMusicType()) {
@@ -73,16 +80,15 @@ public class MusicPlayerService extends Service {
                     for (int i = 0; i < beans.size(); i++) {
                         SongInfo info = new SongInfo();
                         bean = beans.get(i);
-                        info.setSongId(String.valueOf(bean.getSceneId()));
-                        info.setSongUrl(bean.getAudioUrl());
-                        info.setDownloadUrl(bean.getAudioUrl());
+                        info.setSongId(String.valueOf(i));
+                        info.setSongUrl(URLDecoder.decode(bean.getAudioUrl()));
+                        info.setDownloadUrl(URLDecoder.decode(bean.getAudioUrl()));
                         info.setSongName(bean.getSceneName());
                         info.setSize(String.valueOf(bean.getAudioSize()));
                         info.setSongRectCover(bean.getCoverUrl());
                         info.setSongCover(bean.getCoverUrl());
                         mListNatural.add(info);
                     }
-                    LoggerUtil.e("自然音乐长度：" + mListNatural.size());
                 }
                 break;
             case Constant.DOLPHIN_LIGHT_MUSIC_CACHE:
@@ -96,16 +102,15 @@ public class MusicPlayerService extends Service {
                     for (int i = 0; i < beans.size(); i++) {
                         SongInfo info = new SongInfo();
                         bean = beans.get(i);
-                        info.setSongId(String.valueOf(bean.getSceneId()));
-                        info.setSongUrl(bean.getAudioUrl());
-                        info.setDownloadUrl(bean.getAudioUrl());
+                        info.setSongId(String.valueOf(i));
+                        info.setSongUrl(URLDecoder.decode(bean.getAudioUrl()));
+                        info.setDownloadUrl(URLDecoder.decode(bean.getAudioUrl()));
                         info.setSongName(bean.getSceneName());
                         info.setSize(String.valueOf(bean.getAudioSize()));
                         info.setSongRectCover(bean.getCoverUrl());
                         info.setSongCover(bean.getCoverUrl());
                         mListLight.add(info);
                     }
-                    LoggerUtil.e("轻音乐长度：" + mListLight.size());
                 }
                 break;
             default:
@@ -113,38 +118,72 @@ public class MusicPlayerService extends Service {
         }
     }
 
-
+    /**
+     * 设置音乐动作
+     *
+     * @param event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
     public void setMusicPlayer(OnMusicPlayerEvent event) {
         if (TextUtils.isEmpty(event.getMusicAction())) {
             return;
         }
-        LoggerUtil.e("音乐动作：" + event.getMusicAction());
+        LoggerUtil.e("音乐动作：" + event.getMusicAction() + ",音乐类型: " + event.getMusicType());
         switch (event.getMusicAction()) {
             case Constant.MUSIC_START:
                 mMusicType = event.getMusicType();
-                start();
-                break;
-            case Constant.MUSIC_RESUME:
-                resume();
+                if (TextUtils.equals(mMusicType, Constant.DOLPHIN_NATURAL_MUSIC_CACHE)) {
+                    LoggerUtil.e("自然音乐长度：" + mListNatural.size());
+                    if (mListNatural.isEmpty()) {
+                        LoggerUtil.e("自然音乐暂未加载");
+                        return;
+                    }
+                    MusicPlayerManager.getInstance().setPlayMode(false);
+                    MusicPlayerManager.getInstance().start(mListNatural, event.getPosition());
+                } else if (TextUtils.equals(mMusicType, Constant.DOLPHIN_LIGHT_MUSIC_CACHE)) {
+                    LoggerUtil.e("轻音乐长度：" + mListLight.size());
+                    if (mListLight.isEmpty()) {
+                        LoggerUtil.e("轻音乐暂未加载");
+                        return;
+                    }
+                    MusicPlayerManager.getInstance().setPlayMode(false);
+                    MusicPlayerManager.getInstance().start(mListLight, event.getPosition());
+                }
                 break;
             case Constant.MUSIC_PAUSE:
-                pause();
+                if (TextUtils.equals(mMusicType, event.getMusicType())) {
+                    MusicPlayerManager.getInstance().pause();
+                }
+                break;
+            case Constant.MUSIC_RESUME:
+                if (TextUtils.equals(mMusicType, event.getMusicType())) {
+                    MusicPlayerManager.getInstance().resume();
+                }
                 break;
             case Constant.MUSIC_STOP:
-                stop();
+                if (TextUtils.equals(mMusicType, event.getMusicType())) {
+                    MusicPlayerManager.getInstance().stop();
+                }
                 break;
             case Constant.MUSIC_PREVIOUS:
-                previous();
+                if (TextUtils.equals(mMusicType, event.getMusicType())) {
+                    MusicPlayerManager.getInstance().startPrevious();
+                }
                 break;
             case Constant.MUSIC_NEXT:
-                next();
+                if (TextUtils.equals(mMusicType, event.getMusicType())) {
+                    MusicPlayerManager.getInstance().startNext();
+                }
                 break;
             case Constant.MUSIC_SET_CYCLE_MODE:
-
+                if (TextUtils.equals(mMusicType, event.getMusicType())) {
+                    MusicPlayerManager.getInstance().startPrevious();
+                }
                 break;
             case Constant.MUSIC_SET_TIME:
-                setTime();
+                if (TextUtils.equals(mMusicType, event.getMusicType())) {
+                    MusicPlayerManager.getInstance().setRemainTime((int) event.getRemainTime());
+                }
                 break;
             default:
                 break;
