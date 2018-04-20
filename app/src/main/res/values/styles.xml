@@ -13,8 +13,15 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <!--控制头部据appbar的样式-->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
     <!--用于控制toolbar溢出菜单的样式-->
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="TabLayoutTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
 
     <style name="TranslucentTheme" parent="AppTheme">
 
@@ -33,8 +40,6 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.Toolbar" parent="Widget.AppCompat.ActionBar">
         <item name="android:layout_width">match_parent</item>

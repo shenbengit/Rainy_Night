@@ -3,10 +3,15 @@ package com.example.ben.rainy_night.fragment.night_frag.frag;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 
+
+import butterknife.BindView;
+
 /**
  * @author Ben
  */
 public class NightFragment extends BaseFragment {
+
+
 
     public static NightFragment newInstance() {
         return new NightFragment();

@@ -139,7 +139,7 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
     private int mPosition;
     private CountDownTimer mTimer;
     private boolean isPlaying = true;
-    private int mCurrentTime = -1;
+    private long mCurrentTime = -1;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -151,10 +151,10 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
                     break;
                 case 2:
                     float[] values = rsbMusicTime.getCurrentRange();
-                    if (mCurrentTime == (int) values[0]) {
+                    if (mCurrentTime == (long) values[0]) {
                         return;
                     }
-                    mCurrentTime = (int) values[0];
+                    mCurrentTime = (long) values[0];
                     if (mCurrentTime != -1) {
                         //设置定时时间
                         MusicActionManager.getInstance().setRemainTime(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, mCurrentTime);
@@ -199,7 +199,7 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
 
     @Override
     protected void initData() {
-
+        MusicActionManager.getInstance().start(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, mPosition, Constant.PLAY_IN_SINGLE_LOOP, 30);
         CacheEntity<MusicEntity> cache = CacheManager.getInstance().get(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, MusicEntity.class);
         if (cache == null) {
             toastShow("暂无数据");

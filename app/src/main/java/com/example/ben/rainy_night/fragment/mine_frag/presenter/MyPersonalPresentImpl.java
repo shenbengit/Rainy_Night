@@ -88,7 +88,7 @@ public class MyPersonalPresentImpl implements MyPersonalContract.Presenter {
             //UCrop裁剪错误之后的处理
             case UCrop.RESULT_ERROR:
                 final Throwable cropError = UCrop.getError(data);
-                ToastUtil.show(view.getFragAct(), "剪裁失败请重试");
+                view.showToast("剪裁失败请重试");
                 break;
             default:
                 break;

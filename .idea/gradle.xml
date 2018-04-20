@@ -10,6 +10,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/exomedia" />
+            <option value="$PROJECT_DIR$/musiclibrary" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

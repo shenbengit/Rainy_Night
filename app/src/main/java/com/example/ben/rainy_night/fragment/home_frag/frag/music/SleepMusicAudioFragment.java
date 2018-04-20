@@ -19,7 +19,6 @@ import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.manager.MusicActionManager;
-import com.example.ben.rainy_night.player.manager.MusicPlayerManager;
 import com.example.ben.rainy_night.util.Constant;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.db.CacheManager;
@@ -166,7 +165,7 @@ public class SleepMusicAudioFragment extends BaseFragment {
     private boolean isPlaying;
     private CountDownTimer mTimer;
 
-    private int mCurrentTime = -1;
+    private long mCurrentTime = -1;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -194,10 +193,10 @@ public class SleepMusicAudioFragment extends BaseFragment {
                     break;
                 case 3:
                     float[] values = rsbMusicTime.getCurrentRange();
-                    if (mCurrentTime == (int) values[0]) {
+                    if (mCurrentTime == (long) values[0]) {
                         return;
                     }
-                    mCurrentTime = (int) values[0];
+                    mCurrentTime = (long) values[0];
                     if (mCurrentTime != -1) {
                         //设置定时时间
                         MusicActionManager.getInstance().setRemainTime(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, mCurrentTime);
@@ -254,7 +253,7 @@ public class SleepMusicAudioFragment extends BaseFragment {
             return;
         }
         mEntity = cache.getData();
-        MusicActionManager.getInstance().start(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, mPosition, false, 30);
+        MusicActionManager.getInstance().start(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, mPosition, Constant.PLAY_IN_SINGLE_LOOP, 30);
         GlideApp.with(_mActivity).load(mEntity.getData().get(mPosition).getAudioPictureUrl()).into(ivSleepMusicAudioPicture);
     }
 

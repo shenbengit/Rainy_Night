@@ -91,4 +91,19 @@ public class Constant {
     public final static int STATE_ENDED = 5;
     public final static int STATE_NONE = 6;
     public final static int STATE_ERROR = 7;
+
+    /**
+     * 音乐循环模式
+     */
+    //单曲循环
+    public static final int PLAY_IN_SINGLE_LOOP = 1;
+
+    //随机播放
+    public static final int PLAY_IN_RANDOM = 2;
+
+    //列表循环
+    public static final int PLAY_IN_LIST_LOOP = 3;
+
+    //顺序播放
+    public static final int PLAY_IN_ORDER = 4;
 }

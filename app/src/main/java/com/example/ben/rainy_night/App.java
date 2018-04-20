@@ -9,6 +9,7 @@ import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.example.ben.rainy_night.http.okgo.factory.OkGoFactory;
+import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.LoggerUtil;
 import com.lzx.musiclibrary.cache.CacheConfig;
 import com.lzx.musiclibrary.cache.CacheUtils;
@@ -50,7 +51,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         // 获取当前包名
         String packageName = this.getPackageName();
         // 获取当前进程名
@@ -111,6 +111,7 @@ public class App extends Application {
 
         //初始化音乐播放器
         if (!BaseUtil.getCurProcessName(this).contains(":musicLibrary")) {
+
             //边播边存配置
             CacheConfig cacheConfig = new CacheConfig.Builder()
                     .setOpenCacheWhenPlaying(true)
@@ -120,8 +121,12 @@ public class App extends Application {
             MusicManager.get()
                     .setContext(this)
                     .setCacheConfig(cacheConfig)
+//                    .setNotificationCreater(creater)
+                    .giveUpAudioFocusManager()
                     .init();
         }
+
+        MusicActionManager.getInstance().initContext(getApplicationContext());
     }
 
     public static RefWatcher getRefWatcher(Context context) {

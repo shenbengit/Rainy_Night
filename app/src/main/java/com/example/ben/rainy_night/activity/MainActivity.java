@@ -1,6 +1,5 @@
 package com.example.ben.rainy_night.activity;
 
-import android.content.Intent;
 import android.database.ContentObserver;
 import android.os.Handler;
 import android.provider.Settings;
@@ -8,7 +7,6 @@ import android.provider.Settings;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseActivity;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
-import com.example.ben.rainy_night.service.MusicPlayerService;
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.barlibrary.OSUtils;
 
@@ -50,9 +48,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        //启动播放音乐的服务
-        startService(new Intent(this, MusicPlayerService.class));
-
         if (findFragment(MainFragment.class) == null) {
             loadRootFragment(R.id.frame_main, MainFragment.newInstance());
         }
@@ -69,7 +64,6 @@ public class MainActivity extends BaseActivity {
         if (mImmersionBar != null) {
             mImmersionBar.destroy();
         }
-        stopService(new Intent(this, MusicPlayerService.class));
     }
 
     private ContentObserver mNavigationStatusObserver = new ContentObserver(new Handler()) {
