@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1C2640</color>
+    <color name="colorPrimary">#0A1335</color>
     <color name="colorPrimaryDark">#0B122D</color>
     <color name="colorPrimaryOverlay">#cc0094ff</color>
     <color name="colorAccent">#FF4081</color>
@@ -25,4 +25,6 @@
     <color name="bottom_bar_seleted">#38E0FA</color>
 
     <color name="color_hint_text">#707070</color>
+    <color name="color_analysis_title">#F5FAFB</color>
+    <color name="color_analysis_hint">#808B9F</color>
 </resources>

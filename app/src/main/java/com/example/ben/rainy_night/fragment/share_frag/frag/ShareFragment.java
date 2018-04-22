@@ -1,36 +1,33 @@
 package com.example.ben.rainy_night.fragment.share_frag.frag;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
-import com.example.ben.rainy_night.fragment.share_frag.adapter.ItemAdapter;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
+import com.example.ben.rainy_night.fragment.share_frag.adapter.SleepAnalysisFragmentAdapter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import butterknife.BindView;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @author Ben
  */
-public class ShareFragment extends BaseFragment{
+public class ShareFragment extends BaseFragment {
 
-    @BindView(R.id.smartRefreshLayout)
-    SmartRefreshLayout smartRefreshLayout;
-    @BindView(R.id.recy_share)
-    RecyclerView recyShare;
-
-    private ItemAdapter mAdapter;
-
-    private List<String> mItemList = new ArrayList<>();
-
-    private int index = 10;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.tv_share_date)
+    TextView tvShareDate;
+    @BindView(R.id.tab_sleep_analysis)
+    TabLayout tabSleepAnalysis;
+    @BindView(R.id.vp_sleep_analysis)
+    ViewPager vpSleepAnalysis;
 
     public static ShareFragment newInstance() {
         return new ShareFragment();
@@ -57,23 +54,8 @@ public class ShareFragment extends BaseFragment{
      */
     @Override
     public void initView() {
-        smartRefreshLayout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.white);
-        ClassicsHeader header = new ClassicsHeader(_mActivity);
-        header.setSpinnerStyle(SpinnerStyle.Translate);
-        smartRefreshLayout.setRefreshHeader(header);
-//        smartRefreshLayout.setRefreshFooter(new BallPulseFooter(_mActivity).setSpinnerStyle(SpinnerStyle.Scale));
-        smartRefreshLayout.setDisableContentWhenRefresh(true);
-
-        mAdapter = new ItemAdapter(R.layout.item_recycler_share);
-        mAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),
-                LinearLayoutManager.VERTICAL, false);
-        recyShare.setLayoutManager(linearLayoutManager);
-        recyShare.setAdapter(mAdapter);
-
-        mAdapter.setOnLoadMoreListener(() -> {
-
-        },recyShare);
+        tabSleepAnalysis.addTab(tabSleepAnalysis.newTab());
+        tabSleepAnalysis.addTab(tabSleepAnalysis.newTab());
     }
 
     /**
@@ -81,12 +63,7 @@ public class ShareFragment extends BaseFragment{
      */
     @Override
     public void initData() {
-        for (int i = 0; i <= 15; i++) {
-            index++;
-            mItemList.add("item" + index);
-        }
-        Collections.reverse(mItemList);
-        mAdapter.setNewData(mItemList);
+
     }
 
     @Override
@@ -94,12 +71,18 @@ public class ShareFragment extends BaseFragment{
         return false;
     }
 
-    private List<String> addData() {
-        List<String> data = new ArrayList<>();
-        for (int i = mItemList.size() + 1; i <= mItemList.size() + 3; i++) {
-            data.add("item" + i);
-        }
-        Collections.reverse(data);
-        return data;
+    @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
+        vpSleepAnalysis.setAdapter(new SleepAnalysisFragmentAdapter(getChildFragmentManager(), "推荐阅读", "睡眠报告"));
+        tabSleepAnalysis.setupWithViewPager(vpSleepAnalysis);
+    }
+
+    /**
+     * start other BrotherFragment
+     */
+    public void startBrotherFragment(SupportFragment targetFragment) {
+        assert getParentFragment() != null;
+        ((MainFragment) getParentFragment()).startBrotherFragment(targetFragment);
     }
 }

@@ -70,9 +70,6 @@ dependencies {
     compile 'cn.bmob.android:http-legacy:1.0'
     //RxTools
     compile 'com.github.vondear:RxTools:v1.7.6.4'
-    //SmartRefreshLayout
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
-    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-7'
     //circleimageview
     compile 'de.hdodenhof:circleimageview:2.2.0'
     //圆角矩形框背景
@@ -89,8 +86,8 @@ dependencies {
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     //图片选择库
     compile 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.9'
-    //空间列表模板
-    compile 'com.jaeger.ninegridimageview:library:1.1.1'
+    //九宫格控件
+    compile 'com.lzy.widget:ninegridview:0.2.0'
     //ImmersionBar 沉浸式状态栏和沉浸式导航栏管理
     compile 'com.gyf.barlibrary:barlibrary:2.3.0'
     //multidex

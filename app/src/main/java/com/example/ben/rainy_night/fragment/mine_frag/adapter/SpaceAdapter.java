@@ -6,7 +6,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
-import com.jaeger.ninegridimageview.NineGridImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,8 +20,6 @@ import java.util.List;
  */
 
 public class SpaceAdapter extends BaseQuickAdapter<PostEntity, BaseViewHolder> {
-
-    private NineGridImageView<String> mNineGridView;
 
     public SpaceAdapter(@Nullable List<PostEntity> data) {
         super(R.layout.item_recycler_space, data);
@@ -46,10 +43,6 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, BaseViewHolder> {
                 e.printStackTrace();
             }
         }
-
-
-        mNineGridView = helper.getView(R.id.nineGirdView);
-
     }
 
 }
