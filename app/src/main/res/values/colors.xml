@@ -27,4 +27,5 @@
     <color name="color_hint_text">#707070</color>
     <color name="color_analysis_title">#F5FAFB</color>
     <color name="color_analysis_hint">#808B9F</color>
+    <color name="color_web_view">#1C273F</color>
 </resources>

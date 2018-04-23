@@ -12,6 +12,10 @@ import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
 import com.example.ben.rainy_night.fragment.share_frag.adapter.SleepAnalysisFragmentAdapter;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import butterknife.BindView;
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -63,7 +67,13 @@ public class ShareFragment extends BaseFragment {
      */
     @Override
     public void initData() {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
+        String day = format.format(date);
+        format = new SimpleDateFormat("EEEE", Locale.CHINA);
+        String weekDay = format.format(date);
 
+        tvShareDate.setText(day + "\t" + weekDay);
     }
 
     @Override

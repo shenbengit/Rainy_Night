@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.example.ben.rainy_night.R;
@@ -28,6 +30,8 @@ public class WebViewFragment extends BaseFragment {
     private static final String TITLE = "title";
     private static final String URL = "url";
 
+    @BindView(R.id.linear_webView)
+    LinearLayout linearWebView;
     @BindView(R.id.base_toolbar)
     Toolbar baseToolbar;
     @BindView(R.id.pb_webView)
@@ -87,31 +91,35 @@ public class WebViewFragment extends BaseFragment {
     @Override
     protected void initData() {
         WebSettings webSettings = webView.getSettings();
-        //加载缓存否则网络
-        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-//
-//        //图片自动缩放 打开
-//        webSettings.setLoadsImagesAutomatically(true);
-//
-//        //软件解码
-//        webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        // 设置支持javascript脚本
-        webSettings.setJavaScriptEnabled(true);
-//        webSettings.setPluginState(WebSettings.PluginState.ON);
-        // 设置不可以支持缩放
-        webSettings.setSupportZoom(false);
-        // 设置出现缩放工具 是否使用WebView内置的缩放组件，由浮动在窗口上的缩放控制和手势缩放控制组成，默认false
-        webSettings.setBuiltInZoomControls(false);
-        //隐藏缩放工具
-        webSettings.setDisplayZoomControls(true);
-        // 扩大比例的缩放
-//        webSettings.setUseWideViewPort(true);
-        //自适应屏幕
-        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webSettings.setLoadWithOverviewMode(true);
 
-//        webSettings.setDatabaseEnabled(true);
-        webView.setKeepScreenOn(true);
+        webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+
+        //如果访问的页面中要与Javascript交互，则webview必须设置支持Javascript
+        webSettings.setJavaScriptEnabled(true);
+        //将图片调整到适合webview的大小
+        webSettings.setUseWideViewPort(true);
+        // 缩放至屏幕的大小
+        webSettings.setLoadWithOverviewMode(true);
+        //缩放操作
+        //不支持缩放，默认为true。是下面那个的前提。
+        webSettings.setSupportZoom(false);
+        //设置内置的缩放控件。若为false，则该WebView不可缩放
+        webSettings.setBuiltInZoomControls(false);
+        //隐藏原生的缩放控件
+        webSettings.setDisplayZoomControls(false);
+
+        //其他细节操作
+        //关闭webview中缓存
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        //设置可以访问文件
+        webSettings.setAllowFileAccess(true);
+        //支持通过JS打开新窗口
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        //支持自动加载图片
+        webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setBlockNetworkImage(false);
+        //设置编码格式
+        webSettings.setDefaultTextEncodingName("utf-8");
         // 设置setWebChromeClient对象
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -171,5 +179,12 @@ public class WebViewFragment extends BaseFragment {
     @Override
     protected boolean isTransparentStatusBar() {
         return false;
+    }
+
+    @Override
+    public void onDestroyView() {
+        linearWebView.removeView(webView);
+        webView.destroy();
+        super.onDestroyView();
     }
 }
