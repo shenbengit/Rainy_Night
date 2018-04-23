@@ -15,7 +15,7 @@ import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.fragment.share_frag.adapter.SleepReadListAdapter;
 import com.example.ben.rainy_night.fragment.share_frag.contract.SleepReadContract;
 import com.example.ben.rainy_night.fragment.share_frag.frag.analysis.WebViewFragment;
-import com.example.ben.rainy_night.http.bmob.entity.SleepAnalysisEntity;
+import com.example.ben.rainy_night.http.bmob.entity.SleepMusicEntity;
 import com.example.ben.rainy_night.http.okgo.entity.SleepReadEntity;
 import com.example.ben.rainy_night.util.GsonUtil;
 import com.example.ben.rainy_night.util.LoggerUtil;
@@ -37,7 +37,7 @@ public class SleepReadPresenter implements SleepReadContract.Presenter {
     private SleepReadContract.View view;
 
     private String mTitle;
-    private SleepAnalysisEntity mEntity;
+    private SleepMusicEntity mEntity;
     private SleepReadListAdapter mAdapter;
     private List<SleepReadEntity.DataBean> mList;
 
@@ -126,12 +126,12 @@ public class SleepReadPresenter implements SleepReadContract.Presenter {
             return;
         }
 
-        BmobQuery<SleepAnalysisEntity> query = new BmobQuery<>();
+        BmobQuery<SleepMusicEntity> query = new BmobQuery<>();
         query.addWhereEqualTo("title", mTitle);
         query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
-        query.findObjects(new FindListener<SleepAnalysisEntity>() {
+        query.findObjects(new FindListener<SleepMusicEntity>() {
             @Override
-            public void done(List<SleepAnalysisEntity> list, BmobException e) {
+            public void done(List<SleepMusicEntity> list, BmobException e) {
                 if (e == null) {
                     if (!list.isEmpty()) {
                         mEntity = list.get(0);
