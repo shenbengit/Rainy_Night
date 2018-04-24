@@ -43,6 +43,11 @@ public class Constant {
     public static final String DOLPHIN_NATURAL_MUSIC_CACHE = "dolphin_music1";
     public static final String DOLPHIN_LIGHT_MUSIC_CACHE = "dolphin_music2";
 
+    public static final String DOLPHIN_BEFORE_SLEEP_AND_READ = "睡前伴读";
+    public static final String DOLPHIN_HYPNOSIS = "催眠ASMR";
+    public static final String DOLPHIN_NICE_PEOPLE = "耐撕の人";
+    public static final String DOLPHIN_SAY_GOOG_NIGHT = "说晚安";
+
     /**
      * EventBus 避免消息错乱
      */

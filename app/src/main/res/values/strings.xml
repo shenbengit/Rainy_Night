@@ -42,6 +42,7 @@
     <string name="data_error">没有数据啦，点我重试!</string>
     <string name="loading_data">正在加载...</string>
 
+    <string name="simple_view_behavior">com.example.ben.rainy_night.ui.SimpleViewBehavior</string>
     <string name="translate_up_down_behavior">com.example.ben.rainy_night.ui.TranslateUpDownBehavior</string>
 
     <string-array name="music_time">

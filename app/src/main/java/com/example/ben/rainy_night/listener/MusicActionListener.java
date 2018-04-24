@@ -2,6 +2,7 @@ package com.example.ben.rainy_night.listener;
 
 import android.content.Context;
 
+import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
 
 /**
@@ -23,6 +24,22 @@ public interface MusicActionListener {
      * @param cacheName 缓存key
      */
     void setData(String cacheName);
+
+    /**
+     * 获取播放音乐的数据
+     *
+     * @param key    key
+     * @param entity 音乐数据
+     */
+    void setData(String key, SleepFmEntity entity);
+
+    /**
+     * 追加音乐数据
+     *
+     * @param key    key
+     * @param entity 追加的音乐数据
+     */
+    void addData(String key, SleepFmEntity entity);
 
     /**
      * 获取当前播放音乐的类型
@@ -168,8 +185,7 @@ public interface MusicActionListener {
      * 获取时长
      *
      * @param musicType 当前播放的音乐的种类
-     * @param musicType
-     * @return
+     * @return 时长 单位：秒
      */
     int getDuration(String musicType);
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
+import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
 import com.example.ben.rainy_night.listener.MusicActionListener;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
@@ -13,6 +14,7 @@ import com.lzx.musiclibrary.manager.MusicManager;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.db.CacheManager;
 
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,22 @@ public class MusicActionListenerImpl implements MusicActionListener {
      */
     private List<SongInfo> mListLight;
     /**
+     * 睡前伴读集合
+     */
+    private List<SongInfo> mListRead;
+    /**
+     * 催眠ASMR集合
+     */
+    private List<SongInfo> mListHypnosis;
+    /**
+     * 耐撕の人集合
+     */
+    private List<SongInfo> mListNice;
+    /**
+     * 说晚安集合
+     */
+    private List<SongInfo> mListNight;
+    /**
      * 当前播放音乐的种类
      */
     private String mMusicType;
@@ -47,6 +65,10 @@ public class MusicActionListenerImpl implements MusicActionListener {
         mListCurrent = new ArrayList<>();
         mListNatural = new ArrayList<>();
         mListLight = new ArrayList<>();
+        mListRead = new ArrayList<>();
+        mListHypnosis = new ArrayList<>();
+        mListNice = new ArrayList<>();
+        mListNight = new ArrayList<>();
     }
 
     public static MusicActionListenerImpl getInstance() {
@@ -87,8 +109,6 @@ public class MusicActionListenerImpl implements MusicActionListener {
                         info.setDownloadUrl(URLDecoder.decode(bean.getAudioUrl()));
                         info.setSongName(bean.getSceneName());
                         info.setSize(String.valueOf(bean.getAudioSize()));
-                        info.setSongRectCover(bean.getCoverUrl());
-                        info.setSongCover(bean.getCoverUrl());
                         mListNatural.add(info);
                     }
                 }
@@ -109,8 +129,6 @@ public class MusicActionListenerImpl implements MusicActionListener {
                         info.setDownloadUrl(URLDecoder.decode(bean.getAudioUrl()));
                         info.setSongName(bean.getSceneName());
                         info.setSize(String.valueOf(bean.getAudioSize()));
-                        info.setSongRectCover(bean.getCoverUrl());
-                        info.setSongCover(bean.getCoverUrl());
                         mListLight.add(info);
                     }
                 }
@@ -118,6 +136,55 @@ public class MusicActionListenerImpl implements MusicActionListener {
             default:
                 break;
         }
+    }
+
+    /**
+     * 获取播放音乐的数据
+     *
+     * @param key    key
+     * @param entity 音乐数据
+     */
+    @Override
+    public void setData(String key, SleepFmEntity entity) {
+        switch (key) {
+            case Constant.DOLPHIN_BEFORE_SLEEP_AND_READ:
+                mListRead.clear();
+                List<SleepFmEntity.DataBean.ListBeanX> list = entity.getData().getList();
+                for (int i = 0; i < list.size(); i++) {
+                    SleepFmEntity.DataBean.ListBeanX.ListBean bean = list.get(i).getList().get(0);
+                    SongInfo info = new SongInfo();
+                    info.setSongId(String.valueOf(bean.getMediaId()));
+                    info.setSongUrl(bean.getMediaUrl());
+                    info.setFavorites(bean.getCumulativeNum());
+                    info.setDuration((long) bean.getDuration() * 1000);
+                }
+                break;
+            case Constant.DOLPHIN_HYPNOSIS:
+                mListHypnosis.clear();
+
+                break;
+            case Constant.DOLPHIN_NICE_PEOPLE:
+                mListNice.clear();
+
+                break;
+            case Constant.DOLPHIN_SAY_GOOG_NIGHT:
+                mListNight.clear();
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 追加音乐数据
+     *
+     * @param key    key
+     * @param entity 追加的音乐数据
+     */
+    @Override
+    public void addData(String key, SleepFmEntity entity) {
+
     }
 
     /**
@@ -138,7 +205,7 @@ public class MusicActionListenerImpl implements MusicActionListener {
      */
     @Override
     public void start(String musicType, int position) {
-        start(musicType, position, Constant.PLAY_IN_SINGLE_LOOP);
+        start(musicType, position, -1);
     }
 
     /**
@@ -184,10 +251,12 @@ public class MusicActionListenerImpl implements MusicActionListener {
             if (MusicManager.isPlaying()) {
                 MusicManager.get().stopMusic();
             }
-            if (remainTime != -1) {
+            if (remainTime > 0) {
                 MusicManager.get().pausePlayInMillis(remainTime * 1000 * 60);
             }
-            MusicManager.get().setPlayMode(playMode);
+            if (playMode > 0) {
+                MusicManager.get().setPlayMode(playMode);
+            }
             MusicManager.get().setPlayListWithIndex(mListCurrent, position);
         }
     }
@@ -375,13 +444,13 @@ public class MusicActionListenerImpl implements MusicActionListener {
      * 获取时长
      *
      * @param musicType 当前播放的音乐的种类
-     * @param musicType
-     * @return
+     * @return 时长 单位：秒
      */
     @Override
     public int getDuration(String musicType) {
         if (TextUtils.equals(mMusicType, musicType)) {
-            return MusicManager.get().getDuration();
+            double duration = (double) MusicManager.get().getDuration() / 1000;
+            return new BigDecimal(duration).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
         }
         return 0;
     }

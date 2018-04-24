@@ -18,6 +18,7 @@
             android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/transparent"
             app:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.design.widget.CollapsingToolbarLayout
@@ -37,10 +38,15 @@
                     app:layout_collapseParallaxMultiplier="0.6">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_night_music_name"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="7dp"
+                        android:ellipsize="marquee"
+                        android:gravity="center"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:singleLine="true"
                         android:text="夏夜"
                         android:textColor="@color/colorWhite" />
 
@@ -58,27 +64,31 @@
                             android:scaleType="centerCrop"
                             android:src="@mipmap/bg_music_cover" />
 
-                        <ImageView
-                            android:id="@+id/iv_night_music_action"
+                        <ImageButton
+                            android:id="@+id/ib_night_music_play"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:src="@mipmap/ic_night_play" />
+                            android:background="@null"/>
 
-                        <ImageView
+                        <ImageButton
+                            android:id="@+id/ib_night_music_previous"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="45dp"
                             android:layout_toStartOf="@+id/civ_night_cover"
+                            android:background="@null"
                             android:src="@mipmap/ic_night_previous" />
 
-                        <ImageView
+                        <ImageButton
+                            android:id="@+id/ib_night_music_next"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="45dp"
                             android:layout_toEndOf="@+id/civ_night_cover"
+                            android:background="@null"
                             android:src="@mipmap/ic_night_next" />
 
                     </RelativeLayout>
@@ -90,6 +100,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/tv_night_now_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="7dp"
@@ -97,13 +108,19 @@
                             android:textColor="#ECECEC" />
 
                         <SeekBar
+                            android:id="@+id/sb_night_progress"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
                             android:layout_marginStart="5dp"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"
+                            android:maxHeight="3dp"
+                            android:minHeight="3dp"
+                            android:progressDrawable="@drawable/seekbar_style"
+                            android:thumb="@mipmap/ic_seek_bar_thumb" />
 
                         <TextView
+                            android:id="@+id/tv_night_all_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="7dp"
@@ -118,17 +135,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
-                    app:popupTheme="@style/AppTheme.PopupOverlay">
-
-                </android.support.v7.widget.Toolbar>
+                    app:popupTheme="@style/AppTheme.PopupOverlay" />
             </android.support.design.widget.CollapsingToolbarLayout>
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_night"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                app:tabMode="scrollable"
+                android:background="@color/transparent"
+                app:tabMode="fixed"
                 app:tabTextAppearance="@style/TabLayoutTextStyle" />
         </android.support.design.widget.AppBarLayout>
 
@@ -140,5 +155,60 @@
 
         </android.support.v4.view.ViewPager>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginTop="-100dp"
+            android:alpha="0"
+            android:elevation="10dp"
+            android:orientation="horizontal"
+            app:layout_behavior="@string/simple_view_behavior"
+            app:svb_dependOn="@id/appbar"
+            app:svb_dependType="y"
+            app:svb_targetAlpha="1"
+            app:svb_targetY="0dp">
+
+            <ImageView
+                android:id="@+id/iv_toolbar_cover"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="15dp"
+                android:src="@mipmap/bg_music_cover" />
+
+            <TextView
+                android:id="@+id/id_toolbar_music_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="15dp"
+                android:layout_weight="1"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                android:text="夏夜"
+                android:textColor="@color/colorWhite" />
+
+            <ImageButton
+                android:id="@+id/ib_toolbar_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null" />
+
+            <ImageButton
+                android:id="@+id/ib_toolbar_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:background="@null"
+                android:src="@mipmap/ic_night_next" />
+
+        </LinearLayout>
+
     </android.support.design.widget.CoordinatorLayout>
+
 </LinearLayout>

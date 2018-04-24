@@ -3,6 +3,7 @@ package com.example.ben.rainy_night.manager;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
 import com.example.ben.rainy_night.impl.MusicActionListenerImpl;
 import com.example.ben.rainy_night.listener.MusicActionListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
@@ -50,6 +51,30 @@ public class MusicActionManager {
     public void setData(String cacheName) {
         if (mListener != null) {
             mListener.setData(cacheName);
+        }
+    }
+
+    /**
+     * 获取播放音乐的数据
+     *
+     * @param key    key
+     * @param entity 音乐数据
+     */
+    public void setData(String key, SleepFmEntity entity) {
+        if (mListener != null) {
+            mListener.setData(key, entity);
+        }
+    }
+
+    /**
+     * 追加音乐数据
+     *
+     * @param key    key
+     * @param entity 追加的音乐数据
+     */
+    public void addData(String key, SleepFmEntity entity) {
+        if (mListener != null) {
+            mListener.addData(key, entity);
         }
     }
 
@@ -277,8 +302,7 @@ public class MusicActionManager {
      * 获取时长
      *
      * @param musicType 当前播放的音乐的种类
-     * @param musicType
-     * @return
+     * @return 时长 单位：秒
      */
 
     public int getDuration(String musicType) {

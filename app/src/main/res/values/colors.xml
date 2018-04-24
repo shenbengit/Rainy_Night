@@ -13,7 +13,7 @@
     <color name="color_TextBlack">#191818</color>
     <color name="colorBlack">#000000</color>
     <color name="colorRed">#F70D20</color>
-    <color name="colorTextAssistant">#888888</color>
+    <color name="colorTextAssistant">#19878787</color>
     <color name="colorTextContent">#444444</color>
     <color name="colorTextTitle">#333333</color>
     <color name="colorDivison">#33aaaaaa</color>
@@ -28,4 +28,5 @@
     <color name="color_analysis_title">#F5FAFB</color>
     <color name="color_analysis_hint">#808B9F</color>
     <color name="color_web_view">#1C273F</color>
+    <color name="color_sleep_fm">#1D74C1</color>
 </resources>

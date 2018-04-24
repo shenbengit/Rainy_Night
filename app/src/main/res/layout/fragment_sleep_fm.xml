@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@mipmap/bg_rainy">
+    android:background="@color/color_sleep_fm">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recy_sleep_repost_list"
+        android:id="@+id/recy_sleep_fm_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
