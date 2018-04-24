@@ -1,4 +1,4 @@
-package com.example.ben.rainy_night.fragment.night_frag.frag;
+package com.example.ben.rainy_night.fragment.night_frag.frag.fm;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -17,18 +17,21 @@ import butterknife.BindView;
 
 public class SleepFmFragment extends BaseFragment<SleepFmContract.Presenter> implements SleepFmContract.View {
 
-    private static final String TITLE = "title";
+    private static final String ALBUMS_ID = "AlbumsId";
 
     @BindView(R.id.recy_sleep_fm_list)
     RecyclerView recySleepFmList;
 
-    public static SleepFmFragment newInstance(String title) {
+    public static SleepFmFragment newInstance(int albumsId) {
         SleepFmFragment fmFragment = new SleepFmFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(TITLE, title);
+        bundle.putInt(ALBUMS_ID, albumsId);
         fmFragment.setArguments(bundle);
         return fmFragment;
     }
+
+    private int mAlbumsId;
+
 
     @Override
     protected int getLayout() {
@@ -42,12 +45,17 @@ public class SleepFmFragment extends BaseFragment<SleepFmContract.Presenter> imp
 
     @Override
     protected void initView() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mAlbumsId = bundle.getInt(ALBUMS_ID);
+        }
 
+        presenter.init(mAlbumsId);
     }
 
     @Override
     protected void initData() {
-
+        presenter.getAlbumsMediaList();
     }
 
     @Override

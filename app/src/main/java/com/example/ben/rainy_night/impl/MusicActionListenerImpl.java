@@ -95,43 +95,31 @@ public class MusicActionListenerImpl implements MusicActionListener {
         switch (cacheName) {
             case Constant.DOLPHIN_NATURAL_MUSIC_CACHE:
                 mListNatural.clear();
-                CacheEntity<MusicEntity> cache_natural = CacheManager.getInstance().get(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, MusicEntity.class);
-                MusicEntity entity1;
-                if (cache_natural != null) {
-                    entity1 = cache_natural.getData();
-                    List<MusicEntity.DataBean> beans = entity1.getData();
-                    MusicEntity.DataBean bean;
-                    for (int i = 0; i < beans.size(); i++) {
-                        SongInfo info = new SongInfo();
-                        bean = beans.get(i);
-                        info.setSongId(String.valueOf(i));
-                        info.setSongUrl(URLDecoder.decode(bean.getAudioUrl()));
-                        info.setDownloadUrl(URLDecoder.decode(bean.getAudioUrl()));
-                        info.setSongName(bean.getSceneName());
-                        info.setSize(String.valueOf(bean.getAudioSize()));
-                        mListNatural.add(info);
-                    }
-                }
+                mListNatural.addAll(getNaturalOrLightMusic(Constant.DOLPHIN_NATURAL_MUSIC_CACHE));
                 break;
             case Constant.DOLPHIN_LIGHT_MUSIC_CACHE:
                 mListLight.clear();
-                CacheEntity<MusicEntity> cache_light = CacheManager.getInstance().get(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, MusicEntity.class);
-                MusicEntity entity2;
-                if (cache_light != null) {
-                    entity2 = cache_light.getData();
-                    List<MusicEntity.DataBean> beans = entity2.getData();
-                    MusicEntity.DataBean bean;
-                    for (int i = 0; i < beans.size(); i++) {
-                        SongInfo info = new SongInfo();
-                        bean = beans.get(i);
-                        info.setSongId(String.valueOf(i));
-                        info.setSongUrl(URLDecoder.decode(bean.getAudioUrl()));
-                        info.setDownloadUrl(URLDecoder.decode(bean.getAudioUrl()));
-                        info.setSongName(bean.getSceneName());
-                        info.setSize(String.valueOf(bean.getAudioSize()));
-                        mListLight.add(info);
-                    }
-                }
+                mListNight.addAll(getNaturalOrLightMusic(Constant.DOLPHIN_LIGHT_MUSIC_CACHE));
+                break;
+            case Constant.DOLPHIN_HYPNOSIS_CACHE + "1":
+                mListHypnosis.clear();
+                mListHypnosis.addAll(getFmMusicList(Constant.DOLPHIN_HYPNOSIS_CACHE + "1"));
+                LoggerUtil.e(Constant.DOLPHIN_HYPNOSIS_CACHE + "1,音乐大小: " + mListHypnosis.size());
+                break;
+            case Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE + "1":
+                mListRead.clear();
+                mListRead.addAll(getFmMusicList(Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE + "1"));
+                LoggerUtil.e(Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE + "1,音乐大小: " + mListRead.size());
+                break;
+            case Constant.DOLPHIN_NICE_PEOPLE_CACHE + "1":
+                mListNice.clear();
+                mListNice.addAll(getFmMusicList(Constant.DOLPHIN_NICE_PEOPLE_CACHE + "1"));
+                LoggerUtil.e(Constant.DOLPHIN_NICE_PEOPLE_CACHE + "1,音乐大小: " + mListNice.size());
+                break;
+            case Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE + "1":
+                mListNight.clear();
+                mListNight.addAll(getFmMusicList(Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE + "1"));
+                LoggerUtil.e(Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE + "1,音乐大小: " + mListNight.size());
                 break;
             default:
                 break;
@@ -147,7 +135,7 @@ public class MusicActionListenerImpl implements MusicActionListener {
     @Override
     public void setData(String key, SleepFmEntity entity) {
         switch (key) {
-            case Constant.DOLPHIN_BEFORE_SLEEP_AND_READ:
+            case Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE:
                 mListRead.clear();
                 List<SleepFmEntity.DataBean.ListBeanX> list = entity.getData().getList();
                 for (int i = 0; i < list.size(); i++) {
@@ -159,15 +147,15 @@ public class MusicActionListenerImpl implements MusicActionListener {
                     info.setDuration((long) bean.getDuration() * 1000);
                 }
                 break;
-            case Constant.DOLPHIN_HYPNOSIS:
+            case Constant.DOLPHIN_HYPNOSIS_CACHE:
                 mListHypnosis.clear();
 
                 break;
-            case Constant.DOLPHIN_NICE_PEOPLE:
+            case Constant.DOLPHIN_NICE_PEOPLE_CACHE:
                 mListNice.clear();
 
                 break;
-            case Constant.DOLPHIN_SAY_GOOG_NIGHT:
+            case Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE:
                 mListNight.clear();
 
                 break;
@@ -453,5 +441,57 @@ public class MusicActionListenerImpl implements MusicActionListener {
             return new BigDecimal(duration).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
         }
         return 0;
+    }
+
+    /**
+     * 获取自然音符或轻音乐
+     *
+     * @param cacheKey 缓存名
+     * @return 音乐集合
+     */
+    private List<SongInfo> getNaturalOrLightMusic(String cacheKey) {
+        List<SongInfo> lists = new ArrayList<>();
+        CacheEntity<MusicEntity> cache = CacheManager.getInstance().get(cacheKey, MusicEntity.class);
+        MusicEntity entity;
+        if (cache != null) {
+            entity = cache.getData();
+            List<MusicEntity.DataBean> beans = entity.getData();
+            for (MusicEntity.DataBean bean : beans) {
+                SongInfo info = new SongInfo();
+                info.setSongId(String.valueOf(bean.getSceneId()));
+                info.setSongUrl(URLDecoder.decode(bean.getAudioUrl()));
+                info.setDownloadUrl(URLDecoder.decode(bean.getAudioUrl()));
+                info.setSongName(bean.getSceneName());
+                info.setSize(String.valueOf(bean.getAudioSize()));
+                lists.add(info);
+            }
+        }
+        return lists;
+    }
+
+    /**
+     * 获取电台音乐
+     *
+     * @param cacheKey 缓存名
+     * @return
+     */
+    private List<SongInfo> getFmMusicList(String cacheKey) {
+        List<SongInfo> lists = new ArrayList<>();
+        CacheEntity<SleepFmEntity> cache = CacheManager.getInstance().get(cacheKey, SleepFmEntity.class);
+        SleepFmEntity entity;
+        if (cache != null) {
+            entity = cache.getData();
+            List<SleepFmEntity.DataBean.ListBeanX> beans = entity.getData().getList();
+            for (SleepFmEntity.DataBean.ListBeanX bean : beans) {
+                SongInfo info = new SongInfo();
+                info.setSongId(String.valueOf(bean.getList().get(0).getMediaId()));
+                info.setSongUrl(bean.getList().get(0).getMediaUrl());
+                info.setDownloadUrl(bean.getList().get(0).getMediaUrl());
+                info.setFavorites(bean.getList().get(0).getCumulativeNum());
+                info.setDuration((long) (bean.getList().get(0).getDuration() * 1000));
+                lists.add(info);
+            }
+        }
+        return lists;
     }
 }

@@ -22,31 +22,43 @@ public class Constant {
     public static final int REQUEST_POP = 99;
 
     /**
+     * 海豚睡眠相关
+     */
+
+    public static final int REQUEST_SUCCESS = 0;
+
+    public static final int DOLPHIN_NATURAL_MUSIC = 1;
+    public static final int DOLPHIN_LIGHT_MUSIC = 2;
+
+    public static final int DOLPHIN_HYPNOSIS = 27;
+    public static final int DOLPHIN_BEFORE_SLEEP_AND_READ = 7;
+    public static final int DOLPHIN_NICE_PEOPLE = 6;
+    public static final int DOLPHIN_SAY_GOOG_NIGHT = 5;
+
+
+    /**
      * 海豚睡眠 api接口
      * baseUrl
      */
     public static final String DOLPHIN_BASEURL = "https://api.clife.cn/";
 
-    public static final int GET_MUSIC_OK = 0;
-    public static final int DOLPHIN_NATURAL_MUSIC = 1;
-    public static final int DOLPHIN_LIGHT_MUSIC = 2;
-
     public static final String DOLPHIN_MUSIC = "v1/app/csleep/scene/getSceneList?appId=30639&sceneIds=";
     public static final String DOLPHIN_SHARE = "/v1/app/csleep/operate/getPictureList?appId=30639&sleepRegion=1";
+
+    public static final String DOLPHIN_ALBUMS_MEDIA_LIST = "/v1/app/manage/common/media/getAlbumsMediaList";
 
     /**
      * cache 数据缓存||音乐类型
      */
-
     public static final String DOLPHIN_MUSIC_CACHE = "dolphin_music";
 
     public static final String DOLPHIN_NATURAL_MUSIC_CACHE = "dolphin_music1";
     public static final String DOLPHIN_LIGHT_MUSIC_CACHE = "dolphin_music2";
 
-    public static final String DOLPHIN_BEFORE_SLEEP_AND_READ = "睡前伴读";
-    public static final String DOLPHIN_HYPNOSIS = "催眠ASMR";
-    public static final String DOLPHIN_NICE_PEOPLE = "耐撕の人";
-    public static final String DOLPHIN_SAY_GOOG_NIGHT = "说晚安";
+    public static final String DOLPHIN_HYPNOSIS_CACHE = "催眠ASMR";
+    public static final String DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE = "睡前伴读";
+    public static final String DOLPHIN_NICE_PEOPLE_CACHE = "耐撕の人";
+    public static final String DOLPHIN_SAY_GOOG_NIGHT_CACHE = "说晚安";
 
     /**
      * EventBus 避免消息错乱

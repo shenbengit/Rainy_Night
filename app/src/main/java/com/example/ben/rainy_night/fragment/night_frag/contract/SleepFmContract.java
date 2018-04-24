@@ -15,6 +15,15 @@ public interface SleepFmContract {
     }
 
     interface Presenter extends BasePresenter {
+        /**
+         * 初始化
+         * @param albumsId
+         */
+        void init(int albumsId);
 
+        /**
+         * 获取FM集合
+         */
+        void getAlbumsMediaList();
     }
 }

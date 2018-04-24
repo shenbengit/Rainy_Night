@@ -134,8 +134,8 @@ public class NightFragment extends BaseFragment {
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
         vpNight.setAdapter(new SleepFmFragmentAdapter(getChildFragmentManager(),
-                Constant.DOLPHIN_BEFORE_SLEEP_AND_READ, Constant.DOLPHIN_HYPNOSIS,
-                Constant.DOLPHIN_NICE_PEOPLE, Constant.DOLPHIN_SAY_GOOG_NIGHT));
+                Constant.DOLPHIN_HYPNOSIS_CACHE, Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE,
+                Constant.DOLPHIN_NICE_PEOPLE_CACHE, Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE));
         tabNight.setupWithViewPager(vpNight);
     }
 }
