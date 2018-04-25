@@ -69,7 +69,7 @@ dependencies {
     compile 'cn.bmob.android:bmob-sdk:3.5.9'
     compile 'cn.bmob.android:http-legacy:1.0'
     //RxTools
-    compile 'com.github.vondear:RxTools:v1.7.6.4'
+    compile 'com.github.vondear:RxTools:v1.7.8.3'
     //circleimageview
     compile 'de.hdodenhof:circleimageview:2.2.0'
     //圆角矩形框背景

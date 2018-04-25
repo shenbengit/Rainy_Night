@@ -103,7 +103,7 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
      */
     @Override
     public void initData() {
-        petLoginPhone.setText(String.valueOf(SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(SharedPreferencesUtil.USER_PHONE,"")));
+        petLoginPhone.setText(String.valueOf(SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(Constant.USER_PHONE,"")));
     }
 
     /**

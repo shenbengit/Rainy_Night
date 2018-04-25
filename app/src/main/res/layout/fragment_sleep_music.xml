@@ -29,11 +29,11 @@
                 android:id="@+id/tab_sleep_music"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabIndicatorColor="@color/colorWhite"
+                android:background="@color/transparent"
+                app:tabIndicatorColor="@color/bottom_bar_seleted"
                 app:tabMode="fixed"
-                android:background="@color/colorPrimary"
-                app:tabSelectedTextColor="@color/colorWhite"
-                app:tabTextColor="@color/colorTextContent" />
+                app:tabSelectedTextColor="@color/bottom_bar_seleted"
+                app:tabTextColor="@color/colorWhite" />
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.view.ViewPager

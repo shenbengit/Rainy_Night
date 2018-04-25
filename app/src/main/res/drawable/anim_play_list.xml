@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item
+        android:drawable="@mipmap/yx_1"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_2"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_3"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_4"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_5"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_6"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_7"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_8"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_9"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_10"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_11"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_12"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_11"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_10"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_9"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_8"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_7"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_6"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_5"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_4"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_3"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_2"
+        android:duration="150" />
+    <item
+        android:drawable="@mipmap/yx_1"
+        android:duration="150" />
+</animation-list>

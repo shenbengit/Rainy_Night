@@ -200,24 +200,22 @@ public class MusicActionManager {
     /**
      * 设置循环模式
      *
-     * @param musicType 当前播放的音乐的种类
-     * @param playMode  循环模式
+     * @param playMode 循环模式
      */
-    public void setPlayMode(String musicType, int playMode) {
+    public void setPlayMode(int playMode) {
         if (mListener != null) {
-            mListener.setPlayMode(musicType, playMode);
+            mListener.setPlayMode(playMode);
         }
     }
 
     /**
      * 设置倒计时
      *
-     * @param musicType  当前播放的音乐的种类
      * @param remainTime 剩余时间 ：单位分钟
      */
-    public void setRemainTime(String musicType, long remainTime) {
+    public void setRemainTime(long remainTime) {
         if (mListener != null) {
-            mListener.setRemainTime(musicType, remainTime);
+            mListener.setRemainTime(remainTime);
         }
     }
 
@@ -241,6 +239,18 @@ public class MusicActionManager {
     public int getState() {
         if (mListener != null) {
             return mListener.getState();
+        }
+        return -1;
+    }
+
+    /**
+     * 获取当前循环模式
+     *
+     * @return
+     */
+    public int getPlayMode() {
+        if (mListener != null) {
+            return mListener.getPlayMode();
         }
         return -1;
     }

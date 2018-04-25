@@ -1,5 +1,6 @@
 package com.example.ben.rainy_night.fragment.night_frag.frag.fm;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
@@ -81,5 +82,15 @@ public class SleepFmFragment extends BaseFragment<SleepFmContract.Presenter> imp
     @Override
     public void cancelDialog() {
 
+    }
+
+    @Override
+    public Context getCon() {
+        return _mActivity;
+    }
+
+    @Override
+    public RecyclerView getRecycler() {
+        return recySleepFmList;
     }
 }

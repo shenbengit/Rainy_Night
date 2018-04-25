@@ -18,45 +18,6 @@ public class SharedPreferencesUtil {
     private volatile static SharedPreferencesUtil mUtil;
 
     private static final String FILENAME = "Rainy_Night";
-
-    /**
-     * 用户objectId
-     */
-    public static final String USER_OBJECT_ID = "user_objectId";
-    /**
-     * 用户手机号
-     */
-    public static final String USER_PHONE = "user_phone";
-    /**
-     * 用户密码
-     */
-    public static final String USER_PASSWORD = "user_password";
-    /**
-     * 用户头像url地址
-     */
-    public static final String USER_HEAD_IMAGE = "user_head_image";
-    /**
-     * 用户名字
-     */
-    public static final String USER_NAME = "user_name";
-    /**
-     * 用户昵称
-     */
-    public static final String USER_NICK_NAME = "user_nickname";
-    /**
-     * 用户性别
-     */
-    public static final String USER_SEX = "user_sex";
-    /**
-     * 用户生日
-     */
-    public static final String USER_BIRTHDAY = "user_birthday";
-    /**
-     * 用户邮箱
-     */
-    public static final String USER_EMAIL = "user_email";
-
-
     private SharedPreferences preferences;
     private Editor editor;
 

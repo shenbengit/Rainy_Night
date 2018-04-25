@@ -199,7 +199,7 @@ public class SleepMusicAudioFragment extends BaseFragment {
                     mCurrentTime = (long) values[0];
                     if (mCurrentTime != -1) {
                         //设置定时时间
-                        MusicActionManager.getInstance().setRemainTime(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, mCurrentTime);
+                        MusicActionManager.getInstance().setRemainTime(mCurrentTime);
                     }
                     break;
                 default:

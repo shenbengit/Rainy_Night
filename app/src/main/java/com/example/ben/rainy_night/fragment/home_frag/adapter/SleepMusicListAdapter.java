@@ -37,7 +37,7 @@ public class SleepMusicListAdapter extends BaseQuickAdapter<MusicEntity.DataBean
     /**
      * 自定义ViewHolder 继承 BaseViewHolder
      */
-    public class ViewHolder extends BaseViewHolder {
+    class ViewHolder extends BaseViewHolder {
 
         private TextView tvName;
         private ImageView ivCover;

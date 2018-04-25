@@ -1,5 +1,6 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -88,7 +89,7 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
     public void initData() {
         if (mUserEntity != null) {
             String account = mUserEntity.getMobilePhoneNumber();
-            String password = String.valueOf(SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(SharedPreferencesUtil.USER_PASSWORD, ""));
+            String password = String.valueOf(SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(Constant.USER_PASSWORD, ""));
             presenter.loginUser(Constant.REQUEST_LOGIN_MINE, account, password);
         }
     }

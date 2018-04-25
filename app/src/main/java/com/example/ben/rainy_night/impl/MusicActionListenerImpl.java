@@ -335,27 +335,21 @@ public class MusicActionListenerImpl implements MusicActionListener {
     /**
      * 设置循环模式
      *
-     * @param musicType 当前播放的音乐的种类
-     * @param playMode  循环模式
+     * @param playMode 循环模式
      */
     @Override
-    public void setPlayMode(String musicType, int playMode) {
-        if (TextUtils.equals(mMusicType, musicType)) {
-            MusicManager.get().setPlayMode(playMode);
-        }
+    public void setPlayMode(int playMode) {
+        MusicManager.get().setPlayMode(playMode);
     }
 
     /**
      * 设置倒计时
      *
-     * @param musicType  当前播放的音乐的种类
      * @param remainTime 剩余时间 单位毫秒
      */
     @Override
-    public void setRemainTime(String musicType, long remainTime) {
-        if (TextUtils.equals(mMusicType, musicType)) {
-            MusicManager.get().pausePlayInMillis(remainTime * 1000 * 60);
-        }
+    public void setRemainTime(long remainTime) {
+        MusicManager.get().pausePlayInMillis(remainTime * 1000 * 60);
     }
 
     /**
@@ -377,6 +371,16 @@ public class MusicActionListenerImpl implements MusicActionListener {
     @Override
     public int getState() {
         return MusicManager.get().getStatus();
+    }
+
+    /**
+     * 获取当前循环模式
+     *
+     * @return
+     */
+    @Override
+    public int getPlayMode() {
+        return MusicManager.get().getPlayMode();
     }
 
     /**

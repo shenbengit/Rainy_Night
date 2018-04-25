@@ -23,6 +23,19 @@ import okhttp3.OkHttpClient;
  */
 
 public class OkGoFactory {
+
+    public static OkGoFactory getInstance() {
+        return Holder.FACTORY;
+    }
+
+    private OkGoFactory() {
+
+    }
+
+    private static final class Holder {
+        private static final OkGoFactory FACTORY = new OkGoFactory();
+    }
+
     /**
      * 初始化OkGo
      *
@@ -50,17 +63,6 @@ public class OkGoFactory {
                 .setCacheMode(CacheMode.FIRST_CACHE_THEN_REQUEST)
                 .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)
                 .setRetryCount(3);
-    }
-
-    public static OkGoFactory getInstance() {
-        return Holder.FACTORY;
-    }
-
-    private OkGoFactory() {
-    }
-
-    private static final class Holder {
-        private static final OkGoFactory FACTORY = new OkGoFactory();
     }
 
 }

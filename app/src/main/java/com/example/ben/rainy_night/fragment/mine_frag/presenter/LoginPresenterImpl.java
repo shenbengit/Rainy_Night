@@ -48,8 +48,8 @@ public class LoginPresenterImpl implements LoginContract.Presenter {
     public void isLoginSuccess(String message, UserEntity bean) {
         view.cancelDialog();
         if (TextUtils.equals(Constant.OK, message)) {
-            view.putSpValue(SharedPreferencesUtil.USER_PASSWORD,view.getEditPassWord().getText().toString().trim());
-            view.putSpValue(SharedPreferencesUtil.USER_PHONE,bean.getMobilePhoneNumber());
+            view.putSpValue(Constant.USER_PASSWORD,view.getEditPassWord().getText().toString().trim());
+            view.putSpValue(Constant.USER_PHONE,bean.getMobilePhoneNumber());
             view.showToast("登陆成功");
             view.getAct().onBackPressed();
         } else {

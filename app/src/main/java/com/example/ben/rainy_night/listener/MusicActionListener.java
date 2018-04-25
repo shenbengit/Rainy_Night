@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
+import com.lzx.musiclibrary.manager.MusicManager;
 
 /**
  * @author Ben
@@ -121,18 +122,16 @@ public interface MusicActionListener {
     /**
      * 设置循环模式
      *
-     * @param musicType 当前播放的音乐的种类
-     * @param playMode  循环模式
+     * @param playMode 循环模式
      */
-    void setPlayMode(String musicType, int playMode);
+    void setPlayMode(int playMode);
 
     /**
      * 设置倒计时
      *
-     * @param musicType  当前播放的音乐的种类
      * @param remainTime 剩余时间
      */
-    void setRemainTime(String musicType, long remainTime);
+    void setRemainTime(long remainTime);
 
     /**
      * 寻求指定的时间位置
@@ -148,6 +147,13 @@ public interface MusicActionListener {
      * @return
      */
     int getState();
+
+    /**
+     * 获取当前循环模式
+     *
+     * @return
+     */
+    int getPlayMode();
 
     /**
      * 是否正在播放

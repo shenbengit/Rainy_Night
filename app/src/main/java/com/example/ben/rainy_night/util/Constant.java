@@ -10,6 +10,43 @@ package com.example.ben.rainy_night.util;
 public class Constant {
 
     /**
+     * 用户objectId
+     */
+    public static final String USER_OBJECT_ID = "user_objectId";
+    /**
+     * 用户手机号
+     */
+    public static final String USER_PHONE = "user_phone";
+    /**
+     * 用户密码
+     */
+    public static final String USER_PASSWORD = "user_password";
+    /**
+     * 用户头像url地址
+     */
+    public static final String USER_HEAD_IMAGE = "user_head_image";
+    /**
+     * 用户名字
+     */
+    public static final String USER_NAME = "user_name";
+    /**
+     * 用户昵称
+     */
+    public static final String USER_NICK_NAME = "user_nickname";
+    /**
+     * 用户性别
+     */
+    public static final String USER_SEX = "user_sex";
+    /**
+     * 用户生日
+     */
+    public static final String USER_BIRTHDAY = "user_birthday";
+    /**
+     * 用户邮箱
+     */
+    public static final String USER_EMAIL = "user_email";
+
+    /**
      * 音乐播放相关
      */
     public static final String ACTION_CLOSE = "com.lzx.nicemusic.android.Action_CLOSE";
@@ -77,8 +114,19 @@ public class Constant {
     /**
      * 循环模式
      */
+    public static final String CYCLE_MODE = "cycle_mode";
     public static final String SINGLE_CYCLE = "single_cycle";
     public static final String LIST_CYCLE = "list_cycle";
+
+    /**
+     * 定时
+     */
+    public static final String REMAIN_TIME = "ramain_time";
+    public static final int REMAIN_TIME_ZZ = 60;
+    public static final int REMAIN_TIME_10 = 10;
+    public static final int REMAIN_TIME_20 = 20;
+    public static final int REMAIN_TIME_30 = 30;
+
 
     /**
      * 音乐动作

@@ -1,5 +1,20 @@
 package com.example.ben.rainy_night.fragment.night_frag.presenter;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.example.ben.rainy_night.R;
+import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicAudioFragment;
+import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicVideoFragment;
+import com.example.ben.rainy_night.fragment.night_frag.adapter.SleepFmAdapter;
 import com.example.ben.rainy_night.fragment.night_frag.contract.SleepFmContract;
 import com.example.ben.rainy_night.http.okgo.callback.JsonCallBack;
 import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
@@ -10,6 +25,9 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Ben
  * @date 2018/4/24
@@ -18,9 +36,32 @@ import com.lzy.okgo.model.Response;
 public class SleepFmPresenter implements SleepFmContract.Presenter {
     private SleepFmContract.View view;
 
+    private SleepFmAdapter mAdapter;
+    private List<SleepFmEntity.DataBean.ListBeanX> mLists;
+    private View mViewNetError;
+    private View mViewDataError;
+    private View mViewLoading;
+
     private int mAlbumsId;
     private String mCacheKey;
     private int mPageIndex = 1;
+
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    mAdapter.setNewData(mLists);
+                    break;
+                case 2:
+                    mAdapter.setNewData(mLists);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     public SleepFmPresenter(SleepFmContract.View view) {
         this.view = view;
@@ -48,11 +89,35 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
                 mCacheKey = Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE;
                 break;
             default:
-                mCacheKey = "";
+                mCacheKey = null;
                 break;
         }
 
+        mLists = new ArrayList<>();
+        mAdapter = new SleepFmAdapter(mLists);
+        LinearLayoutManager manager = new LinearLayoutManager(view.getCon(),
+                LinearLayoutManager.VERTICAL, false);
+        view.getRecycler().setItemAnimator(new DefaultItemAnimator());
+        view.getRecycler().setLayoutManager(manager);
+        mAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
+        view.getRecycler().setAdapter(mAdapter);
 
+        mViewNetError = LayoutInflater.from(view.getCon())
+                .inflate(R.layout.item_net_error, (ViewGroup) view.getRecycler().getParent(), false);
+        mViewNetError.setOnClickListener(v -> {
+            mAdapter.setEmptyView(mViewLoading);
+            new Handler(Looper.getMainLooper()).postDelayed(this::getAlbumsMediaList, 1000);
+        });
+
+        mViewLoading = LayoutInflater.from(view.getCon())
+                .inflate(R.layout.item_loading, (ViewGroup) view.getRecycler().getParent(), false);
+
+        mViewDataError = LayoutInflater.from(view.getCon())
+                .inflate(R.layout.item_data_error, (ViewGroup) view.getRecycler().getParent(), false);
+        mViewDataError.setOnClickListener(v -> {
+            mAdapter.setEmptyView(mViewLoading);
+            new Handler(Looper.getMainLooper()).postDelayed(this::getAlbumsMediaList, 1000);
+        });
     }
 
     /**
@@ -60,6 +125,14 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
      */
     @Override
     public void getAlbumsMediaList() {
+        if (!view.isNetworkAvailable()) {
+            mAdapter.setEmptyView(mViewNetError);
+            return;
+        }
+        if (TextUtils.isEmpty(mCacheKey)) {
+            mAdapter.setEmptyView(mViewDataError);
+            return;
+        }
         OkGo.<SleepFmEntity>get(Constant.DOLPHIN_BASEURL + Constant.DOLPHIN_ALBUMS_MEDIA_LIST)
                 .params("albumsId", mAlbumsId)
                 .params("appId", "30639")
@@ -72,7 +145,11 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
                     @Override
                     public void onSuccess(Response<SleepFmEntity> response) {
                         if (response.body().getCode() == Constant.REQUEST_SUCCESS) {
+                            mLists = response.body().getData().getList();
+                            mHandler.sendEmptyMessage(1);
                             MusicActionManager.getInstance().setData(mCacheKey + String.valueOf(mPageIndex));
+                        } else {
+                            mAdapter.setEmptyView(mViewDataError);
                         }
                     }
 
@@ -80,7 +157,11 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
                     public void onCacheSuccess(Response<SleepFmEntity> response) {
                         super.onCacheSuccess(response);
                         if (response.body().getCode() == Constant.REQUEST_SUCCESS) {
+                            mLists = response.body().getData().getList();
+                            mHandler.sendEmptyMessage(2);
                             MusicActionManager.getInstance().setData(mCacheKey + String.valueOf(mPageIndex));
+                        } else {
+                            mAdapter.setEmptyView(mViewDataError);
                         }
                     }
                 });

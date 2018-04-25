@@ -2,14 +2,12 @@ package com.example.ben.rainy_night.fragment.home_frag.frag;
 
 
 import android.view.View;
-import android.widget.Button;
 
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicFragment;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
 
-import butterknife.BindView;
 import butterknife.OnClick;
 
 
@@ -18,14 +16,11 @@ import butterknife.OnClick;
  */
 public class HomeFragment extends BaseFragment {
 
-    @BindView(R.id.btn_home_sleep)
-    Button btnHomeSleep;
-
-    @OnClick({R.id.btn_home_sleep})
+    @OnClick({R.id.ib_home_sleep})
     public void viewOnClick(View view) {
         assert (getParentFragment()) != null;
         switch (view.getId()) {
-            case R.id.btn_home_sleep:
+            case R.id.ib_home_sleep:
                 ((MainFragment) getParentFragment()).startBrotherFragment(SleepMusicFragment.newInstance());
                 break;
             default:
