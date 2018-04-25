@@ -52,8 +52,9 @@ public class SleepReadPresenter implements SleepReadContract.Presenter {
             switch (msg.what) {
                 case 1:
                     if (mEntity != null) {
+                        mList.clear();
                         SleepReadEntity entity = GsonUtil.fromJson(mEntity.getJson(), SleepReadEntity.class);
-                        mList = entity.getData();
+                        mList.addAll(entity.getData());
                         if (mList.isEmpty()) {
                             mAdapter.setEmptyView(mViewDataError);
                             return;
@@ -107,7 +108,7 @@ public class SleepReadPresenter implements SleepReadContract.Presenter {
             new Handler(Looper.getMainLooper()).postDelayed(this::getSleepReadList, 1000);
         });
 
-        mAdapter.setOnItemClickListener((adapter, v, position) -> view.startBrotherFragment(WebViewFragment.newInstance(mList.get(position).getArticleTitle(),mList.get(position).getArticleUrl())));
+        mAdapter.setOnItemClickListener((adapter, v, position) -> view.startBrotherFragment(WebViewFragment.newInstance(mList.get(position).getArticleTitle(), mList.get(position).getArticleUrl())));
 
     }
 

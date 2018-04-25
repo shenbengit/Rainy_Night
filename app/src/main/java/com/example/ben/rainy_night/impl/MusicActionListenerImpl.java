@@ -96,30 +96,28 @@ public class MusicActionListenerImpl implements MusicActionListener {
             case Constant.DOLPHIN_NATURAL_MUSIC_CACHE:
                 mListNatural.clear();
                 mListNatural.addAll(getNaturalOrLightMusic(Constant.DOLPHIN_NATURAL_MUSIC_CACHE));
+                LoggerUtil.e(Constant.DOLPHIN_NATURAL_MUSIC_CACHE + ",音乐大小: " + mListNatural.size());
                 break;
             case Constant.DOLPHIN_LIGHT_MUSIC_CACHE:
                 mListLight.clear();
-                mListNight.addAll(getNaturalOrLightMusic(Constant.DOLPHIN_LIGHT_MUSIC_CACHE));
+                mListLight.addAll(getNaturalOrLightMusic(Constant.DOLPHIN_LIGHT_MUSIC_CACHE));
+                LoggerUtil.e(Constant.DOLPHIN_LIGHT_MUSIC_CACHE + ",音乐大小: " + mListLight.size());
                 break;
             case Constant.DOLPHIN_HYPNOSIS_CACHE + "1":
                 mListHypnosis.clear();
                 mListHypnosis.addAll(getFmMusicList(Constant.DOLPHIN_HYPNOSIS_CACHE + "1"));
-                LoggerUtil.e(Constant.DOLPHIN_HYPNOSIS_CACHE + "1,音乐大小: " + mListHypnosis.size());
                 break;
             case Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE + "1":
                 mListRead.clear();
                 mListRead.addAll(getFmMusicList(Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE + "1"));
-                LoggerUtil.e(Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE + "1,音乐大小: " + mListRead.size());
                 break;
             case Constant.DOLPHIN_NICE_PEOPLE_CACHE + "1":
                 mListNice.clear();
                 mListNice.addAll(getFmMusicList(Constant.DOLPHIN_NICE_PEOPLE_CACHE + "1"));
-                LoggerUtil.e(Constant.DOLPHIN_NICE_PEOPLE_CACHE + "1,音乐大小: " + mListNice.size());
                 break;
             case Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE + "1":
                 mListNight.clear();
                 mListNight.addAll(getFmMusicList(Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE + "1"));
-                LoggerUtil.e(Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE + "1,音乐大小: " + mListNight.size());
                 break;
             default:
                 break;
@@ -245,7 +243,8 @@ public class MusicActionListenerImpl implements MusicActionListener {
             if (playMode > 0) {
                 MusicManager.get().setPlayMode(playMode);
             }
-            MusicManager.get().setPlayListWithIndex(mListCurrent, position);
+            LoggerUtil.e("播放音乐：" + mListCurrent.size() + ",位置：" + position);
+            MusicManager.get().playMusic(mListCurrent, position);
         }
     }
 

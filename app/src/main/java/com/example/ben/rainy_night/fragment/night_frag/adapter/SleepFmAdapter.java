@@ -20,19 +20,13 @@ import java.util.List;
 
 public class SleepFmAdapter extends BaseQuickAdapter<SleepFmEntity.DataBean.ListBeanX, SleepFmAdapter.ViewHolder> {
 
-
     public SleepFmAdapter(@Nullable List<SleepFmEntity.DataBean.ListBeanX> data) {
         super(R.layout.item_sleep_fm, data);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
-        holder.tvNumber.setText(String.valueOf(position + 1));
-    }
-
-    @Override
     protected void convert(ViewHolder holder, SleepFmEntity.DataBean.ListBeanX item) {
+        holder.tvNumber.setText(String.valueOf(holder.getLayoutPosition() - getHeaderLayoutCount() + 1));
         holder.tvName.setText(item.getMediaName().trim());
         holder.tvDate.setText(item.getCreateTime().substring(5, 10));
         holder.tvCount.setText(String.valueOf(item.getList().get(0).getCumulativeNum()));

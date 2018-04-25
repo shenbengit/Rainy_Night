@@ -50,8 +50,9 @@ public class SleepReportPresenter implements SleepReportContract.Presenter {
             switch (msg.what) {
                 case 1:
                     if (mEntity != null) {
+                        mList.clear();
                         SleepReportEntity entity = GsonUtil.fromJson(mEntity.getJson(), SleepReportEntity.class);
-                        mList = entity.getData();
+                        mList.addAll(entity.getData());
                         if (mList.isEmpty()) {
                             mAdapter.setEmptyView(mViewDataError);
                             return;

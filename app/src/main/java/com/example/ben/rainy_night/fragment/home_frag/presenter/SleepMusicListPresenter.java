@@ -125,7 +125,8 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
                     @Override
                     public void onSuccess(Response<MusicEntity> response) {
                         if (response.body().getCode() == Constant.REQUEST_SUCCESS) {
-                            mLists = response.body().getData();
+                            mLists.clear();
+                            mLists.addAll(response.body().getData());
                             mHandler.sendEmptyMessage(1);
                             MusicActionManager.getInstance().setData(Constant.DOLPHIN_MUSIC_CACHE + mSceneType);
                         } else {
@@ -137,7 +138,8 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
                     public void onCacheSuccess(Response<MusicEntity> response) {
                         super.onCacheSuccess(response);
                         if (response.body().getCode() == Constant.REQUEST_SUCCESS) {
-                            mLists = response.body().getData();
+                            mLists.clear();
+                            mLists.addAll(response.body().getData());
                             mHandler.sendEmptyMessage(2);
                             MusicActionManager.getInstance().setData(Constant.DOLPHIN_MUSIC_CACHE + mSceneType);
                         } else {

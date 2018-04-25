@@ -12,15 +12,12 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicAudioFragment;
-import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicVideoFragment;
 import com.example.ben.rainy_night.fragment.night_frag.adapter.SleepFmAdapter;
 import com.example.ben.rainy_night.fragment.night_frag.contract.SleepFmContract;
 import com.example.ben.rainy_night.http.okgo.callback.JsonCallBack;
 import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
 import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
-import com.example.ben.rainy_night.util.LoggerUtil;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
@@ -45,6 +42,9 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
     private int mAlbumsId;
     private String mCacheKey;
     private int mPageIndex = 1;
+
+    private int[] mPageRows = new int[]{33, 87, 27, 99};
+    private int mPageRow;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -77,15 +77,19 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
         mAlbumsId = albumsId;
         switch (mAlbumsId) {
             case Constant.DOLPHIN_HYPNOSIS:
+                mPageRow = mPageRows[0];
                 mCacheKey = Constant.DOLPHIN_HYPNOSIS_CACHE;
                 break;
             case Constant.DOLPHIN_BEFORE_SLEEP_AND_READ:
+                mPageRow = mPageRows[1];
                 mCacheKey = Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE;
                 break;
             case Constant.DOLPHIN_NICE_PEOPLE:
+                mPageRow = mPageRows[2];
                 mCacheKey = Constant.DOLPHIN_NICE_PEOPLE_CACHE;
                 break;
             case Constant.DOLPHIN_SAY_GOOG_NIGHT:
+                mPageRow = mPageRows[3];
                 mCacheKey = Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE;
                 break;
             default:
@@ -95,8 +99,7 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
 
         mLists = new ArrayList<>();
         mAdapter = new SleepFmAdapter(mLists);
-        LinearLayoutManager manager = new LinearLayoutManager(view.getCon(),
-                LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager manager = new LinearLayoutManager(view.getCon(), LinearLayoutManager.VERTICAL, false);
         view.getRecycler().setItemAnimator(new DefaultItemAnimator());
         view.getRecycler().setLayoutManager(manager);
         mAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
@@ -137,7 +140,7 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
                 .params("albumsId", mAlbumsId)
                 .params("appId", "30639")
                 .params("pageIndex", mPageIndex)
-                .params("pageRows", "20")
+                .params("pageRows", mPageRow)
                 .params("timestamp", System.currentTimeMillis())
                 .cacheMode(CacheMode.IF_NONE_CACHE_REQUEST)
                 .cacheKey(mCacheKey + String.valueOf(mPageIndex))
@@ -145,7 +148,8 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
                     @Override
                     public void onSuccess(Response<SleepFmEntity> response) {
                         if (response.body().getCode() == Constant.REQUEST_SUCCESS) {
-                            mLists = response.body().getData().getList();
+                            mLists.clear();
+                            mLists.addAll(response.body().getData().getList());
                             mHandler.sendEmptyMessage(1);
                             MusicActionManager.getInstance().setData(mCacheKey + String.valueOf(mPageIndex));
                         } else {
@@ -157,7 +161,8 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
                     public void onCacheSuccess(Response<SleepFmEntity> response) {
                         super.onCacheSuccess(response);
                         if (response.body().getCode() == Constant.REQUEST_SUCCESS) {
-                            mLists = response.body().getData().getList();
+                            mLists.clear();
+                            mLists.addAll(response.body().getData().getList());
                             mHandler.sendEmptyMessage(2);
                             MusicActionManager.getInstance().setData(mCacheKey + String.valueOf(mPageIndex));
                         } else {
