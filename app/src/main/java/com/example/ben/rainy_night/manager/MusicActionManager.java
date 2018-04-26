@@ -72,7 +72,7 @@ public class MusicActionManager {
      * @param key    key
      * @param entity 追加的音乐数据
      */
-    public void addData(String key, SleepFmEntity entity) {
+    public <T> void addData(String key, T entity) {
         if (mListener != null) {
             mListener.addData(key, entity);
         }

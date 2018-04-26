@@ -51,10 +51,18 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    mAdapter.setNewData(mLists);
+                    if (!mLists.isEmpty()) {
+                        mAdapter.setNewData(mLists);
+                    } else {
+                        mAdapter.setEmptyView(mViewDataError);
+                    }
                     break;
                 case 2:
-                    mAdapter.setNewData(mLists);
+                    if (!mLists.isEmpty()) {
+                        mAdapter.setNewData(mLists);
+                    } else {
+                        mAdapter.setEmptyView(mViewDataError);
+                    }
                     break;
                 default:
                     break;

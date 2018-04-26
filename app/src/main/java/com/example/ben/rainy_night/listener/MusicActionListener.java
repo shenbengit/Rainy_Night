@@ -38,9 +38,9 @@ public interface MusicActionListener {
      * 追加音乐数据
      *
      * @param key    key
-     * @param entity 追加的音乐数据
+     * @param object 追加的音乐数据
      */
-    void addData(String key, SleepFmEntity entity);
+    <T> void addData(String key, T object);
 
     /**
      * 获取当前播放音乐的类型

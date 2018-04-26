@@ -41,7 +41,6 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
 
     private int mAlbumsId;
     private String mCacheKey;
-    private int mPageIndex = 1;
 
     private int[] mPageRows = new int[]{33, 87, 27, 99};
     private int mPageRow;
@@ -52,10 +51,18 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    mAdapter.setNewData(mLists);
+                    if (!mLists.isEmpty()) {
+                        mAdapter.setNewData(mLists);
+                    } else {
+                        mAdapter.setEmptyView(mViewDataError);
+                    }
                     break;
                 case 2:
-                    mAdapter.setNewData(mLists);
+                    if (!mLists.isEmpty()) {
+                        mAdapter.setNewData(mLists);
+                    } else {
+                        mAdapter.setEmptyView(mViewDataError);
+                    }
                     break;
                 default:
                     break;
@@ -139,11 +146,11 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
         OkGo.<SleepFmEntity>get(Constant.DOLPHIN_BASEURL + Constant.DOLPHIN_ALBUMS_MEDIA_LIST)
                 .params("albumsId", mAlbumsId)
                 .params("appId", "30639")
-                .params("pageIndex", mPageIndex)
+                .params("pageIndex", "1")
                 .params("pageRows", mPageRow)
                 .params("timestamp", System.currentTimeMillis())
                 .cacheMode(CacheMode.IF_NONE_CACHE_REQUEST)
-                .cacheKey(mCacheKey + String.valueOf(mPageIndex))
+                .cacheKey(mCacheKey)
                 .execute(new JsonCallBack<SleepFmEntity>(SleepFmEntity.class) {
                     @Override
                     public void onSuccess(Response<SleepFmEntity> response) {
@@ -151,7 +158,7 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
                             mLists.clear();
                             mLists.addAll(response.body().getData().getList());
                             mHandler.sendEmptyMessage(1);
-                            MusicActionManager.getInstance().setData(mCacheKey + String.valueOf(mPageIndex));
+                            MusicActionManager.getInstance().setData(mCacheKey);
                         } else {
                             mAdapter.setEmptyView(mViewDataError);
                         }
@@ -164,7 +171,7 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
                             mLists.clear();
                             mLists.addAll(response.body().getData().getList());
                             mHandler.sendEmptyMessage(2);
-                            MusicActionManager.getInstance().setData(mCacheKey + String.valueOf(mPageIndex));
+                            MusicActionManager.getInstance().setData(mCacheKey);
                         } else {
                             mAdapter.setEmptyView(mViewDataError);
                         }

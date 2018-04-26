@@ -58,6 +58,8 @@ public class SleepReportPresenter implements SleepReportContract.Presenter {
                             return;
                         }
                         mAdapter.setNewData(mList);
+                    } else {
+                        mAdapter.setEmptyView(mViewDataError);
                     }
                     break;
                 default:

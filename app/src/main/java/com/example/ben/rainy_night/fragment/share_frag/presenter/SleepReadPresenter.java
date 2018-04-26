@@ -60,6 +60,8 @@ public class SleepReadPresenter implements SleepReadContract.Presenter {
                             return;
                         }
                         mAdapter.setNewData(mList);
+                    } else {
+                        mAdapter.setEmptyView(mViewDataError);
                     }
                     break;
                 default:
