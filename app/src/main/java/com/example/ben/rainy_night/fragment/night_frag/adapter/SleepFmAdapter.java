@@ -1,5 +1,6 @@
 package com.example.ben.rainy_night.fragment.night_frag.adapter;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,6 +10,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
+import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.vondear.rxtools.RxTimeTool;
 
 import java.util.List;
@@ -26,11 +28,26 @@ public class SleepFmAdapter extends BaseQuickAdapter<SleepFmEntity.DataBean.List
 
     @Override
     protected void convert(ViewHolder holder, SleepFmEntity.DataBean.ListBeanX item) {
+        AnimationDrawable drawable = (AnimationDrawable) holder.ivAnim.getDrawable();
         holder.tvNumber.setText(String.valueOf(holder.getLayoutPosition() - getHeaderLayoutCount() + 1));
         holder.tvName.setText(item.getMediaName().trim());
         holder.tvDate.setText(item.getCreateTime().substring(5, 10));
         holder.tvCount.setText(String.valueOf(item.getList().get(0).getCumulativeNum()));
         holder.tvTime.setText(RxTimeTool.formatTime((long) (item.getList().get(0).getDuration() * 1000)));
+
+        if (MusicActionManager.getInstance().isCurrMusicIsPlayingMusic(item.getMediaName())) {
+            holder.ivAnim.setVisibility(View.VISIBLE);
+            holder.tvNumber.setVisibility(View.GONE);
+            if (MusicActionManager.getInstance().isPlaying()) {
+                drawable.start();
+            } else {
+                drawable.stop();
+            }
+        } else {
+            holder.ivAnim.setVisibility(View.GONE);
+            holder.tvNumber.setVisibility(View.VISIBLE);
+            drawable.stop();
+        }
     }
 
 

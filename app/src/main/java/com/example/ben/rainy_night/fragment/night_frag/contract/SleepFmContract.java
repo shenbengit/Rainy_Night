@@ -42,5 +42,10 @@ public interface SleepFmContract {
          * 获取FM集合
          */
         void getAlbumsMediaList();
+
+        /**
+         * 销毁时执行操作
+         */
+        void onDestroy();
     }
 }

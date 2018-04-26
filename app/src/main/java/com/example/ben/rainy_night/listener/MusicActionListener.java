@@ -3,6 +3,7 @@ package com.example.ben.rainy_night.listener;
 import android.content.Context;
 
 import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
+import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
 import com.lzx.musiclibrary.manager.MusicManager;
 
@@ -174,18 +175,24 @@ public interface MusicActionListener {
     /**
      * 获取当前播放音频的id
      *
-     * @param musicType 当前播放的音乐的种类
      * @return
      */
-    int getmCurrentMediaId(String musicType);
+    int getmCurrentMediaId();
 
     /**
      * 获取当前播放音乐的信息
      *
-     * @param musicType
      * @return
      */
-    SongInfo getCurrentMediaInfo(String musicType);
+    SongInfo getCurrentMediaInfo();
+
+    /**
+     * 判断当前的音乐是不是正在播放的音乐
+     *
+     * @param musicName 音乐名
+     * @return
+     */
+    boolean isCurrMusicIsPlayingMusic(String musicName);
 
     /**
      * 获取时长
@@ -194,4 +201,18 @@ public interface MusicActionListener {
      * @return 时长 单位：秒
      */
     int getDuration(String musicType);
+
+    /**
+     * 添加播放事件监听
+     *
+     * @param listener
+     */
+    void addPlayerEventListener(OnPlayerEventListener listener);
+
+    /**
+     * 移除播放事件监听
+     *
+     * @param listener
+     */
+    void removePlayerEventListener(OnPlayerEventListener listener);
 }

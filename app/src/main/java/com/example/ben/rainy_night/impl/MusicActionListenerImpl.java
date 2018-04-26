@@ -3,13 +3,13 @@ package com.example.ben.rainy_night.impl;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.example.ben.rainy_night.http.bmob.entity.SleepMusicEntity;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
 import com.example.ben.rainy_night.listener.MusicActionListener;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.ToastUtil;
+import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
 import com.lzx.musiclibrary.manager.MusicManager;
 import com.lzy.okgo.cache.CacheEntity;
@@ -140,19 +140,19 @@ public class MusicActionListenerImpl implements MusicActionListener {
         switch (key) {
             case Constant.DOLPHIN_HYPNOSIS_CACHE:
                 mListHypnosis.clear();
-                mListHypnosis.addAll(getFmMusicList(entity));
+                mListHypnosis.addAll(getMusicList(entity));
                 break;
             case Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE:
                 mListRead.clear();
-                mListRead.addAll(getFmMusicList(entity));
+                mListRead.addAll(getMusicList(entity));
                 break;
             case Constant.DOLPHIN_NICE_PEOPLE_CACHE:
                 mListNice.clear();
-                mListNice.addAll(getFmMusicList(entity));
+                mListNice.addAll(getMusicList(entity));
                 break;
             case Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE:
                 mListNight.clear();
-                mListNight.addAll(getFmMusicList(entity));
+                mListNight.addAll(getMusicList(entity));
                 break;
             default:
                 LoggerUtil.e("MusicActionListenerImpl: setData()音乐类型错误，key: " + key);
@@ -160,32 +160,27 @@ public class MusicActionListenerImpl implements MusicActionListener {
         }
     }
 
-    /**
-     * 追加音乐数据
-     *
-     * @param key    key
-     * @param object 追加的音乐数据
-     */
     @Override
-    public void addData(String key, Object object) {
+    public <T> void addData(String key, T object) {
         switch (key) {
             case Constant.DOLPHIN_HYPNOSIS_CACHE:
-                mListHypnosis.addAll(getFmMusicList(object));
+                mListHypnosis.addAll(getMusicList(object));
                 break;
             case Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE:
-                mListRead.addAll(getFmMusicList(object));
+                mListRead.addAll(getMusicList(object));
                 break;
             case Constant.DOLPHIN_NICE_PEOPLE_CACHE:
-                mListNice.addAll(getFmMusicList(object));
+                mListNice.addAll(getMusicList(object));
                 break;
             case Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE:
-                mListNight.addAll(getFmMusicList(object));
+                mListNight.addAll(getMusicList(object));
                 break;
             default:
                 LoggerUtil.e("MusicActionListenerImpl: addData()音乐类型错误，key: " + key);
                 break;
         }
     }
+
 
     /**
      * 获取当前播放音乐的类型
@@ -231,10 +226,14 @@ public class MusicActionListenerImpl implements MusicActionListener {
     @Override
     public void start(String musicType, int position, int playMode, long remainTime) {
         if (TextUtils.equals(mMusicType, musicType) && !mListCurrent.isEmpty()) {
+            if (MusicManager.isPlaying()) {
+                MusicManager.get().stopMusic();
+            }
             MusicManager.get().playMusicByIndex(position);
             return;
         }
         mMusicType = musicType;
+        mListCurrent.clear();
         switch (mMusicType) {
             case Constant.DOLPHIN_NATURAL_MUSIC_CACHE:
                 if (mListNatural.isEmpty()) {
@@ -455,29 +454,33 @@ public class MusicActionListenerImpl implements MusicActionListener {
     /**
      * 获取当前播放音频的id
      *
-     * @param musicType 当前播放的音乐的种类
      * @return
      */
     @Override
-    public int getmCurrentMediaId(String musicType) {
-        if (TextUtils.equals(mMusicType, musicType)) {
-            return MusicManager.get().getCurrPlayingIndex();
-        }
-        return -1;
+    public int getmCurrentMediaId() {
+        return MusicManager.get().getCurrPlayingIndex();
     }
 
     /**
      * 获取当前播放音乐的信息
      *
-     * @param musicType
      * @return
      */
     @Override
-    public SongInfo getCurrentMediaInfo(String musicType) {
-        if (TextUtils.equals(mMusicType, musicType)) {
-            return MusicManager.get().getCurrPlayingMusic();
-        }
-        return null;
+    public SongInfo getCurrentMediaInfo() {
+        return MusicManager.get().getCurrPlayingMusic();
+    }
+
+    /**
+     * 判断当前的音乐是不是正在播放的音乐
+     *
+     * @param musicName 音乐名
+     * @return
+     */
+    @Override
+    public boolean isCurrMusicIsPlayingMusic(String musicName) {
+        SongInfo info = MusicManager.get().getCurrPlayingMusic();
+        return info != null && TextUtils.equals(info.getSongName(), musicName);
     }
 
     /**
@@ -496,6 +499,30 @@ public class MusicActionListenerImpl implements MusicActionListener {
     }
 
     /**
+     * 添加播放事件监听
+     *
+     * @param listener
+     */
+    @Override
+    public void addPlayerEventListener(OnPlayerEventListener listener) {
+        if (listener != null) {
+            MusicManager.get().addPlayerEventListener(listener);
+        }
+    }
+
+    /**
+     * 移除播放事件监听
+     *
+     * @param listener
+     */
+    @Override
+    public void removePlayerEventListener(OnPlayerEventListener listener) {
+        if (listener != null) {
+            MusicManager.get().removePlayerEventListener(listener);
+        }
+    }
+
+    /**
      * 获取自然音符或轻音乐
      *
      * @param cacheKey 缓存名
@@ -509,11 +536,11 @@ public class MusicActionListenerImpl implements MusicActionListener {
             List<MusicEntity.DataBean> beans = entity.getData();
             for (MusicEntity.DataBean bean : beans) {
                 SongInfo info = new SongInfo();
+                info.setSongName(bean.getSceneName());
+                info.setSize(String.valueOf(bean.getAudioSize()));
                 info.setSongId(String.valueOf(bean.getSceneId()));
                 info.setSongUrl(URLDecoder.decode(bean.getAudioUrl()));
                 info.setDownloadUrl(URLDecoder.decode(bean.getAudioUrl()));
-                info.setSongName(bean.getSceneName());
-                info.setSize(String.valueOf(bean.getAudioSize()));
                 lists.add(info);
             }
         }
@@ -534,11 +561,12 @@ public class MusicActionListenerImpl implements MusicActionListener {
             List<SleepFmEntity.DataBean.ListBeanX> beans = entity.getData().getList();
             for (SleepFmEntity.DataBean.ListBeanX bean : beans) {
                 SongInfo info = new SongInfo();
+                info.setSongName(bean.getMediaName());
+                info.setFavorites(bean.getList().get(0).getCumulativeNum());
                 info.setSongId(String.valueOf(bean.getList().get(0).getMediaId()));
+                info.setDuration((long) (bean.getList().get(0).getDuration() * 1000));
                 info.setSongUrl(URLDecoder.decode(bean.getList().get(0).getMediaUrl()));
                 info.setDownloadUrl(URLDecoder.decode(bean.getList().get(0).getMediaUrl()));
-                info.setFavorites(bean.getList().get(0).getCumulativeNum());
-                info.setDuration((long) (bean.getList().get(0).getDuration() * 1000));
                 lists.add(info);
             }
         }
@@ -548,36 +576,37 @@ public class MusicActionListenerImpl implements MusicActionListener {
     /**
      * 获取电台音乐
      *
-     * @param bean 音乐数据
+     * @param object 音乐数据
      * @return
      */
-    private <T> List<SongInfo> getFmMusicList(T bean) {
+    private <T> List<SongInfo> getMusicList(T object) {
         List<SongInfo> lists = new ArrayList<>();
-        if (bean instanceof MusicEntity) {
-            MusicEntity entity = (MusicEntity) bean;
+        if (object instanceof MusicEntity) {
+            MusicEntity entity = (MusicEntity) object;
             List<MusicEntity.DataBean> beans = entity.getData();
             if (beans != null) {
-                for (MusicEntity.DataBean dataBean : beans) {
+                for (MusicEntity.DataBean bean : beans) {
                     SongInfo info = new SongInfo();
-                    info.setSongId(String.valueOf(dataBean.getSceneId()));
-                    info.setSongUrl(URLDecoder.decode(dataBean.getAudioUrl()));
-                    info.setDownloadUrl(URLDecoder.decode(dataBean.getAudioUrl()));
-                    info.setSongName(dataBean.getSceneName());
-                    info.setSize(String.valueOf(dataBean.getAudioSize()));
+                    info.setSongName(bean.getSceneName());
+                    info.setSize(String.valueOf(bean.getAudioSize()));
+                    info.setSongId(String.valueOf(bean.getSceneId()));
+                    info.setSongUrl(URLDecoder.decode(bean.getAudioUrl()));
+                    info.setDownloadUrl(URLDecoder.decode(bean.getAudioUrl()));
                     lists.add(info);
                 }
             }
-        } else if (bean instanceof SleepFmEntity) {
-            SleepFmEntity entity = (SleepFmEntity) bean;
+        } else if (object instanceof SleepFmEntity) {
+            SleepFmEntity entity = (SleepFmEntity) object;
             List<SleepFmEntity.DataBean.ListBeanX> beans = entity.getData().getList();
             if (beans != null) {
-                for (SleepFmEntity.DataBean.ListBeanX beanX : beans) {
+                for (SleepFmEntity.DataBean.ListBeanX bean : beans) {
                     SongInfo info = new SongInfo();
-                    info.setSongId(String.valueOf(beanX.getList().get(0).getMediaId()));
-                    info.setSongUrl(URLDecoder.decode(beanX.getList().get(0).getMediaUrl()));
-                    info.setDownloadUrl(URLDecoder.decode(beanX.getList().get(0).getMediaUrl()));
-                    info.setFavorites(beanX.getList().get(0).getCumulativeNum());
-                    info.setDuration((long) (beanX.getList().get(0).getDuration() * 1000));
+                    info.setSongName(bean.getMediaName());
+                    info.setFavorites(bean.getList().get(0).getCumulativeNum());
+                    info.setSongId(String.valueOf(bean.getList().get(0).getMediaId()));
+                    info.setDuration((long) (bean.getList().get(0).getDuration() * 1000));
+                    info.setSongUrl(URLDecoder.decode(bean.getList().get(0).getMediaUrl()));
+                    info.setDownloadUrl(URLDecoder.decode(bean.getList().get(0).getMediaUrl()));
                     lists.add(info);
                 }
             }
@@ -591,7 +620,6 @@ public class MusicActionListenerImpl implements MusicActionListener {
      * @param list
      */
     private void setCurrentMusicList(List<SongInfo> list) {
-        mListCurrent.clear();
         mListCurrent.addAll(list);
     }
 }

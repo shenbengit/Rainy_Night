@@ -69,6 +69,13 @@ public class SleepFmFragment extends BaseFragment<SleepFmContract.Presenter> imp
         return isNetAvailable();
     }
 
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.onDestroy();
+    }
+
     @Override
     public void showToast(String text) {
         toastShow(text);

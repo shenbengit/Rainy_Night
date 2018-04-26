@@ -18,6 +18,9 @@ import com.example.ben.rainy_night.http.okgo.callback.JsonCallBack;
 import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
 import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
+import com.example.ben.rainy_night.util.LoggerUtil;
+import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
+import com.lzx.musiclibrary.aidl.model.SongInfo;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
@@ -30,7 +33,7 @@ import java.util.List;
  * @date 2018/4/24
  */
 
-public class SleepFmPresenter implements SleepFmContract.Presenter {
+public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEventListener {
     private SleepFmContract.View view;
 
     private SleepFmAdapter mAdapter;
@@ -72,6 +75,7 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
 
     public SleepFmPresenter(SleepFmContract.View view) {
         this.view = view;
+        MusicActionManager.getInstance().addPlayerEventListener(this);
     }
 
     /**
@@ -128,6 +132,8 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
             mAdapter.setEmptyView(mViewLoading);
             new Handler(Looper.getMainLooper()).postDelayed(this::getAlbumsMediaList, 1000);
         });
+
+        mAdapter.setOnItemClickListener((adapter, view1, position) -> MusicActionManager.getInstance().start(mCacheKey, position));
     }
 
     /**
@@ -177,5 +183,41 @@ public class SleepFmPresenter implements SleepFmContract.Presenter {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onDestroy() {
+        MusicActionManager.getInstance().removePlayerEventListener(this);
+    }
+
+    @Override
+    public void onMusicSwitch(SongInfo music) {
+
+    }
+
+    @Override
+    public void onPlayerStart() {
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPlayerPause() {
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPlayCompletion() {
+
+    }
+
+    @Override
+    public void onError(String errorMsg) {
+        view.showToast(errorMsg);
+        LoggerUtil.e("SleepFmPresenter,音乐播放错误: " + errorMsg);
+    }
+
+    @Override
+    public void onAsyncLoading(boolean isFinishLoading) {
+
     }
 }

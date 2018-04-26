@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
 import com.example.ben.rainy_night.impl.MusicActionListenerImpl;
 import com.example.ben.rainy_night.listener.MusicActionListener;
+import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
 import com.lzx.musiclibrary.manager.MusicManager;
 
@@ -70,11 +71,11 @@ public class MusicActionManager {
      * 追加音乐数据
      *
      * @param key    key
-     * @param entity 追加的音乐数据
+     * @param object 追加的音乐数据
      */
-    public <T> void addData(String key, T entity) {
+    public <T> void addData(String key, T object) {
         if (mListener != null) {
-            mListener.addData(key, entity);
+            mListener.addData(key, object);
         }
     }
 
@@ -282,13 +283,12 @@ public class MusicActionManager {
     /**
      * 获取当前播放音频的id
      *
-     * @param musicType 当前播放的音乐的种类
      * @return
      */
 
-    public int getmCurrentMediaId(String musicType) {
+    public int getmCurrentMediaId() {
         if (mListener != null) {
-            mListener.getmCurrentMediaId(musicType);
+            mListener.getmCurrentMediaId();
         }
 
         return -1;
@@ -297,15 +297,27 @@ public class MusicActionManager {
     /**
      * 获取当前播放音乐的信息
      *
-     * @param musicType
      * @return
      */
 
-    public SongInfo getCurrentMediaInfo(String musicType) {
+    public SongInfo getCurrentMediaInfo() {
         if (mListener != null) {
-            mListener.getCurrentMediaInfo(musicType);
+            mListener.getCurrentMediaInfo();
         }
         return null;
+    }
+
+    /**
+     * 判断当前的音乐是不是正在播放的音乐
+     *
+     * @param musicName 音乐名
+     * @return
+     */
+    public boolean isCurrMusicIsPlayingMusic(String musicName) {
+        if (mListener != null) {
+            return mListener.isCurrMusicIsPlayingMusic(musicName);
+        }
+        return false;
     }
 
     /**
@@ -320,5 +332,27 @@ public class MusicActionManager {
             mListener.getDuration(musicType);
         }
         return 0;
+    }
+
+    /**
+     * 添加播放事件监听
+     *
+     * @param listener
+     */
+    public void addPlayerEventListener(OnPlayerEventListener listener) {
+        if (mListener != null) {
+            mListener.addPlayerEventListener(listener);
+        }
+    }
+
+    /**
+     * 移除播放事件监听
+     *
+     * @param listener
+     */
+    public void removePlayerEventListener(OnPlayerEventListener listener) {
+        if (mListener != null) {
+            mListener.removePlayerEventListener(listener);
+        }
     }
 }
