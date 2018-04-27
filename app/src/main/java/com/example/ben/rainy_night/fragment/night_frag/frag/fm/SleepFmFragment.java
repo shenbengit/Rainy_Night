@@ -33,6 +33,8 @@ public class SleepFmFragment extends BaseFragment<SleepFmContract.Presenter> imp
 
     private int mAlbumsId;
 
+    private boolean isVisibleToUser;
+
 
     @Override
     protected int getLayout() {
@@ -69,6 +71,17 @@ public class SleepFmFragment extends BaseFragment<SleepFmContract.Presenter> imp
         return isNetAvailable();
     }
 
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        isVisibleToUser = true;
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        isVisibleToUser = false;
+    }
 
     @Override
     public void onDestroyView() {
@@ -99,5 +112,10 @@ public class SleepFmFragment extends BaseFragment<SleepFmContract.Presenter> imp
     @Override
     public RecyclerView getRecycler() {
         return recySleepFmList;
+    }
+
+    @Override
+    public boolean isVisibleToUser() {
+        return isVisibleToUser;
     }
 }

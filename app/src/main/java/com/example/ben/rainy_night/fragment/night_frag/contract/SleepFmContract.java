@@ -27,6 +27,13 @@ public interface SleepFmContract {
          * @return
          */
         RecyclerView getRecycler();
+
+        /**
+         * 当前fragment对用户是否可见
+         *
+         * @return
+         */
+        boolean isVisibleToUser();
     }
 
     interface Presenter extends BasePresenter {

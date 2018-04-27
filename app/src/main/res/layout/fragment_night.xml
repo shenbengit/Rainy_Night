@@ -218,7 +218,7 @@
                 android:src="@mipmap/bg_music_cover" />
 
             <TextView
-                android:id="@+id/id_toolbar_music_name"
+                android:id="@+id/tv_toolbar_music_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

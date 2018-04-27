@@ -145,56 +145,46 @@ public class MusicActionManager {
 
     /**
      * 暂停
-     *
-     * @param musicType 当前播放的音乐的种类
      */
-    public void pause(String musicType) {
+    public void pause() {
         if (mListener != null) {
-            mListener.pause(musicType);
+            mListener.pause();
         }
     }
 
     /**
      * 继续播放
-     *
-     * @param musicType 当前播放的音乐的种类
      */
-    public void resume(String musicType) {
+    public void resume() {
         if (mListener != null) {
-            mListener.resume(musicType);
+            mListener.resume();
         }
     }
 
     /**
      * 停止
-     *
-     * @param musicType 当前播放的音乐的种类
      */
-    public void stop(String musicType) {
+    public void stop() {
         if (mListener != null) {
-            mListener.stop(musicType);
+            mListener.stop();
         }
     }
 
     /**
      * 播放上一个
-     *
-     * @param musicType 当前播放的音乐的种类
      */
-    public void startPrevious(String musicType) {
+    public void startPrevious() {
         if (mListener != null) {
-            mListener.startPrevious(musicType);
+            mListener.startPrevious();
         }
     }
 
     /**
      * 播放下一个
-     *
-     * @param musicType 当前播放的音乐的种类
      */
-    public void startNext(String musicType) {
+    public void startNext() {
         if (mListener != null) {
-            mListener.startNext(musicType);
+            mListener.startNext();
         }
     }
 
@@ -223,13 +213,12 @@ public class MusicActionManager {
     /**
      * 寻求指定的时间位置
      *
-     * @param musicType 当前播放的音乐的种类
-     * @param position  播放的位置
+     * @param position 播放的位置
      */
 
-    public void seekTo(String musicType, int position) {
+    public void seekTo(int position) {
         if (mListener != null) {
-            mListener.seekTo(musicType, position);
+            mListener.seekTo(position);
         }
     }
 
@@ -241,7 +230,7 @@ public class MusicActionManager {
         if (mListener != null) {
             return mListener.getState();
         }
-        return -1;
+        return 0;
     }
 
     /**
@@ -253,7 +242,7 @@ public class MusicActionManager {
         if (mListener != null) {
             return mListener.getPlayMode();
         }
-        return -1;
+        return 0;
     }
 
     /**
@@ -281,16 +270,15 @@ public class MusicActionManager {
     }
 
     /**
-     * 获取当前播放音频的id
+     * 获取当前播放音频的在List中的位置
      *
      * @return
      */
 
-    public int getmCurrentMediaId() {
+    public int getCurrPlayingIndex() {
         if (mListener != null) {
-            mListener.getmCurrentMediaId();
+            return mListener.getCurrPlayingIndex();
         }
-
         return -1;
     }
 
@@ -323,13 +311,12 @@ public class MusicActionManager {
     /**
      * 获取时长
      *
-     * @param musicType 当前播放的音乐的种类
      * @return 时长 单位：秒
      */
 
-    public int getDuration(String musicType) {
+    public int getDuration() {
         if (mListener != null) {
-            mListener.getDuration(musicType);
+            mListener.getDuration();
         }
         return 0;
     }

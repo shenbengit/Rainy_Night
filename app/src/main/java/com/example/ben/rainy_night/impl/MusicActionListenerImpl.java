@@ -313,69 +313,49 @@ public class MusicActionListenerImpl implements MusicActionListener {
 
     /**
      * 暂停
-     *
-     * @param musicType 当前播放的音乐的种类
      */
     @Override
-    public void pause(String musicType) {
-        if (TextUtils.equals(mMusicType, musicType)) {
-            MusicManager.get().pauseMusic();
-        }
+    public void pause() {
+        MusicManager.get().pauseMusic();
     }
 
     /**
      * 继续播放
-     *
-     * @param musicType 当前播放的音乐的种类
      */
     @Override
-    public void resume(String musicType) {
-        if (TextUtils.equals(mMusicType, musicType)) {
-            MusicManager.get().resumeMusic();
-        }
+    public void resume() {
+        MusicManager.get().resumeMusic();
     }
 
     /**
      * 停止
-     *
-     * @param musicType 当前播放的音乐的种类
      */
     @Override
-    public void stop(String musicType) {
-        if (TextUtils.equals(mMusicType, musicType)) {
-            MusicManager.get().stopMusic();
-        }
+    public void stop() {
+        MusicManager.get().stopMusic();
     }
 
     /**
      * 播放上一个
-     *
-     * @param musicType 当前播放的音乐的种类
      */
     @Override
-    public void startPrevious(String musicType) {
-        if (TextUtils.equals(mMusicType, musicType)) {
-            if (MusicManager.get().hasPre()) {
-                MusicManager.get().playPre();
-            } else {
-                ToastUtil.show(mContext, "已经是第一首了");
-            }
+    public void startPrevious() {
+        if (MusicManager.get().hasPre()) {
+            MusicManager.get().playPre();
+        } else {
+            ToastUtil.show(mContext, "已经是第一首了");
         }
     }
 
     /**
      * 播放下一个
-     *
-     * @param musicType 当前播放的音乐的种类
      */
     @Override
-    public void startNext(String musicType) {
-        if (TextUtils.equals(mMusicType, musicType)) {
-            if (MusicManager.get().hasNext()) {
-                MusicManager.get().playNext();
-            } else {
-                ToastUtil.show(mContext, "已经是最后一首了");
-            }
+    public void startNext() {
+        if (MusicManager.get().hasNext()) {
+            MusicManager.get().playNext();
+        } else {
+            ToastUtil.show(mContext, "已经是最后一首了");
         }
     }
 
@@ -402,14 +382,11 @@ public class MusicActionListenerImpl implements MusicActionListener {
     /**
      * 寻求指定的时间位置
      *
-     * @param musicType 当前播放的音乐的种类
-     * @param position  播放的位置
+     * @param position 播放的位置
      */
     @Override
-    public void seekTo(String musicType, int position) {
-        if (TextUtils.equals(mMusicType, musicType)) {
-            MusicManager.get().seekTo(position);
-        }
+    public void seekTo(int position) {
+        MusicManager.get().seekTo(position);
     }
 
     /**
@@ -452,12 +429,12 @@ public class MusicActionListenerImpl implements MusicActionListener {
     }
 
     /**
-     * 获取当前播放音频的id
+     * 获取当前播放音频的在List中的位置
      *
      * @return
      */
     @Override
-    public int getmCurrentMediaId() {
+    public int getCurrPlayingIndex() {
         return MusicManager.get().getCurrPlayingIndex();
     }
 
@@ -486,16 +463,12 @@ public class MusicActionListenerImpl implements MusicActionListener {
     /**
      * 获取时长
      *
-     * @param musicType 当前播放的音乐的种类
      * @return 时长 单位：秒
      */
     @Override
-    public int getDuration(String musicType) {
-        if (TextUtils.equals(mMusicType, musicType)) {
-            double duration = (double) MusicManager.get().getDuration() / 1000;
-            return new BigDecimal(duration).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-        }
-        return 0;
+    public int getDuration() {
+        double duration = (double) MusicManager.get().getDuration() / 1000;
+        return new BigDecimal(duration).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
     }
 
     /**
@@ -561,7 +534,13 @@ public class MusicActionListenerImpl implements MusicActionListener {
             List<SleepFmEntity.DataBean.ListBeanX> beans = entity.getData().getList();
             for (SleepFmEntity.DataBean.ListBeanX bean : beans) {
                 SongInfo info = new SongInfo();
-                info.setSongName(bean.getMediaName());
+                if (bean.getMediaName().contains("【海豚FM说晚安】")) {
+                    info.setSongName(bean.getMediaName().replace("【海豚FM说晚安】", ""));
+                } else if (bean.getMediaName().contains("【耐撕の人】")) {
+                    info.setSongName(bean.getMediaName().replace("【耐撕の人】", ""));
+                } else {
+                    info.setSongName(bean.getMediaName());
+                }
                 info.setFavorites(bean.getList().get(0).getCumulativeNum());
                 info.setSongId(String.valueOf(bean.getList().get(0).getMediaId()));
                 info.setDuration((long) (bean.getList().get(0).getDuration() * 1000));
@@ -601,7 +580,13 @@ public class MusicActionListenerImpl implements MusicActionListener {
             if (beans != null) {
                 for (SleepFmEntity.DataBean.ListBeanX bean : beans) {
                     SongInfo info = new SongInfo();
-                    info.setSongName(bean.getMediaName());
+                    if (bean.getMediaName().contains("【海豚FM说晚安】")) {
+                        info.setSongName(bean.getMediaName().replace("【海豚FM说晚安】", ""));
+                    } else if (bean.getMediaName().contains("【耐撕の人】")) {
+                        info.setSongName(bean.getMediaName().replace("【耐撕の人】", ""));
+                    } else {
+                        info.setSongName(bean.getMediaName());
+                    }
                     info.setFavorites(bean.getList().get(0).getCumulativeNum());
                     info.setSongId(String.valueOf(bean.getList().get(0).getMediaId()));
                     info.setDuration((long) (bean.getList().get(0).getDuration() * 1000));

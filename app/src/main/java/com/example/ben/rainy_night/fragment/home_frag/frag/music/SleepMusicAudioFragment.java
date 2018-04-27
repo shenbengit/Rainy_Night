@@ -62,19 +62,19 @@ public class SleepMusicAudioFragment extends BaseFragment {
                 break;
             case R.id.ib_music_previous:
                 mTimer.cancel();
-                MusicActionManager.getInstance().startPrevious(Constant.DOLPHIN_LIGHT_MUSIC_CACHE);
+                MusicActionManager.getInstance().startPrevious();
                 mTimer.start();
                 break;
             case R.id.ib_music_isPlay:
                 mTimer.cancel();
                 if (!isPlaying) {
                     ibMusicIsPlay.setBackgroundResource(R.mipmap.music_pause);
-                    MusicActionManager.getInstance().resume(Constant.DOLPHIN_LIGHT_MUSIC_CACHE);
+                    MusicActionManager.getInstance().resume();
                     mHandler.sendEmptyMessage(1);
                     isPlaying = true;
                 } else {
                     ibMusicIsPlay.setBackgroundResource(R.mipmap.music_start);
-                    MusicActionManager.getInstance().pause(Constant.DOLPHIN_LIGHT_MUSIC_CACHE);
+                    MusicActionManager.getInstance().pause();
                     mHandler.removeMessages(1);
                     isPlaying = false;
                 }
@@ -82,7 +82,7 @@ public class SleepMusicAudioFragment extends BaseFragment {
                 break;
             case R.id.ib_music_next:
                 mTimer.cancel();
-                MusicActionManager.getInstance().startNext(Constant.DOLPHIN_LIGHT_MUSIC_CACHE);
+                MusicActionManager.getInstance().startNext();
                 mTimer.start();
                 break;
             default:
@@ -294,7 +294,7 @@ public class SleepMusicAudioFragment extends BaseFragment {
             mTimer.cancel();
             mTimer = null;
         }
-        MusicActionManager.getInstance().stop(Constant.DOLPHIN_LIGHT_MUSIC_CACHE);
+        MusicActionManager.getInstance().stop();
     }
 
     @Override

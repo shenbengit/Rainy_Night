@@ -11,6 +11,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
 import com.example.ben.rainy_night.manager.MusicActionManager;
+import com.example.ben.rainy_night.util.LoggerUtil;
+import com.lzx.musiclibrary.manager.MusicManager;
 import com.vondear.rxtools.RxTimeTool;
 
 import java.util.List;
@@ -30,12 +32,20 @@ public class SleepFmAdapter extends BaseQuickAdapter<SleepFmEntity.DataBean.List
     protected void convert(ViewHolder holder, SleepFmEntity.DataBean.ListBeanX item) {
         AnimationDrawable drawable = (AnimationDrawable) holder.ivAnim.getDrawable();
         holder.tvNumber.setText(String.valueOf(holder.getLayoutPosition() - getHeaderLayoutCount() + 1));
-        holder.tvName.setText(item.getMediaName().trim());
+        if (item.getMediaName().contains("【海豚FM说晚安】")) {
+            holder.tvName.setText(item.getMediaName().replace("【海豚FM说晚安】", "").trim());
+        } else if (item.getMediaName().contains("【耐撕の人】")) {
+            holder.tvName.setText(item.getMediaName().replace("【耐撕の人】", "").trim());
+        } else {
+            holder.tvName.setText(item.getMediaName().trim());
+        }
         holder.tvDate.setText(item.getCreateTime().substring(5, 10));
         holder.tvCount.setText(String.valueOf(item.getList().get(0).getCumulativeNum()));
         holder.tvTime.setText(RxTimeTool.formatTime((long) (item.getList().get(0).getDuration() * 1000)));
 
         if (MusicActionManager.getInstance().isCurrMusicIsPlayingMusic(item.getMediaName())) {
+            LoggerUtil.e(MusicManager.get().getCurrPlayingMusic().getSongName());
+            holder.tvName.setTextColor(mContext.getResources().getColor(R.color.color_fm_playing));
             holder.ivAnim.setVisibility(View.VISIBLE);
             holder.tvNumber.setVisibility(View.GONE);
             if (MusicActionManager.getInstance().isPlaying()) {
@@ -44,6 +54,7 @@ public class SleepFmAdapter extends BaseQuickAdapter<SleepFmEntity.DataBean.List
                 drawable.stop();
             }
         } else {
+            holder.tvName.setTextColor(mContext.getResources().getColor(R.color.colorWhite));
             holder.ivAnim.setVisibility(View.GONE);
             holder.tvNumber.setVisibility(View.VISIBLE);
             drawable.stop();

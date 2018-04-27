@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,11 @@ import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
+import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
+import com.lzx.musiclibrary.aidl.model.SongInfo;
 import com.lzx.musiclibrary.manager.MusicManager;
+import com.lzx.musiclibrary.manager.TimerTaskManager;
+import com.vondear.rxtools.RxTimeTool;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +37,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * @author Ben
  */
-public class NightFragment extends BaseFragment {
+public class NightFragment extends BaseFragment implements OnPlayerEventListener {
 
     @BindView(R.id.tv_night_music_name)
     TextView tvNightMusicName;
@@ -62,8 +67,8 @@ public class NightFragment extends BaseFragment {
     ViewPager vpNight;
     @BindView(R.id.iv_toolbar_cover)
     ImageView ivToolbarCover;
-    @BindView(R.id.id_toolbar_music_name)
-    TextView idToolbarMusicName;
+    @BindView(R.id.tv_toolbar_music_name)
+    TextView tvToolbarMusicName;
     @BindView(R.id.ib_toolbar_play)
     ImageButton ibToolbarPlay;
     @BindView(R.id.ib_toolbar_next)
@@ -75,20 +80,22 @@ public class NightFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.ib_night_music_play:
                 if (isPlaying) {
+                    MusicActionManager.getInstance().pause();
                     ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_play);
                     ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_play);
                     isPlaying = false;
                 } else {
+                    MusicActionManager.getInstance().resume();
                     ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_pause);
                     ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_pause);
                     isPlaying = true;
                 }
                 break;
             case R.id.ib_night_music_previous:
-
+                MusicActionManager.getInstance().startPrevious();
                 break;
             case R.id.ib_night_music_next:
-
+                MusicActionManager.getInstance().startNext();
                 break;
             case R.id.ib_cycle_mode:
                 if (isSingleCycle) {
@@ -124,12 +131,14 @@ public class NightFragment extends BaseFragment {
                 }
                 break;
             case R.id.ib_toolbar_next:
-
+                MusicActionManager.getInstance().startNext();
                 break;
             default:
                 break;
         }
     }
+
+    private TimerTaskManager mManager;
 
     public static NightFragment newInstance() {
         return new NightFragment();
@@ -140,6 +149,8 @@ public class NightFragment extends BaseFragment {
 
     private int[] mRemainTimes = new int[]{R.mipmap.ic_time_zz, R.mipmap.ic_time_10, R.mipmap.ic_time_20, R.mipmap.ic_time_30};
     private int mPositionTime;
+    private String[] mTitles = new String[]{Constant.DOLPHIN_HYPNOSIS_CACHE, Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE,
+            Constant.DOLPHIN_NICE_PEOPLE_CACHE, Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE};
 
     @Override
     public int getLayout() {
@@ -153,13 +164,14 @@ public class NightFragment extends BaseFragment {
 
     @Override
     public void initView() {
+        mManager = new TimerTaskManager();
+        MusicActionManager.getInstance().addPlayerEventListener(this);
         ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_play);
         ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_play);
         tabNight.addTab(tabNight.newTab());
         tabNight.addTab(tabNight.newTab());
         tabNight.addTab(tabNight.newTab());
         tabNight.addTab(tabNight.newTab());
-
     }
 
     @Override
@@ -211,10 +223,14 @@ public class NightFragment extends BaseFragment {
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
-        vpNight.setAdapter(new SleepFmFragmentAdapter(getChildFragmentManager(),
-                Constant.DOLPHIN_HYPNOSIS_CACHE, Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE,
-                Constant.DOLPHIN_NICE_PEOPLE_CACHE, Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE));
+        vpNight.setAdapter(new SleepFmFragmentAdapter(getChildFragmentManager(), mTitles));
         tabNight.setupWithViewPager(vpNight);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        MusicActionManager.getInstance().removePlayerEventListener(this);
     }
 
     /**
@@ -266,5 +282,69 @@ public class NightFragment extends BaseFragment {
                 break;
         }
         MusicActionManager.getInstance().setRemainTime(remainTime);
+    }
+
+    @Override
+    public void onMusicSwitch(SongInfo music) {
+        if (TextUtils.equals(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
+            return;
+        }
+        if (TextUtils.equals(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
+            return;
+        }
+        tvNightMusicName.setText(music.getSongName());
+        tvNightNowTime.setText("00:00");
+        tvNightAllTime.setText(RxTimeTool.formatTime((music.getDuration() * 1000)));
+        tvToolbarMusicName.setText(music.getSongName());
+    }
+
+    @Override
+    public void onPlayerStart() {
+        if (TextUtils.equals(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
+            return;
+        }
+        if (TextUtils.equals(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
+            return;
+        }
+        ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_pause);
+        ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_pause);
+    }
+
+    @Override
+    public void onPlayerPause() {
+        if (TextUtils.equals(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
+            return;
+        }
+        if (TextUtils.equals(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
+            return;
+        }
+        ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_play);
+        ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_play);
+    }
+
+    @Override
+    public void onPlayCompletion() {
+        if (TextUtils.equals(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
+            return;
+        }
+        if (TextUtils.equals(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
+            return;
+        }
+    }
+
+    @Override
+    public void onError(String errorMsg) {
+        if (TextUtils.equals(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
+            return;
+        }
+        if (TextUtils.equals(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
+            return;
+        }
+
+    }
+
+    @Override
+    public void onAsyncLoading(boolean isFinishLoading) {
+
     }
 }

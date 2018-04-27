@@ -61,7 +61,7 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
                 break;
             case R.id.ib_music_previous:
                 mTimer.cancel();
-                MusicActionManager.getInstance().startPrevious(Constant.DOLPHIN_NATURAL_MUSIC_CACHE);
+                MusicActionManager.getInstance().startPrevious();
                 presenter.startPrevious();
                 mTimer.start();
                 break;
@@ -69,12 +69,12 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
                 mTimer.cancel();
                 if (!isPlaying) {
                     ibMusicIsPlay.setBackgroundResource(R.mipmap.music_pause);
-                    MusicActionManager.getInstance().resume(Constant.DOLPHIN_NATURAL_MUSIC_CACHE);
+                    MusicActionManager.getInstance().resume();
                     presenter.resumeVideo();
                     isPlaying = true;
                 } else {
                     ibMusicIsPlay.setBackgroundResource(R.mipmap.music_start);
-                    MusicActionManager.getInstance().pause(Constant.DOLPHIN_NATURAL_MUSIC_CACHE);
+                    MusicActionManager.getInstance().pause();
                     presenter.pauseVideo();
                     isPlaying = false;
                 }
@@ -82,7 +82,7 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
                 break;
             case R.id.ib_music_next:
                 mTimer.cancel();
-                MusicActionManager.getInstance().startNext(Constant.DOLPHIN_NATURAL_MUSIC_CACHE);
+                MusicActionManager.getInstance().startNext();
                 presenter.startNext();
                 mTimer.start();
                 break;
@@ -235,7 +235,7 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
             mTimer.cancel();
             mTimer = null;
         }
-        MusicActionManager.getInstance().stop(Constant.DOLPHIN_NATURAL_MUSIC_CACHE);
+        MusicActionManager.getInstance().stop();
     }
 
     @Override

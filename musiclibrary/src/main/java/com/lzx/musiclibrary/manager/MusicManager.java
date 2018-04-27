@@ -334,6 +334,8 @@ public class MusicManager implements IPlayControl {
                 case MSG_BUFFERING:
                     listener.onAsyncLoading(isFinishBuffer);
                     break;
+                default:
+                    break;
             }
         }
     }

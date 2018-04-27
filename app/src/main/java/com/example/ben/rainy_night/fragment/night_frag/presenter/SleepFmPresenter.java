@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
+import com.lzx.musiclibrary.manager.MusicManager;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
@@ -47,6 +49,9 @@ public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEven
 
     private int[] mPageRows = new int[]{33, 87, 27, 99};
     private int mPageRow;
+
+    private int mFirstItemPosition;
+    private int mLastItemPosition;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -133,6 +138,26 @@ public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEven
             new Handler(Looper.getMainLooper()).postDelayed(this::getAlbumsMediaList, 1000);
         });
 
+        view.getRecycler().setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                if (layoutManager instanceof LinearLayoutManager) {
+                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
+                    //获取第一个可见view的位置
+                    mFirstItemPosition = linearManager.findFirstVisibleItemPosition();
+                    //获取最后一个可见view的位置
+                    mLastItemPosition = linearManager.findLastVisibleItemPosition();
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+
         mAdapter.setOnItemClickListener((adapter, view1, position) -> MusicActionManager.getInstance().start(mCacheKey, position));
     }
 
@@ -192,7 +217,12 @@ public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEven
 
     @Override
     public void onMusicSwitch(SongInfo music) {
-
+        if (view.isVisibleToUser()) {
+            if (MusicActionManager.getInstance().getCurrPlayingIndex() < mFirstItemPosition
+                    || MusicActionManager.getInstance().getCurrPlayingIndex() > mLastItemPosition) {
+                view.getRecycler().smoothScrollToPosition(MusicActionManager.getInstance().getCurrPlayingIndex());
+            }
+        }
     }
 
     @Override
@@ -207,7 +237,7 @@ public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEven
 
     @Override
     public void onPlayCompletion() {
-
+//        LoggerUtil.e(view.getCon().getClass().getName() + ",当前歌曲播放完成");
     }
 
     @Override

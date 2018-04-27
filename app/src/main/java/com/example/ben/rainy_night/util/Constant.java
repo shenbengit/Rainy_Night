@@ -72,7 +72,6 @@ public class Constant {
     public static final int DOLPHIN_NICE_PEOPLE = 6;
     public static final int DOLPHIN_SAY_GOOG_NIGHT = 5;
 
-
     /**
      * 海豚睡眠 api接口
      * baseUrl
@@ -122,7 +121,7 @@ public class Constant {
      * 定时
      */
     public static final String REMAIN_TIME = "ramain_time";
-    public static final int REMAIN_TIME_ZZ = 60;
+    public static final int REMAIN_TIME_ZZ = 120;
     public static final int REMAIN_TIME_10 = 10;
     public static final int REMAIN_TIME_20 = 20;
     public static final int REMAIN_TIME_30 = 30;

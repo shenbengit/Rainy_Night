@@ -87,38 +87,28 @@ public interface MusicActionListener {
 
     /**
      * 暂停
-     *
-     * @param musicType 当前播放的音乐的种类
      */
-    void pause(String musicType);
+    void pause();
 
     /**
      * 继续播放
-     *
-     * @param musicType 当前播放的音乐的种类
      */
-    void resume(String musicType);
+    void resume();
 
     /**
      * 停止
-     *
-     * @param musicType 当前播放的音乐的种类
      */
-    void stop(String musicType);
+    void stop();
 
     /**
      * 播放上一个
-     *
-     * @param musicType 当前播放的音乐的种类
      */
-    void startPrevious(String musicType);
+    void startPrevious();
 
     /**
      * 播放下一个
-     *
-     * @param musicType 当前播放的音乐的种类
      */
-    void startNext(String musicType);
+    void startNext();
 
     /**
      * 设置循环模式
@@ -137,10 +127,9 @@ public interface MusicActionListener {
     /**
      * 寻求指定的时间位置
      *
-     * @param musicType 当前播放的音乐的种类
      * @param position  播放的位置
      */
-    void seekTo(String musicType, int position);
+    void seekTo(int position);
 
     /**
      * 获取当前的播放状态
@@ -173,11 +162,11 @@ public interface MusicActionListener {
 
 
     /**
-     * 获取当前播放音频的id
+     * 获取当前播放音频的在List中的位置
      *
      * @return
      */
-    int getmCurrentMediaId();
+    int getCurrPlayingIndex();
 
     /**
      * 获取当前播放音乐的信息
@@ -197,10 +186,9 @@ public interface MusicActionListener {
     /**
      * 获取时长
      *
-     * @param musicType 当前播放的音乐的种类
      * @return 时长 单位：秒
      */
-    int getDuration(String musicType);
+    int getDuration();
 
     /**
      * 添加播放事件监听
