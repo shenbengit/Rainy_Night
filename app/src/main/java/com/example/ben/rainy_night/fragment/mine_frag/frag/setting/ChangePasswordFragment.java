@@ -14,7 +14,6 @@ import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginF
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.ChangePasswordPresenterImpl;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.DialogLoadingUtil;
-import com.example.ben.rainy_night.util.LoggerUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -94,7 +93,7 @@ public class ChangePasswordFragment extends BaseFragment<ChangePasswordContract.
      */
     @Override
     protected void initData() {
-        LoggerUtil.e(getPreFragment().getClass().getSimpleName());
+
     }
 
     /**

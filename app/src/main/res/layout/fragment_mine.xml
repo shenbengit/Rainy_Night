@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@mipmap/bg_rainy"
     tools:context="com.example.ben.rainy_night.fragment.mine_frag.frag.MineFragment">
 
     <include layout="@layout/view" />
@@ -43,7 +44,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@color/tab_unselect" />
 
     <RelativeLayout
@@ -55,16 +56,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:drawableLeft="@mipmap/iv_space"
+            android:drawableStart="@mipmap/iv_space"
             android:drawablePadding="15dp"
             android:gravity="center"
             android:text="动态"
+            android:textColor="@color/colorWhite"
             android:textSize="17sp" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@color/tab_unselect" />
 
 </LinearLayout>

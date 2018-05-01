@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackGrey"
+    android:background="@mipmap/bg_rainy"
     android:orientation="vertical"
     tools:context=".fragment.mine_frag.frag.personal.MyPersonalFragment">
 
@@ -19,8 +19,7 @@
     <RelativeLayout
         android:id="@+id/rela_person_head"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@color/colorWhite">
+        android:layout_height="70dp">
 
         <TextView
             style="@style/MyPersonalTextStyle"
@@ -48,10 +47,7 @@
     <RelativeLayout
         android:id="@+id/rela_person_petName"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorWhite">
-
-
+        android:layout_height="50dp">
         <TextView
             style="@style/MyPersonalTextStyle"
             android:text="@string/pet_name" />
@@ -60,15 +56,15 @@
             android:id="@+id/tv_person_petName"
             style="@style/TextHint"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/image2" />
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/image2" />
 
         <ImageView
             android:id="@+id/image2"
             style="@style/Img_Go"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="15dp" />
     </RelativeLayout>
 
@@ -77,8 +73,7 @@
     <RelativeLayout
         android:id="@+id/rela_person_sex"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorWhite">
+        android:layout_height="50dp">
 
 
         <TextView
@@ -89,25 +84,24 @@
             android:id="@+id/tv_person_sex"
             style="@style/TextHint"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/image3" />
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/image3" />
 
         <ImageView
             android:id="@+id/image3"
             style="@style/Img_Go"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="15dp" />
     </RelativeLayout>
 
-    <View style="@style/ViewStyle"></View>
+    <View style="@style/ViewStyle" />
 
     <RelativeLayout
         android:id="@+id/rela_person_birth"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorWhite">
+        android:layout_height="50dp">
 
 
         <TextView
@@ -118,25 +112,24 @@
             android:id="@+id/tv_person_birth"
             style="@style/TextHint"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/image4" />
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/image4" />
 
         <ImageView
             android:id="@+id/image4"
             style="@style/Img_Go"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="15dp" />
     </RelativeLayout>
 
-    <View style="@style/ViewStyle"></View>
+    <View style="@style/ViewStyle" />
 
     <RelativeLayout
         android:id="@+id/rela_person_email"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorWhite">
+        android:layout_height="50dp">
 
 
         <TextView
@@ -147,19 +140,19 @@
             android:id="@+id/tv_person_email"
             style="@style/TextHint"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/image5" />
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/image5" />
 
         <ImageView
             android:id="@+id/image5"
             style="@style/Img_Go"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="15dp" />
     </RelativeLayout>
 
-    <View style="@style/ViewStyle"></View>
+    <View style="@style/ViewStyle" />
 
     <Button
         android:id="@+id/btn_personal_save"
@@ -169,5 +162,5 @@
         android:background="@drawable/button_style"
         android:text="@string/save"
         android:textColor="@color/white"
-        android:textSize="18dp" />
+        android:textSize="18sp" />
 </LinearLayout>

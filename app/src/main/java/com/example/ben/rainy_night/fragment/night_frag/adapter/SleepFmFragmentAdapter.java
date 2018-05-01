@@ -21,8 +21,8 @@ public class SleepFmFragmentAdapter extends FragmentStatePagerAdapter {
     public SleepFmFragmentAdapter(FragmentManager fm, String... titles) {
         super(fm);
         mTitles = titles;
-        mAlbums = new int[]{Constant.DOLPHIN_HYPNOSIS, Constant.DOLPHIN_BEFORE_SLEEP_AND_READ,
-                Constant.DOLPHIN_NICE_PEOPLE, Constant.DOLPHIN_SAY_GOOG_NIGHT};
+        mAlbums = new int[]{ Constant.DOLPHIN_BEFORE_SLEEP_AND_READ, Constant.DOLPHIN_NICE_PEOPLE,
+                Constant.DOLPHIN_HYPNOSIS, Constant.DOLPHIN_SAY_GOOG_NIGHT};
     }
 
     @Override

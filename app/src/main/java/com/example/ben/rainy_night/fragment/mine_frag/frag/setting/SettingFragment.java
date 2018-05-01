@@ -11,10 +11,10 @@ import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.SettingContract;
+import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.personal.MyPersonalFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.SettingPresenterImpl;
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
-import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 import butterknife.BindView;
@@ -56,10 +56,14 @@ public class SettingFragment extends BaseFragment<SettingContract.Presenter> imp
     public void viewOnClick(View view) {
         switch (view.getId()) {
             case R.id.rela_setting_head:
-                start(MyPersonalFragment.newInstance());
+                if (mUserEntity == null) {
+                    start(LoginFragment.newInstance());
+                } else {
+                    start(MyPersonalFragment.newInstance());
+                }
                 break;
             case R.id.rela_setting_change_password:
-                startForResult(ChangePasswordFragment.newInstance(), Constant.REQUEST_POP);
+                start(ChangePasswordFragment.newInstance());
                 break;
             case R.id.rela_setting_about_us:
                 presenter.aboutUs();
@@ -136,6 +140,7 @@ public class SettingFragment extends BaseFragment<SettingContract.Presenter> imp
                         .into(ivSettingHead);
             } else {
                 ivSettingHead.setImageResource(R.mipmap.ic_head);
+                tvSettingName.setText(getString(R.string.login_register));
             }
 
         }

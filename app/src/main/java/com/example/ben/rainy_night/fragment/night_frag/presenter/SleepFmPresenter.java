@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,7 @@ public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEven
     private int mAlbumsId;
     private String mCacheKey;
 
-    private int[] mPageRows = new int[]{33, 87, 27, 99};
+    private int[] mPageRows = new int[]{ 87, 27,33, 99};
     private int mPageRow;
 
     private int mFirstItemPosition;

@@ -153,12 +153,11 @@ public interface MusicActionListener {
     boolean isPlaying();
 
     /**
-     * 获取当前播放流的进度位置
+     * 获取当前播放音乐的进度
      *
-     * @param musicType 当前播放的音乐的种类
      * @return
      */
-    long getCurrentStreamPosition(String musicType);
+    long getProgress();
 
 
     /**

@@ -1,14 +1,12 @@
 package com.example.ben.rainy_night.manager;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
 import com.example.ben.rainy_night.impl.MusicActionListenerImpl;
 import com.example.ben.rainy_night.listener.MusicActionListener;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
-import com.lzx.musiclibrary.manager.MusicManager;
 
 /**
  * 音乐播放工具类
@@ -259,13 +257,14 @@ public class MusicActionManager {
     }
 
     /**
-     * 获取当前播放流的进度位置
+     * 获取当前播放音乐的进度
      *
-     * @param musicType 当前播放的音乐的种类
      * @return
      */
-
-    public long getCurrentStreamPosition(String musicType) {
+    public long getProgress() {
+        if (mListener != null) {
+            return mListener.getProgress();
+        }
         return 0;
     }
 

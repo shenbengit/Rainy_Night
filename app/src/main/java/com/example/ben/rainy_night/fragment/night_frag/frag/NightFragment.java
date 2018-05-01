@@ -1,15 +1,14 @@
 package com.example.ben.rainy_night.fragment.night_frag.frag;
 
 
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -20,18 +19,14 @@ import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.night_frag.adapter.SleepFmFragmentAdapter;
 import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
-import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
-import com.lzx.musiclibrary.manager.MusicManager;
 import com.lzx.musiclibrary.manager.TimerTaskManager;
 import com.vondear.rxtools.RxTimeTool;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -65,6 +60,8 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
     TabLayout tabNight;
     @BindView(R.id.vp_night)
     ViewPager vpNight;
+    @BindView(R.id.iv_night_music_bg)
+    ImageView ivNightMusicBg;
     @BindView(R.id.iv_toolbar_cover)
     ImageView ivToolbarCover;
     @BindView(R.id.tv_toolbar_music_name)
@@ -100,12 +97,12 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
             case R.id.ib_cycle_mode:
                 if (isSingleCycle) {
                     isSingleCycle = false;
-                    SharedPreferencesUtil.getInstance(_mActivity).putValue(Constant.CYCLE_MODE, Constant.LIST_CYCLE);
                     setPlayMode(false);
+                    toastShow(Constant.LIST_CYCLE);
                 } else {
                     isSingleCycle = true;
-                    SharedPreferencesUtil.getInstance(_mActivity).putValue(Constant.CYCLE_MODE, Constant.SINGLE_CYCLE);
                     setPlayMode(true);
+                    toastShow(Constant.SINGLE_CYCLE);
                 }
                 break;
             case R.id.ib_remain_time:
@@ -113,18 +110,17 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
                 if (mPositionTime == mRemainTimes.length) {
                     mPositionTime = 0;
                 }
-                if (MusicActionManager.getInstance().isPlaying()) {
-                    setRemainBg(mPositionTime);
-                } else {
-                    setRemainBg(mPositionTime);
-                }
+
+                setRemainTime(mPositionTime);
                 break;
             case R.id.ib_toolbar_play:
                 if (isPlaying) {
+                    MusicActionManager.getInstance().pause();
                     ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_play);
                     ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_play);
                     isPlaying = false;
                 } else {
+                    MusicActionManager.getInstance().resume();
                     ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_pause);
                     ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_pause);
                     isPlaying = true;
@@ -149,8 +145,10 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
 
     private int[] mRemainTimes = new int[]{R.mipmap.ic_time_zz, R.mipmap.ic_time_10, R.mipmap.ic_time_20, R.mipmap.ic_time_30};
     private int mPositionTime;
-    private String[] mTitles = new String[]{Constant.DOLPHIN_HYPNOSIS_CACHE, Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE,
-            Constant.DOLPHIN_NICE_PEOPLE_CACHE, Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE};
+    private String[] mTitles = new String[]{Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE, Constant.DOLPHIN_NICE_PEOPLE_CACHE,
+            Constant.DOLPHIN_HYPNOSIS_CACHE, Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE};
+
+    private AnimationDrawable mDrawable;
 
     @Override
     public int getLayout() {
@@ -164,6 +162,9 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
 
     @Override
     public void initView() {
+        mDrawable = (AnimationDrawable) ivNightMusicBg.getDrawable();
+        tvNightMusicName.setSelected(true);
+        tvToolbarMusicName.setSelected(true);
         mManager = new TimerTaskManager();
         MusicActionManager.getInstance().addPlayerEventListener(this);
         ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_play);
@@ -176,7 +177,7 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
 
     @Override
     public void initData() {
-        switch (String.valueOf(SharedPreferencesUtil.getInstance(_mActivity).getValue(Constant.CYCLE_MODE, Constant.SINGLE_CYCLE))) {
+        switch (String.valueOf(SharedPreferencesUtil.getInstance(_mActivity).getValue(Constant.CYCLE_MODE, Constant.LIST_CYCLE))) {
             case Constant.SINGLE_CYCLE:
                 isSingleCycle = true;
                 setPlayMode(true);
@@ -194,25 +195,43 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
         switch ((Integer) SharedPreferencesUtil.getInstance(_mActivity).getValue(Constant.REMAIN_TIME, Constant.REMAIN_TIME_ZZ)) {
             case Constant.REMAIN_TIME_ZZ:
                 mPositionTime = 0;
-                setRemainBg(mPositionTime);
+                setRemainTime(mPositionTime);
                 break;
             case Constant.REMAIN_TIME_10:
                 mPositionTime = 1;
-                setRemainBg(mPositionTime);
+                setRemainTime(mPositionTime);
                 break;
             case Constant.REMAIN_TIME_20:
                 mPositionTime = 2;
-                setRemainBg(mPositionTime);
+                setRemainTime(mPositionTime);
                 break;
             case Constant.REMAIN_TIME_30:
                 mPositionTime = 3;
-                setRemainBg(mPositionTime);
+                setRemainTime(mPositionTime);
                 break;
             default:
                 mPositionTime = 0;
-                setRemainBg(mPositionTime);
+                setRemainTime(mPositionTime);
                 break;
         }
+        sbNightProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                MusicActionManager.getInstance().seekTo(seekBar.getProgress());
+            }
+        });
+
+        mManager.setUpdateProgressTask(this::updateProgress);
     }
 
     @Override
@@ -230,6 +249,7 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mManager.onRemoveUpdateProgressTask();
         MusicActionManager.getInstance().removePlayerEventListener(this);
     }
 
@@ -242,19 +262,12 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
         if (isSingleCycle) {
             ibCycleMode.setBackgroundResource(R.mipmap.ic_single_cycle);
             MusicActionManager.getInstance().setPlayMode(Constant.PLAY_IN_SINGLE_LOOP);
+            SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).putValue(Constant.CYCLE_MODE, Constant.LIST_CYCLE);
         } else {
             ibCycleMode.setBackgroundResource(R.mipmap.ic_list_cycle);
             MusicActionManager.getInstance().setPlayMode(Constant.PLAY_IN_LIST_LOOP);
+            SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).putValue(Constant.CYCLE_MODE, Constant.LIST_CYCLE);
         }
-    }
-
-    /**
-     * 定时背景
-     *
-     * @param position 位置
-     */
-    private void setRemainBg(int position) {
-        ibRemainTime.setBackgroundResource(mRemainTimes[position]);
     }
 
     /**
@@ -263,25 +276,36 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
      * @param position 位置
      */
     private void setRemainTime(int position) {
-        long remainTime;
+        ibRemainTime.setBackgroundResource(mRemainTimes[position]);
+        int remainTime;
         switch (position) {
             case 0:
-                remainTime = (long) Constant.REMAIN_TIME_ZZ;
+                remainTime = Constant.REMAIN_TIME_ZZ;
                 break;
             case 1:
-                remainTime = (long) Constant.REMAIN_TIME_10;
+                remainTime = Constant.REMAIN_TIME_10;
                 break;
             case 2:
-                remainTime = (long) Constant.REMAIN_TIME_20;
+                remainTime = Constant.REMAIN_TIME_20;
                 break;
             case 3:
-                remainTime = (long) Constant.REMAIN_TIME_30;
+                remainTime = Constant.REMAIN_TIME_30;
                 break;
             default:
-                remainTime = (long) Constant.REMAIN_TIME_ZZ;
+                remainTime = Constant.REMAIN_TIME_ZZ;
                 break;
         }
-        MusicActionManager.getInstance().setRemainTime(remainTime);
+        SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).putValue(Constant.REMAIN_TIME, remainTime);
+        MusicActionManager.getInstance().setRemainTime((long) remainTime);
+    }
+
+    /**
+     * 更新进度
+     */
+    private void updateProgress() {
+        long progress = MusicActionManager.getInstance().getProgress();
+        sbNightProgress.setProgress((int) progress);
+        tvNightNowTime.setText(RxTimeTool.formatTime((progress)));
     }
 
     @Override
@@ -292,9 +316,10 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
         if (TextUtils.equals(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
             return;
         }
+        sbNightProgress.setMax((int) music.getDuration());
         tvNightMusicName.setText(music.getSongName());
-        tvNightNowTime.setText("00:00");
-        tvNightAllTime.setText(RxTimeTool.formatTime((music.getDuration() * 1000)));
+        tvNightNowTime.setText(getString(R.string._00_00));
+        tvNightAllTime.setText(RxTimeTool.formatTime((music.getDuration())));
         tvToolbarMusicName.setText(music.getSongName());
     }
 
@@ -306,6 +331,8 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
         if (TextUtils.equals(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
             return;
         }
+        mDrawable.start();
+        mManager.scheduleSeekBarUpdate();
         ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_pause);
         ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_pause);
     }
@@ -318,6 +345,8 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
         if (TextUtils.equals(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
             return;
         }
+        mDrawable.stop();
+        mManager.stopSeekBarUpdate();
         ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_play);
         ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_play);
     }
@@ -330,6 +359,12 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
         if (TextUtils.equals(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, MusicActionManager.getInstance().getCurrentMusicType())) {
             return;
         }
+        mDrawable.stop();
+        sbNightProgress.setProgress(0);
+        tvNightNowTime.setText(getString(R.string._00_00));
+        ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_play);
+        ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_play);
+
     }
 
     @Override

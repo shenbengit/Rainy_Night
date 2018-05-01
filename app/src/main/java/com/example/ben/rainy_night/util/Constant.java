@@ -121,7 +121,7 @@ public class Constant {
      * 定时
      */
     public static final String REMAIN_TIME = "ramain_time";
-    public static final int REMAIN_TIME_ZZ = 120;
+    public static final int REMAIN_TIME_ZZ = -1;
     public static final int REMAIN_TIME_10 = 10;
     public static final int REMAIN_TIME_20 = 20;
     public static final int REMAIN_TIME_30 = 30;

@@ -1,6 +1,5 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
