@@ -51,7 +51,7 @@
     <string name="business_card">名片</string>
     <string name="qr_business_card">二维码名片</string>
     <string name="login_firstly">请先登录哦</string>
-    <string name="no_more_data">没有更多数据了~~~</string>
+    <string name="no_more_data">没有更多数据啦~~~</string>
 
     <string-array name="music_time">
         <item>0</item>

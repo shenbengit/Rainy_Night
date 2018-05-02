@@ -42,6 +42,7 @@ public class SleepReportPresenter implements SleepReportContract.Presenter {
     private View mViewNetError;
     private View mViewDataError;
     private View mViewLoading;
+    private View mViewNoMoreData;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -58,6 +59,7 @@ public class SleepReportPresenter implements SleepReportContract.Presenter {
                             return;
                         }
                         mAdapter.setNewData(mList);
+                        mAdapter.addFooterView(mViewNoMoreData);
                     } else {
                         mAdapter.setEmptyView(mViewDataError);
                     }
@@ -102,6 +104,10 @@ public class SleepReportPresenter implements SleepReportContract.Presenter {
 
         mViewDataError = LayoutInflater.from(view.getCon())
                 .inflate(R.layout.item_data_error, (ViewGroup) view.getRecycler().getParent(), false);
+
+        mViewNoMoreData = LayoutInflater.from(view.getCon())
+                .inflate(R.layout.item_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
+
         mViewDataError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
             new Handler(Looper.getMainLooper()).postDelayed(this::getSleepReportList, 1000);
@@ -123,7 +129,7 @@ public class SleepReportPresenter implements SleepReportContract.Presenter {
             mAdapter.setEmptyView(mViewDataError);
             return;
         }
-
+        mAdapter.setEmptyView(mViewLoading);
         BmobQuery<SleepMusicEntity> query = new BmobQuery<>();
         query.addWhereEqualTo("title", mTitle);
         query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);

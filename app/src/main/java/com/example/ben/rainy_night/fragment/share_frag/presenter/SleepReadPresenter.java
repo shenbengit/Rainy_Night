@@ -133,7 +133,7 @@ public class SleepReadPresenter implements SleepReadContract.Presenter {
             mAdapter.setEmptyView(mViewDataError);
             return;
         }
-
+        mAdapter.setEmptyView(mViewLoading);
         BmobQuery<SleepMusicEntity> query = new BmobQuery<>();
         query.addWhereEqualTo("title", mTitle);
         query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);

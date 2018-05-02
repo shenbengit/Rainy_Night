@@ -40,6 +40,8 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
     private View mViewNetError;
     private View mViewDataError;
     private View mViewLoading;
+    private View mViewNoMoreData;
+
     /**
      * 音乐类型
      */
@@ -53,6 +55,7 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
                 case 1:
                     if (!mLists.isEmpty()) {
                         mAdapter.setNewData(mLists);
+                        mAdapter.addFooterView(mViewNoMoreData);
                     } else {
                         mAdapter.setEmptyView(mViewDataError);
                     }
@@ -60,6 +63,7 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
                 case 2:
                     if (!mLists.isEmpty()) {
                         mAdapter.setNewData(mLists);
+                        mAdapter.addFooterView(mViewNoMoreData);
                     } else {
                         mAdapter.setEmptyView(mViewDataError);
                     }
@@ -104,8 +108,10 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
             new Handler(Looper.getMainLooper()).postDelayed(this::getMusic, 1000);
         });
 
-        mAdapter.setOnItemClickListener((adapter, view1, position) -> {
+        mViewNoMoreData = LayoutInflater.from(view.getCon())
+                .inflate(R.layout.item_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
 
+        mAdapter.setOnItemClickListener((adapter, view1, position) -> {
             if (TextUtils.equals(sceneType, String.valueOf(Constant.DOLPHIN_NATURAL_MUSIC))) {
                 view.startBrotherFragment(SleepMusicVideoFragment.newInstance(position));
             } else if (TextUtils.equals(sceneType, String.valueOf(Constant.DOLPHIN_LIGHT_MUSIC))) {
@@ -124,6 +130,7 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
             mAdapter.setEmptyView(mViewDataError);
             return;
         }
+        mAdapter.setEmptyView(mViewLoading);
         OkGo.<MusicEntity>get(Constant.DOLPHIN_BASEURL + Constant.DOLPHIN_MUSIC)
                 .params("sceneType", mSceneType)
                 .params("timestamp", System.currentTimeMillis())

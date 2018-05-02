@@ -44,6 +44,7 @@ public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEven
     private View mViewNetError;
     private View mViewDataError;
     private View mViewLoading;
+    private View mViewNoMoreData;
 
     private int mAlbumsId;
     private String mCacheKey;
@@ -62,6 +63,7 @@ public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEven
                 case 1:
                     if (!mLists.isEmpty()) {
                         mAdapter.setNewData(mLists);
+                        mAdapter.addFooterView(mViewNoMoreData);
                     } else {
                         mAdapter.setEmptyView(mViewDataError);
                     }
@@ -69,6 +71,7 @@ public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEven
                 case 2:
                     if (!mLists.isEmpty()) {
                         mAdapter.setNewData(mLists);
+                        mAdapter.addFooterView(mViewNoMoreData);
                     } else {
                         mAdapter.setEmptyView(mViewDataError);
                     }
@@ -139,6 +142,9 @@ public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEven
             new Handler(Looper.getMainLooper()).postDelayed(this::getAlbumsMediaList, 1000);
         });
 
+        mViewNoMoreData = LayoutInflater.from(view.getCon())
+                .inflate(R.layout.item_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
+
         view.getRecycler().setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -175,6 +181,7 @@ public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEven
             mAdapter.setEmptyView(mViewDataError);
             return;
         }
+        mAdapter.setEmptyView(mViewLoading);
         OkGo.<SleepFmEntity>get(Constant.DOLPHIN_BASEURL + Constant.DOLPHIN_ALBUMS_MEDIA_LIST)
                 .params("albumsId", mAlbumsId)
                 .params("appId", "30639")
