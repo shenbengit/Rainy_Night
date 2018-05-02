@@ -26,7 +26,6 @@ public class PostEntity extends BmobObject {
      * 喜欢帖子的人
      */
     private BmobRelation likes;
-
     /**
      * 帖子里面的图片
      */

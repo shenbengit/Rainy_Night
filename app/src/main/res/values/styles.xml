@@ -14,7 +14,7 @@
     </style>
 
     <!--控制头部据appbar的样式-->
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <!--用于控制toolbar溢出菜单的样式-->
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -60,19 +60,19 @@
     <style name="TextHint">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/color_hint_text</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorBackGrey</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="ViewStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_height">0.5dp</item>
         <item name="android:background">@color/tab_unselect</item>
     </style>
 
     <style name="Img_Go">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:src">@mipmap/go</item>
+        <item name="android:src">@mipmap/ic_goto</item>
     </style>
 </resources>

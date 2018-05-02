@@ -2,21 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/bg_rainy"
     android:orientation="vertical">
 
     <include layout="@layout/view" />
 
     <include layout="@layout/toolbar" />
 
-    <View
-        style="@style/ViewStyle"
-        android:layout_marginTop="5dp" />
+    <View style="@style/ViewStyle"/>
 
     <RelativeLayout
         android:id="@+id/rela_setting_head"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@color/colorWhite">
+        android:layout_height="70dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_setting_head"
@@ -47,29 +45,53 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/rela_setting_change_password"
+            android:id="@+id/rela_setting_business_card"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/colorWhite">
+            android:layout_height="50dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/business_card"
+                android:textColor="@color/colorWhite"
+                android:textSize="17sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_business_card"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="15dp" />
+        </RelativeLayout>
+
+        <View style="@style/ViewStyle" />
+
+        <RelativeLayout
+            android:id="@+id/rela_setting_change_password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
                 android:text="@string/change_user_password"
-                android:textColor="@color/rainy_night_background"
+                android:textColor="@color/colorWhite"
                 android:textSize="17sp" />
 
             <ImageView
                 style="@style/Img_Go"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginTop="15dp" />
         </RelativeLayout>
 
@@ -78,23 +100,22 @@
         <RelativeLayout
             android:id="@+id/rela_setting_about_us"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/colorWhite">
+            android:layout_height="50dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:text="@string/about_us"
-                android:textColor="@color/rainy_night_background"
+                android:textColor="@color/colorWhite"
                 android:textSize="17sp" />
 
             <ImageView
                 style="@style/Img_Go"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginTop="15dp" />
         </RelativeLayout>
 
@@ -103,31 +124,30 @@
         <RelativeLayout
             android:id="@+id/rela_setting_clear_cache"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/colorWhite">
+            android:layout_height="50dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:text="@string/clear_cache"
-                android:textColor="@color/rainy_night_background"
+                android:textColor="@color/colorWhite"
                 android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/tv_setting_cache"
                 style="@style/TextHint"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/img" />
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/img" />
 
             <ImageView
                 android:id="@+id/img"
                 style="@style/Img_Go"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginTop="15dp" />
         </RelativeLayout>
 

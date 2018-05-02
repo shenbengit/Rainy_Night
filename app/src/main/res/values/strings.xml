@@ -18,7 +18,8 @@
     <string name="head_img">头像</string>
     <string name="pet_name">昵称</string>
     <string name="change_nickname">修改昵称</string>
-    <string name="sex">男</string>
+    <string name="sex_boy">男</string>
+    <string name="sex_girl">女</string>
     <string name="user_sex">性别</string>
     <string name="birthday">出生日期</string>
     <string name="birth">1997-02-21</string>
@@ -46,6 +47,11 @@
     <string name="translate_up_down_behavior">com.example.ben.rainy_night.ui.TranslateUpDownBehavior</string>
     <string name="_00_00">00:00</string>
     <string name="sleep">伴我睡</string>
+    <string name="community">社区</string>
+    <string name="business_card">名片</string>
+    <string name="qr_business_card">二维码名片</string>
+    <string name="login_firstly">请先登录哦</string>
+    <string name="no_more_data">没有更多数据了~~~</string>
 
     <string-array name="music_time">
         <item>0</item>

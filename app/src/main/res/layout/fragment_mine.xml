@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@mipmap/bg_rainy"
+    android:orientation="vertical"
     tools:context="com.example.ben.rainy_night.fragment.mine_frag.frag.MineFragment">
 
     <include layout="@layout/view" />
@@ -27,25 +27,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/civ_mine_head"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/civ_mine_head"
             android:textColor="@color/colorWhite"
             android:textSize="17sp" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/civ_mine_setting"
+        <ImageView
+            android:id="@+id/iv_mine_scan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
-            android:src="@mipmap/ic_setting" />
+            android:src="@mipmap/ic_scan" />
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/tab_unselect" />
+    <View style="@style/ViewStyle" />
 
     <RelativeLayout
         android:id="@+id/rela_space"
@@ -56,17 +53,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:drawableStart="@mipmap/iv_space"
             android:drawablePadding="15dp"
+            android:drawableStart="@mipmap/ic_community"
             android:gravity="center"
-            android:text="动态"
+            android:text="@string/community"
             android:textColor="@color/colorWhite"
             android:textSize="17sp" />
     </RelativeLayout>
 
-    <View
+    <View style="@style/ViewStyle" />
+
+    <RelativeLayout
+        android:id="@+id/rela_setting"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/tab_unselect" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:drawablePadding="15dp"
+            android:drawableStart="@mipmap/ic_setting"
+            android:gravity="center"
+            android:text="@string/setting"
+            android:textColor="@color/colorWhite"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+    <View style="@style/ViewStyle" />
 
 </LinearLayout>

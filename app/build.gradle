@@ -83,7 +83,7 @@ dependencies {
     //Logger
     compile 'com.orhanobut:logger:2.1.1'
     //BaseRecyclerViewAdapterHelper
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.38'
     //图片选择库
     compile 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.9'
     //九宫格控件

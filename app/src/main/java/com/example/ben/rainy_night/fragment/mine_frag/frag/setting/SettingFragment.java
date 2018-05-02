@@ -51,8 +51,8 @@ public class SettingFragment extends BaseFragment<SettingContract.Presenter> imp
     @BindView(R.id.btn_setting_login_out)
     Button linearSettingLoginOut;
 
-    @OnClick({R.id.rela_setting_head, R.id.rela_setting_change_password, R.id.rela_setting_about_us,
-            R.id.rela_setting_clear_cache, R.id.btn_setting_login_out})
+    @OnClick({R.id.rela_setting_head, R.id.rela_setting_business_card, R.id.rela_setting_change_password,
+            R.id.rela_setting_about_us, R.id.rela_setting_clear_cache, R.id.btn_setting_login_out})
     public void viewOnClick(View view) {
         switch (view.getId()) {
             case R.id.rela_setting_head:
@@ -61,6 +61,13 @@ public class SettingFragment extends BaseFragment<SettingContract.Presenter> imp
                 } else {
                     start(MyPersonalFragment.newInstance());
                 }
+                break;
+            case R.id.rela_setting_business_card:
+                if (mUserEntity == null) {
+                    toastShow(getString(R.string.login_firstly));
+                    return;
+                }
+                start(QrCodeFragment.newInstance());
                 break;
             case R.id.rela_setting_change_password:
                 start(ChangePasswordFragment.newInstance());
@@ -140,9 +147,10 @@ public class SettingFragment extends BaseFragment<SettingContract.Presenter> imp
                         .into(ivSettingHead);
             } else {
                 ivSettingHead.setImageResource(R.mipmap.ic_head);
-                tvSettingName.setText(getString(R.string.login_register));
             }
-
+        } else {
+            ivSettingHead.setImageResource(R.mipmap.ic_head);
+            tvSettingName.setText(getString(R.string.login_register));
         }
     }
 

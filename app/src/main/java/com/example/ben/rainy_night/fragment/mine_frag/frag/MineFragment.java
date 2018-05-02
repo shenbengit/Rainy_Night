@@ -2,6 +2,7 @@ package com.example.ben.rainy_night.fragment.mine_frag.frag;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,8 @@ import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenterImp
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
+import com.vondear.rxtools.RxActivityTool;
+import com.vondear.rxtools.activity.ActivityScanerCode;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,12 +41,10 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
     CircleImageView civMineHead;
     @BindView(R.id.tv_mine_name)
     TextView tvMineName;
-    @BindView(R.id.civ_mine_setting)
-    CircleImageView civMineSetting;
-    @BindView(R.id.rela_space)
-    RelativeLayout relaSpace;
+    @BindView(R.id.iv_mine_scan)
+    ImageView ivMineScan;
 
-    @OnClick({R.id.civ_mine_head, R.id.civ_mine_setting, R.id.rela_space})
+    @OnClick({R.id.civ_mine_head, R.id.iv_mine_scan, R.id.rela_space, R.id.rela_setting})
     public void viewOnClick(View view) {
         assert (getParentFragment()) != null;
         switch (view.getId()) {
@@ -54,11 +55,14 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
                     ((MainFragment) getParentFragment()).startBrotherFragment(MyPersonalFragment.newInstance());
                 }
                 break;
-            case R.id.civ_mine_setting:
-                ((MainFragment) getParentFragment()).startBrotherFragment(SettingFragment.newInstance());
+            case R.id.iv_mine_scan:
+                RxActivityTool.skipActivity(_mActivity, ActivityScanerCode.class);
                 break;
             case R.id.rela_space:
                 ((MainFragment) getParentFragment()).startBrotherFragment(SpaceFragment.newInstance());
+                break;
+            case R.id.rela_setting:
+                ((MainFragment) getParentFragment()).startBrotherFragment(SettingFragment.newInstance());
                 break;
             default:
                 break;

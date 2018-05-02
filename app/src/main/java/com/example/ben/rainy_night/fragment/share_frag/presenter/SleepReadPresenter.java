@@ -44,6 +44,7 @@ public class SleepReadPresenter implements SleepReadContract.Presenter {
     private View mViewNetError;
     private View mViewDataError;
     private View mViewLoading;
+    private View mViewNoMoreData;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -60,6 +61,7 @@ public class SleepReadPresenter implements SleepReadContract.Presenter {
                             return;
                         }
                         mAdapter.setNewData(mList);
+                        mAdapter.addFooterView(mViewNoMoreData);
                     } else {
                         mAdapter.setEmptyView(mViewDataError);
                     }
@@ -109,6 +111,9 @@ public class SleepReadPresenter implements SleepReadContract.Presenter {
             mAdapter.setEmptyView(mViewLoading);
             new Handler(Looper.getMainLooper()).postDelayed(this::getSleepReadList, 1000);
         });
+
+        mViewNoMoreData = LayoutInflater.from(view.getCon())
+                .inflate(R.layout.item_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
 
         mAdapter.setOnItemClickListener((adapter, v, position) -> view.startBrotherFragment(WebViewFragment.newInstance(mList.get(position).getArticleTitle(), mList.get(position).getArticleUrl())));
 
