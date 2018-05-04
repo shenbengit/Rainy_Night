@@ -52,6 +52,7 @@
     <string name="qr_business_card">二维码名片</string>
     <string name="login_firstly">请先登录哦</string>
     <string name="no_more_data">没有更多数据啦~~~</string>
+    <string name="scaner_code_hint">将二维码对准扫描框即可自动扫描</string>
 
     <string-array name="music_time">
         <item>0</item>

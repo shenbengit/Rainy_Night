@@ -14,6 +14,7 @@ import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.MineContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.personal.MyPersonalFragment;
+import com.example.ben.rainy_night.fragment.mine_frag.frag.setting.ScanerCodeFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.setting.SettingFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.space.SpaceFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenterImpl;
@@ -56,7 +57,7 @@ public class MineFragment extends BaseFragment<MineContract.Presenter> implement
                 }
                 break;
             case R.id.iv_mine_scan:
-                RxActivityTool.skipActivity(_mActivity, ActivityScanerCode.class);
+                ((MainFragment) getParentFragment()).startBrotherFragment(ScanerCodeFragment.newInstance());
                 break;
             case R.id.rela_space:
                 ((MainFragment) getParentFragment()).startBrotherFragment(SpaceFragment.newInstance());
