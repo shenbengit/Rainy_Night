@@ -27,9 +27,9 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder helper, PostEntity item) {
-        helper.setText(R.id.tv_item_space_nick, item.getUser().getNickName());
-        helper.setText(R.id.tv_item_space_time, item.getCreatedAt());
-        helper.setText(R.id.tv_item_space_content, item.getContent());
+        helper.setText(R.id.tv_item_space_nick, item.getUser().getNickName())
+                .setText(R.id.tv_item_space_time, item.getCreatedAt())
+                .setText(R.id.tv_item_space_content, item.getContent());
         JSONArray array = new JSONArray(item.getPictures());
         JSONObject object;
         List<String> mUrls = new ArrayList<>();

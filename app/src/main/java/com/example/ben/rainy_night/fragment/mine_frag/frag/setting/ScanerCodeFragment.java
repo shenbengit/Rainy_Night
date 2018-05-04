@@ -2,14 +2,12 @@ package com.example.ben.rainy_night.fragment.mine_frag.frag.setting;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.event.OnActivityResultEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.ScanerCodeContract;
-import com.example.ben.rainy_night.fragment.mine_frag.presenter.ScanerCodePresenter;
-import com.example.ben.rainy_night.util.LoggerUtil;
+import com.example.ben.rainy_night.fragment.mine_frag.presenter.ScanerCodePresenterImpl;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -65,7 +63,7 @@ public class ScanerCodeFragment extends BaseFragment<ScanerCodeContract.Presente
 
     @Override
     protected void setPresenter() {
-        presenter = new ScanerCodePresenter(this);
+        presenter = new ScanerCodePresenterImpl(this);
     }
 
     @Override

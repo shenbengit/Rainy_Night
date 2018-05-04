@@ -32,14 +32,14 @@ import cn.bingoogolapple.qrcode.core.QRCodeView;
  * @date 2018/5/3
  */
 
-public class ScanerCodePresenter implements ScanerCodeContract.Presenter, QRCodeView.Delegate {
+public class ScanerCodePresenterImpl implements ScanerCodeContract.Presenter, QRCodeView.Delegate {
     private ScanerCodeContract.View view;
     /**
      * 扫描结果显示框
      */
     private RxDialogSure mDialog;
 
-    public ScanerCodePresenter(ScanerCodeContract.View view) {
+    public ScanerCodePresenterImpl(ScanerCodeContract.View view) {
         this.view = view;
     }
 
@@ -112,7 +112,6 @@ public class ScanerCodePresenter implements ScanerCodeContract.Presenter, QRCode
 
     @Override
     public void onScanQRCodeSuccess(String result) {
-        LoggerUtil.e(result);
         Vibrator vibrator = (Vibrator) view.getCon().getSystemService(Context.VIBRATOR_SERVICE);
         assert vibrator != null;
         vibrator.vibrate(200);

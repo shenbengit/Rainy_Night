@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.share_frag.contract.SleepReportContract;
-import com.example.ben.rainy_night.fragment.share_frag.presenter.SleepReportPresenter;
+import com.example.ben.rainy_night.fragment.share_frag.presenter.SleepReportPresenterImpl;
 
 import butterknife.BindView;
 
@@ -41,7 +41,7 @@ public class SleepReportFragment extends BaseFragment<SleepReportContract.Presen
 
     @Override
     protected void setPresenter() {
-        presenter = new SleepReportPresenter(this);
+        presenter = new SleepReportPresenterImpl(this);
     }
 
 

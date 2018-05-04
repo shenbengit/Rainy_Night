@@ -8,7 +8,7 @@ import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.share_frag.contract.SleepReadContract;
 import com.example.ben.rainy_night.fragment.share_frag.frag.ShareFragment;
-import com.example.ben.rainy_night.fragment.share_frag.presenter.SleepReadPresenter;
+import com.example.ben.rainy_night.fragment.share_frag.presenter.SleepReadPresenterImpl;
 
 import butterknife.BindView;
 import me.yokeyword.fragmentation.SupportFragment;
@@ -42,7 +42,7 @@ public class SleepReadFragment extends BaseFragment<SleepReadContract.Presenter>
 
     @Override
     protected void setPresenter() {
-        presenter = new SleepReadPresenter(this);
+        presenter = new SleepReadPresenterImpl(this);
     }
 
     @Override

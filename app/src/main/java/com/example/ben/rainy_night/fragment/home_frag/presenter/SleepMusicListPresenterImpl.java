@@ -32,7 +32,7 @@ import java.util.List;
  * @date 2018/3/28
  */
 
-public class SleepMusicListPresenter implements SleepMusicListContract.Presenter {
+public class SleepMusicListPresenterImpl implements SleepMusicListContract.Presenter {
 
     private SleepMusicListContract.View view;
     private SleepMusicListAdapter mAdapter;
@@ -74,7 +74,7 @@ public class SleepMusicListPresenter implements SleepMusicListContract.Presenter
         }
     };
 
-    public SleepMusicListPresenter(SleepMusicListContract.View view) {
+    public SleepMusicListPresenterImpl(SleepMusicListContract.View view) {
         this.view = view;
     }
 

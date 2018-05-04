@@ -62,16 +62,13 @@
             android:textColor="@color/colorGrey"
             android:textSize="15sp" />
 
-        <com.lzy.ninegrid.NineGridView
-            android:id="@+id/nineGrid"
+        <com.jaeger.ninegridimageview.NineGridImageView
+            android:id="@+id/nglv_images"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            app:ngv_gridSpacing="3dp"
-            app:ngv_maxSize="9"
-            app:ngv_mode="grid"
-            app:ngv_singleImageRatio="1"
-            app:ngv_singleImageSize="250dp" />
+            app:imgGap="3dp"
+            app:showStyle="grid"
+            app:singleImgSize="300dp" />
 
         <View
             android:layout_width="match_parent"

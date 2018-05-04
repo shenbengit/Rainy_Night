@@ -89,6 +89,7 @@ public class App extends Application {
         //RxTool初始化
         RxTool.init(this);
 
+        //Logger初始化
         FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
                 //（可选）是否显示线程信息。 默认值为true
                 .showThreadInfo(true)
@@ -100,6 +101,7 @@ public class App extends Application {
 
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
 
+        //内存泄漏检查
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
         }

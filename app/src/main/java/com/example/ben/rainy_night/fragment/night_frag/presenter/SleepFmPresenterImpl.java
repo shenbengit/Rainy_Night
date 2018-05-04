@@ -36,7 +36,7 @@ import java.util.List;
  * @date 2018/4/24
  */
 
-public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEventListener {
+public class SleepFmPresenterImpl implements SleepFmContract.Presenter, OnPlayerEventListener {
     private SleepFmContract.View view;
 
     private SleepFmAdapter mAdapter;
@@ -82,7 +82,7 @@ public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEven
         }
     };
 
-    public SleepFmPresenter(SleepFmContract.View view) {
+    public SleepFmPresenterImpl(SleepFmContract.View view) {
         this.view = view;
         MusicActionManager.getInstance().addPlayerEventListener(this);
     }
@@ -251,7 +251,7 @@ public class SleepFmPresenter implements SleepFmContract.Presenter, OnPlayerEven
     @Override
     public void onError(String errorMsg) {
         view.showToast(errorMsg);
-        LoggerUtil.e("SleepFmPresenter,音乐播放错误: " + errorMsg);
+        LoggerUtil.e("SleepFmPresenterImpl,音乐播放错误: " + errorMsg);
     }
 
     @Override

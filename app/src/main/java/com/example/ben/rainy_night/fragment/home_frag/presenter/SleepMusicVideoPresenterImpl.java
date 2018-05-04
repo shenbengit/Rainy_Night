@@ -14,14 +14,14 @@ import java.net.URLDecoder;
  * @date 2018/3/29
  */
 
-public class SleepMusicVideoPresenter implements SleepMusicVideoContract.Presenter {
+public class SleepMusicVideoPresenterImpl implements SleepMusicVideoContract.Presenter {
 
     private SleepMusicVideoContract.View view;
     private HttpProxyCacheServer mServer;
     private MusicEntity mEntity;
     private int mPosition;
 
-    public SleepMusicVideoPresenter(SleepMusicVideoContract.View view) {
+    public SleepMusicVideoPresenterImpl(SleepMusicVideoContract.View view) {
         this.view = view;
     }
 

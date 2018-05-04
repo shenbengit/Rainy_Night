@@ -143,12 +143,7 @@ public class EnlargePictureDialog extends RxDialog {
             mImage.setVisibility(View.VISIBLE);
 
         }
-        mBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancel();
-            }
-        });
+        mBack.setOnClickListener(v -> cancel());
         setFullScreen();
         setContentView(view);
     }
@@ -234,7 +229,7 @@ public class EnlargePictureDialog extends RxDialog {
             if (!isCanDeletePicture) {
                 img.setOnLongClickListener(v -> {
                     savePicture(mData.get(position));
-                    return false;
+                    return true;
                 });
             }
             container.addView(view);

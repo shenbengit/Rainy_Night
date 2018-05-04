@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicListContract;
-import com.example.ben.rainy_night.fragment.home_frag.presenter.SleepMusicListPresenter;
+import com.example.ben.rainy_night.fragment.home_frag.presenter.SleepMusicListPresenterImpl;
 import com.example.ben.rainy_night.util.NetWorkUtil;
 
 import butterknife.BindView;
@@ -50,7 +50,7 @@ public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.
      */
     @Override
     protected void setPresenter() {
-        presenter = new SleepMusicListPresenter(this);
+        presenter = new SleepMusicListPresenterImpl(this);
     }
 
     /**

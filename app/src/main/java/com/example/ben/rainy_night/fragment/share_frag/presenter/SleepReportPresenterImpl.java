@@ -31,7 +31,7 @@ import cn.bmob.v3.listener.FindListener;
  * @date 2018/4/22
  */
 
-public class SleepReportPresenter implements SleepReportContract.Presenter {
+public class SleepReportPresenterImpl implements SleepReportContract.Presenter {
     private SleepReportContract.View view;
 
     private String mTitle;
@@ -70,7 +70,7 @@ public class SleepReportPresenter implements SleepReportContract.Presenter {
         }
     };
 
-    public SleepReportPresenter(SleepReportContract.View view) {
+    public SleepReportPresenterImpl(SleepReportContract.View view) {
         this.view = view;
     }
 

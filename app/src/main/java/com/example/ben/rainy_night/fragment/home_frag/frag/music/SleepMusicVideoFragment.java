@@ -15,12 +15,10 @@ import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicVideoContract;
-import com.example.ben.rainy_night.fragment.home_frag.presenter.SleepMusicVideoPresenter;
+import com.example.ben.rainy_night.fragment.home_frag.presenter.SleepMusicVideoPresenterImpl;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
-import com.lzx.musiclibrary.aidl.model.SongInfo;
-import com.lzx.musiclibrary.manager.MusicManager;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.db.CacheManager;
 import com.vondear.rxtools.view.RxSeekBar;
@@ -173,7 +171,7 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
 
     @Override
     protected void setPresenter() {
-        presenter = new SleepMusicVideoPresenter(this);
+        presenter = new SleepMusicVideoPresenterImpl(this);
     }
 
     @Override

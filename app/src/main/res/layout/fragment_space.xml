@@ -1,14 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.example.ben.rainy_night.fragment.mine_frag.frag.space.SpaceFragment">
 
     <include layout="@layout/view" />
 
-    <include layout="@layout/toolbar" />
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:contentInsetLeft="0dp"
+        android:contentInsetStart="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/ib_space_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:background="@mipmap/ic_arrow_back_white_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/community"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_space_head"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp" />
+        </RelativeLayout>
+    </Toolbar>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,7 +72,11 @@
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="30dp"
             android:layout_marginEnd="30dp"
-            app:layout_behavior="@string/translate_up_down_behavior"
-            app:layout_scrollFlags="scroll|enterAlways|snap" />
+            android:backgroundTint="@color/colorPrimaryOverlay"
+            android:scaleType="center"
+            android:src="@mipmap/ic_add"
+            app:borderWidth="0dp"
+            app:rippleColor="#a6a6a6" />
     </RelativeLayout>
+
 </LinearLayout>
