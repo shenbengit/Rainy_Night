@@ -1,7 +1,7 @@
 package com.example.ben.rainy_night.fragment.mine_frag.model;
 
-import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 import com.example.ben.rainy_night.http.bmob.PostBmob;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 
 /**
  * @author Ben
@@ -36,9 +36,12 @@ public class PostModelImpl implements PostModel {
 
     /**
      * 查询帖子
+     *
+     * @param action    用来区别下拉刷新、上拉加载
+     * @param createdAt 根据创建时间查询
      */
     @Override
-    public void queryPost() {
-        PostBmob.getInstance().queryPost();
+    public void queryPost(String action, String createdAt) {
+        PostBmob.getInstance().queryPost(action, createdAt);
     }
 }

@@ -1,9 +1,11 @@
 package com.example.ben.rainy_night.fragment.mine_frag.adapter;
 
 import android.support.annotation.Nullable;
+import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
 
@@ -30,6 +32,13 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, BaseViewHolder> {
         helper.setText(R.id.tv_item_space_nick, item.getUser().getNickName())
                 .setText(R.id.tv_item_space_time, item.getCreatedAt())
                 .setText(R.id.tv_item_space_content, item.getContent());
+
+        GlideApp.with(mContext)
+                .load(item.getUser().getHeadimg().getFileUrl())
+                .placeholder(R.mipmap.ic_head)
+                .error(R.mipmap.ic_head)
+                .into((ImageView) helper.getView(R.id.civ_item_space_head));
+
         JSONArray array = new JSONArray(item.getPictures());
         JSONObject object;
         List<String> mUrls = new ArrayList<>();

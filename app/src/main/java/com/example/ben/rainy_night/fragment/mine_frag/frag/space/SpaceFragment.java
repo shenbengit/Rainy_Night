@@ -1,17 +1,24 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag.space;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageButton;
 
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
+import com.example.ben.rainy_night.fragment.event.OnPostEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.SpaceContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
+import com.example.ben.rainy_night.fragment.mine_frag.presenter.SpacePresenterImpl;
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -48,11 +55,11 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
                 }
                 break;
             case R.id.fab_space:
-//                if (mUserEntity == null) {
-//                    start(LoginFragment.newInstance());
-//                } else {
-//                    start(PostStoryFragment.newInstance());
-//                }
+                if (mUserEntity == null) {
+                    start(LoginFragment.newInstance());
+                } else {
+                    start(PostStoryFragment.newInstance());
+                }
                 break;
             default:
                 break;
@@ -76,7 +83,7 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
      */
     @Override
     protected void setPresenter() {
-
+        presenter = new SpacePresenterImpl(this);
     }
 
     /**
@@ -84,6 +91,13 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
      */
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
+
+        //为SwipeRefreshLayout设置刷新时的颜色变化，最多可以设置4种
+        srlSpace.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
     }
 
@@ -92,7 +106,7 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
      */
     @Override
     protected void initData() {
-
+        presenter.init();
     }
 
     @Override
@@ -118,6 +132,20 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
             civSpaceHead.setImageResource(R.mipmap.ic_head);
         }
 
+        presenter.loadData();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
+    public void getPostData(OnPostEvent event) {
+        presenter.getPostData(event);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     @Override
@@ -138,5 +166,20 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
     @Override
     public void cancelDialog() {
 
+    }
+
+    @Override
+    public Context getCon() {
+        return _mActivity;
+    }
+
+    @Override
+    public SwipeRefreshLayout getSwipeRefresh() {
+        return srlSpace;
+    }
+
+    @Override
+    public RecyclerView getRecycler() {
+        return rvSpace;
     }
 }

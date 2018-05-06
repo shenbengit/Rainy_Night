@@ -20,14 +20,14 @@
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_item_space_head"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@mipmap/image_avatar_5" />
+                android:layout_height="50dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -35,7 +35,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="芜湖大司马"
                     android:textColor="@color/colorGrey"
                     android:textSize="18sp" />
 
@@ -43,8 +42,7 @@
                     android:id="@+id/tv_item_space_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="今天16:18" />
+                    android:layout_marginTop="10dp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -58,7 +56,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="实现了动态布局，针对不同图片的数量展示不同的排版布局。效果类似微信朋友圈的图片排版，效果略有不同。"
             android:textColor="@color/colorGrey"
             android:textSize="15sp" />
 

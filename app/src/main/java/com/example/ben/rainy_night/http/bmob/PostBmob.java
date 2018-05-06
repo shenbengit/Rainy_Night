@@ -7,14 +7,17 @@ import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 import com.example.ben.rainy_night.manager.ThreadPoolManager;
 import com.example.ben.rainy_night.util.Constant;
-import com.example.ben.rainy_night.util.LoggerUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Locale;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -110,38 +113,43 @@ public class PostBmob {
 
     /**
      * 查询帖子
+     *
+     * @param action    用来区别下拉刷新、上拉加载
+     * @param createdAt 根据创建时间查询
      */
-    public void queryPost() {
+    public void queryPost(String action, String createdAt) {
         Runnable runable = () -> {
-            BmobQuery<PostEntity> query = new BmobQuery<PostEntity>();
-            query.addWhereEqualTo("createdAt", "");
-            query.setLimit(10);
-            query.order("createdAt");
-            boolean isCache = query.hasCachedResult(PostEntity.class);
-            if (isCache) {
-                //先从缓存读取，如果没有再从网络获取
-                query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
-            } else {
-                //只会从网络获取，同时会在本地缓存数据
-                query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ONLY);
+            BmobQuery<PostEntity> query = new BmobQuery<>();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+            Date date = null;
+            try {
+                date = sdf.parse(createdAt);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-            //表示缓存一天
-            query.setMaxCacheAge(TimeUnit.DAYS.toMillis(1));
+            query.addWhereLessThan("createdAt", new BmobDate(date));
+            query.order("-createdAt");
 
-            // 希望在查询帖子信息的同时也把发布人的信息查询出来
+//            boolean isCache = query.hasCachedResult(PostEntity.class);
+//            if (isCache) {
+//                //先从缓存读取，如果没有再从网络获取
+//                query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+//            } else {
+//                //只会从网络获取，同时会在本地缓存数据
+//                query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ONLY);
+//            }
+//            //表示缓存一天
+//            query.setMaxCacheAge(TimeUnit.DAYS.toMillis(1));
+
             query.include("user");
+            query.setLimit(10);
             query.findObjects(new FindListener<PostEntity>() {
                 @Override
                 public void done(List<PostEntity> list, BmobException e) {
                     if (e == null) {
-                        LoggerUtil.e(list.toString());
-                        for (int i = 0; i < list.size(); i++) {
-                            UserEntity bean = list.get(i).getUser();
-                            String nickname = bean.getNickName();
-                            String headimg = bean.getHeadimg().getUrl();
-                        }
+                        EventBus.getDefault().post(new OnPostEvent(Constant.OK, action, list));
                     } else {
-
+                        EventBus.getDefault().post(new OnPostEvent(e.getMessage() + ",ErrorCode: " + e.getErrorCode(), action));
                     }
                 }
             });

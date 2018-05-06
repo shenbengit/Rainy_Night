@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@mipmap/bg_rainy"
     tools:context="com.example.ben.rainy_night.fragment.mine_frag.frag.space.SpaceFragment">
 
     <include layout="@layout/view" />
@@ -58,9 +59,9 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_space"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </android.support.v7.widget.RecyclerView>
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -76,7 +77,9 @@
             android:scaleType="center"
             android:src="@mipmap/ic_add"
             app:borderWidth="0dp"
-            app:rippleColor="#a6a6a6" />
+            app:rippleColor="#a6a6a6"
+            app:elevation="5dp"
+            app:layout_scrollFlags="scroll|enterAlways|snap"/>
     </RelativeLayout>
 
 </LinearLayout>

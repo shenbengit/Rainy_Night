@@ -27,6 +27,9 @@ public interface PostModel {
 
     /**
      * 查询帖子
+     *
+     * @param action    用来区别下拉刷新、上拉加载
+     * @param createdAt 根据创建时间查询
      */
-    void queryPost();
+    void queryPost(String action, String createdAt);
 }

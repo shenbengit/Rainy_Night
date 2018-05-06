@@ -109,6 +109,8 @@ public class Constant {
     public static final String REQUEST_NICK_NAME = "nick_name";
     public static final String REQUEST_CHANGE_PASSWORD = "change_password";
     public static final String ADD_PICTURE = "add_picture";
+    public static final String REQUSET_POST_REFRESH="post_refresh";
+    public static final String REQUSET_POST_LOAD_MORE="post_load_more";
 
     /**
      * 循环模式
