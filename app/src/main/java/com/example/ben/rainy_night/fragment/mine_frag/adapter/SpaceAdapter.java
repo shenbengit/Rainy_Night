@@ -1,16 +1,20 @@
 package com.example.ben.rainy_night.fragment.mine_frag.adapter;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
+import com.example.ben.rainy_night.widget.EnlargePictureDialog;
 import com.jaeger.ninegridimageview.NineGridImageView;
+import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,7 +71,22 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, SpaceAdapter.View
         private TextView tvNick;
         private TextView tvTime;
         private TextView tvContent;
-        private NineGridImageView nglvImages;
+        private NineGridImageView<String> nglvImages;
+
+        private NineGridImageViewAdapter<String> mAdapter = new NineGridImageViewAdapter<String>() {
+            @Override
+            protected void onDisplayImage(Context context, ImageView imageView, String s) {
+                GlideApp.with(context).load(s).into(imageView);
+            }
+
+            @Override
+            protected void onItemImageClick(Context context, int index, List<String> list) {
+                super.onItemImageClick(context, index, list);
+                EnlargePictureDialog mDialog = new EnlargePictureDialog(context);
+                mDialog.setImageList(list,index,false);
+                mDialog.show();
+            }
+        };
 
         public ViewHolder(View view) {
             super(view);
@@ -76,6 +95,12 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, SpaceAdapter.View
             tvTime = view.findViewById(R.id.tv_item_space_time);
             tvContent = view.findViewById(R.id.tv_item_space_content);
             nglvImages = view.findViewById(R.id.nglv_images);
+
+            nglvImages.setAdapter(mAdapter);
+        }
+
+        public void bind(){
+
         }
     }
 
