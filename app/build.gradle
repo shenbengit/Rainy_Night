@@ -87,7 +87,7 @@ dependencies {
     //图片选择库
     compile 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.9'
     //九宫格控件
-    compile 'com.jaeger.ninegridimageview:library:1.0.2'
+    compile 'com.jaeger.ninegridimageview:library:1.1.1'
     //ImmersionBar 沉浸式状态栏和沉浸式导航栏管理
     compile 'com.gyf.barlibrary:barlibrary:2.3.0'
     //multidex

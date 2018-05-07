@@ -45,7 +45,6 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
 
     private boolean isLoadFirst = true;
 
-    private String mTimeRefresh;
     private String mTimeLoadMore;
 
     public SpacePresenterImpl(SpaceContract.View view) {
@@ -141,7 +140,7 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
     @Override
     public void onRefresh() {
         mAdapter.setEnableLoadMore(false);
-        mTimeRefresh = getDateToString(System.currentTimeMillis());
+        String mTimeRefresh = getDateToString(System.currentTimeMillis());
         model.queryPost(Constant.REQUSET_POST_REFRESH, mTimeRefresh);
     }
 

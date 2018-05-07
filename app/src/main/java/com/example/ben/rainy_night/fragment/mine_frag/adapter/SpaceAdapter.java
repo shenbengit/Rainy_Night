@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -16,13 +15,9 @@ import com.example.ben.rainy_night.widget.EnlargePictureDialog;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.datatype.BmobFile;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -47,18 +42,10 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, SpaceAdapter.View
         holder.tvTime.setText(item.getCreatedAt());
         holder.tvContent.setText(item.getContent());
 
-        JSONArray array = new JSONArray(item.getPictures());
-        JSONObject object;
-        List<String> mUrls = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++) {
-            try {
-                object = array.getJSONObject(i);
-                String filename = object.getString("filename");
-                String url = object.getString("url");
-                mUrls.add(url);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        if (item.getPictures() == null) {
+            holder.nglvImages.setVisibility(View.GONE);
+        } else {
+            holder.bind(item.getPictures());
         }
     }
 
@@ -71,19 +58,19 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, SpaceAdapter.View
         private TextView tvNick;
         private TextView tvTime;
         private TextView tvContent;
-        private NineGridImageView<String> nglvImages;
+        private NineGridImageView<BmobFile> nglvImages;
 
-        private NineGridImageViewAdapter<String> mAdapter = new NineGridImageViewAdapter<String>() {
+        private NineGridImageViewAdapter<BmobFile> mAdapter = new NineGridImageViewAdapter<BmobFile>() {
             @Override
-            protected void onDisplayImage(Context context, ImageView imageView, String s) {
-                GlideApp.with(context).load(s).into(imageView);
+            protected void onDisplayImage(Context context, ImageView imageView, BmobFile s) {
+                GlideApp.with(context).load(s.getFileUrl()).into(imageView);
             }
 
             @Override
-            protected void onItemImageClick(Context context, int index, List<String> list) {
-                super.onItemImageClick(context, index, list);
+            protected void onItemImageClick(Context context, ImageView imageView, int index, List<BmobFile> list) {
+                super.onItemImageClick(context, imageView, index, list);
                 EnlargePictureDialog mDialog = new EnlargePictureDialog(context);
-                mDialog.setImageList(list,index,false);
+                mDialog.setImageList(list, index, false);
                 mDialog.show();
             }
         };
@@ -95,12 +82,11 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, SpaceAdapter.View
             tvTime = view.findViewById(R.id.tv_item_space_time);
             tvContent = view.findViewById(R.id.tv_item_space_content);
             nglvImages = view.findViewById(R.id.nglv_images);
-
-            nglvImages.setAdapter(mAdapter);
         }
 
-        public void bind(){
-
+        public void bind(List<BmobFile> list) {
+            nglvImages.setAdapter(mAdapter);
+            nglvImages.setImagesData(list);
         }
     }
 

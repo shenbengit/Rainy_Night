@@ -1,7 +1,6 @@
 package com.example.ben.rainy_night.widget;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -96,7 +95,6 @@ public class EnlargePictureDialog extends RxDialog {
         GlideApp.with(mContext).load(uri).error(R.mipmap.img_picture_load_failed).into(mImage);
     }
 
-
     public void setImageRes(int resId) {
         this.isShowManyPicture = false;
         initView();
@@ -109,7 +107,7 @@ public class EnlargePictureDialog extends RxDialog {
         GlideApp.with(mContext).load(bitmap).error(R.mipmap.img_picture_load_failed).into(mImage);
     }
 
-    public void setImageList(List<String> images, int position, boolean isCanDeletePicture) {
+    public <T> void setImageList(List<T> images, int position, boolean isCanDeletePicture) {
         this.isShowManyPicture = true;
         this.isCanDeletePicture = isCanDeletePicture;
         initView();
@@ -154,10 +152,10 @@ public class EnlargePictureDialog extends RxDialog {
      * @param images
      * @param position
      */
-    private void initViewPager(final List<String> images, int position) {
+    private <T> void initViewPager(final List<T> images, int position) {
         final int[] index = {position};
         mTitle.setText((position + 1) + "/" + images.size());
-        SimpleFragmentAdapter mAdapter = new SimpleFragmentAdapter(images);
+        SimpleFragmentAdapter<T> mAdapter = new SimpleFragmentAdapter<>(images);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(position);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -200,11 +198,11 @@ public class EnlargePictureDialog extends RxDialog {
     /**
      * ViewPager适配器类
      */
-    public class SimpleFragmentAdapter extends PagerAdapter {
+    private class SimpleFragmentAdapter<T> extends PagerAdapter {
 
-        private List<String> mData = new ArrayList<String>();
+        private List<T> mData = new ArrayList<>();
 
-        public SimpleFragmentAdapter(List<String> lists) {
+         private SimpleFragmentAdapter(List<T> lists) {
             mData.clear();
             mData.addAll(lists);
         }
@@ -224,14 +222,25 @@ public class EnlargePictureDialog extends RxDialog {
         public Object instantiateItem(@NonNull ViewGroup container, final int position) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_enlarge_picture, null);
             ImageView img = view.findViewById(R.id.iv_item_enlarge_picture);
-            GlideApp.with(mContext).load(mData.get(position)).error(R.mipmap.img_picture_load_failed).into(img);
-
-            if (!isCanDeletePicture) {
-                img.setOnLongClickListener(v -> {
-                    savePicture(mData.get(position));
-                    return true;
-                });
+            if (mData.get(position) instanceof String) {
+                String url = (String) mData.get(position);
+                if (!isCanDeletePicture) {
+                    img.setOnLongClickListener(v -> {
+                        savePicture(url, null);
+                        return true;
+                    });
+                }
+            } else if (mData.get(position) instanceof BmobFile) {
+                BmobFile file = (BmobFile) mData.get(position);
+                if (!isCanDeletePicture) {
+                    img.setOnLongClickListener(v -> {
+                        savePicture(file.getFileUrl(), file.getFilename());
+                        return true;
+                    });
+                }
             }
+
+
             container.addView(view);
             return view;
         }
@@ -245,11 +254,11 @@ public class EnlargePictureDialog extends RxDialog {
     /**
      * 显示保存图片Dialog
      */
-    private void savePicture(String url) {
+    private void savePicture(String url, String fileName) {
         if (mDialog == null) {
             mDialog = new SavePictureDialog(mContext);
         }
-        mDialog.setUrl(url);
+        mDialog.setUrl(url, fileName);
         mDialog.show();
     }
 
@@ -259,14 +268,16 @@ public class EnlargePictureDialog extends RxDialog {
     public class SavePictureDialog extends RxDialog {
 
         private String url = null;
+        private String fileName = null;
 
         public SavePictureDialog(Context context) {
             super(context);
             initViewDialog(context);
         }
 
-        public void setUrl(String url) {
+        public void setUrl(String url, String fileName) {
             this.url = url;
+            this.fileName = fileName;
         }
 
         private void initViewDialog(final Context context) {
@@ -279,7 +290,12 @@ public class EnlargePictureDialog extends RxDialog {
                     cancel();
                     return;
                 }
-                BmobFile file = new BmobFile(url.substring(48), "", url);
+                BmobFile file;
+                if (TextUtils.isEmpty(fileName)) {
+                    file = new BmobFile(url.substring(48), "", url);
+                } else {
+                    file = new BmobFile(fileName, "", url);
+                }
                 File saveFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), file.getFilename());
                 LoggerUtil.e(file.getFilename());
                 file.download(saveFile, new DownloadFileListener() {
