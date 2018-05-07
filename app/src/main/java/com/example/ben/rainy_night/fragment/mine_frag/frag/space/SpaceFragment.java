@@ -1,7 +1,6 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag.space;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
