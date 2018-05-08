@@ -23,6 +23,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
+import me.yokeyword.fragmentation.ISupportFragment;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @author Ben
@@ -181,4 +183,10 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
     public RecyclerView getRecycler() {
         return rvSpace;
     }
+
+    @Override
+    public void startBrotherFragment(ISupportFragment fragment) {
+        start(fragment);
+    }
+
 }

@@ -96,24 +96,24 @@ public class SleepReadPresenterImpl implements SleepReadContract.Presenter {
         view.getRecycler().setAdapter(mAdapter);
 
         mViewNetError = LayoutInflater.from(view.getCon())
-                .inflate(R.layout.item_net_error, (ViewGroup) view.getRecycler().getParent(), false);
+                .inflate(R.layout.layout_net_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewNetError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
             new Handler(Looper.getMainLooper()).postDelayed(this::getSleepReadList, 1000);
         });
 
         mViewLoading = LayoutInflater.from(view.getCon())
-                .inflate(R.layout.item_loading, (ViewGroup) view.getRecycler().getParent(), false);
+                .inflate(R.layout.layout_loading, (ViewGroup) view.getRecycler().getParent(), false);
 
         mViewDataError = LayoutInflater.from(view.getCon())
-                .inflate(R.layout.item_data_error, (ViewGroup) view.getRecycler().getParent(), false);
+                .inflate(R.layout.layout_data_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewDataError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
             new Handler(Looper.getMainLooper()).postDelayed(this::getSleepReadList, 1000);
         });
 
         mViewNoMoreData = LayoutInflater.from(view.getCon())
-                .inflate(R.layout.item_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
+                .inflate(R.layout.layout_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
 
         mAdapter.setOnItemClickListener((adapter, v, position) -> view.startBrotherFragment(WebViewFragment.newInstance(mList.get(position).getArticleTitle(), mList.get(position).getArticleUrl())));
 

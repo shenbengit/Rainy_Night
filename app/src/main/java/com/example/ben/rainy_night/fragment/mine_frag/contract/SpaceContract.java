@@ -8,6 +8,9 @@ import com.example.ben.rainy_night.base.BasePresenter;
 import com.example.ben.rainy_night.base.BaseView;
 import com.example.ben.rainy_night.fragment.event.OnPostEvent;
 
+import me.yokeyword.fragmentation.ISupportFragment;
+import me.yokeyword.fragmentation.SupportFragment;
+
 /**
  * @author Ben
  * @date 2018/5/4
@@ -36,6 +39,13 @@ public interface SpaceContract {
          * @return
          */
         RecyclerView getRecycler();
+
+        /**
+         * 从兄弟fragment进行跳转
+         *
+         * @param fragment 要跳转的fragment
+         */
+        void startBrotherFragment(ISupportFragment fragment);
     }
 
     interface Presenter extends BasePresenter {
@@ -51,6 +61,7 @@ public interface SpaceContract {
 
         /**
          * 获取帖子数据
+         *
          * @param event
          */
         void getPostData(OnPostEvent event);

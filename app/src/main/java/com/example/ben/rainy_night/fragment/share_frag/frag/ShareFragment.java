@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import butterknife.BindView;
-import me.yokeyword.fragmentation.SupportFragment;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
  * @author Ben
@@ -91,7 +91,7 @@ public class ShareFragment extends BaseFragment {
     /**
      * start other BrotherFragment
      */
-    public void startBrotherFragment(SupportFragment targetFragment) {
+    public void startBrotherFragment(ISupportFragment targetFragment) {
         assert getParentFragment() != null;
         ((MainFragment) getParentFragment()).startBrotherFragment(targetFragment);
     }

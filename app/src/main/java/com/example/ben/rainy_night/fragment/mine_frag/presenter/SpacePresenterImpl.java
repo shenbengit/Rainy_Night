@@ -14,6 +14,7 @@ import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.fragment.event.OnPostEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.adapter.SpaceAdapter;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.SpaceContract;
+import com.example.ben.rainy_night.fragment.mine_frag.frag.space.PostDetailFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.model.PostModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.PostModelImpl;
 import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
@@ -65,24 +66,26 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
         view.getSwipeRefresh().setOnRefreshListener(this);
 
         mViewNetError = LayoutInflater.from(view.getCon())
-                .inflate(R.layout.item_net_error, (ViewGroup) view.getRecycler().getParent(), false);
+                .inflate(R.layout.layout_net_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewNetError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
             new Handler(Looper.getMainLooper()).postDelayed(this::loadData, 1000);
         });
 
         mViewLoading = LayoutInflater.from(view.getCon())
-                .inflate(R.layout.item_loading, (ViewGroup) view.getRecycler().getParent(), false);
+                .inflate(R.layout.layout_loading, (ViewGroup) view.getRecycler().getParent(), false);
 
         mViewDataError = LayoutInflater.from(view.getCon())
-                .inflate(R.layout.item_data_error, (ViewGroup) view.getRecycler().getParent(), false);
+                .inflate(R.layout.layout_data_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewDataError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
             new Handler(Looper.getMainLooper()).postDelayed(this::loadData, 1000);
         });
 
         mViewNoMoreData = LayoutInflater.from(view.getCon())
-                .inflate(R.layout.item_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
+                .inflate(R.layout.layout_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
+
+        mAdapter.setOnItemClickListener((adapter, v, position) -> view.startBrotherFragment(PostDetailFragment.newInstance(mList.get(position))));
     }
 
     @Override
@@ -92,7 +95,7 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
             return;
         }
         mAdapter.setEmptyView(mViewLoading);
-        setRefreshing(true);
+
         onRefresh();
     }
 
@@ -108,7 +111,9 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
                         view.showToast("暂时没有新内容了");
                     }
                 } else {
-                    mAdapter.setNewData(event.getList());
+                    mList.clear();
+                    mList.addAll(event.getList());
+                    mAdapter.setNewData(mList);
                     isLoadFirst = false;
                     mTimeLoadMore = event.getList().get(event.getList().size() - 1).getCreatedAt();
                 }
@@ -119,7 +124,8 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
                     mAdapter.loadMoreEnd();
                 } else {
                     mTimeLoadMore = event.getList().get(event.getList().size() - 1).getCreatedAt();
-                    mAdapter.addData(event.getList());
+                    mList.addAll(event.getList());
+                    mAdapter.addData(mList);
                     mAdapter.loadMoreComplete();
                 }
             }
@@ -153,9 +159,9 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
         view.getSwipeRefresh().post(() -> view.getSwipeRefresh().setRefreshing(refreshing));
     }
 
-    private String getDateToString(long milSecond) {
+    private String getDateToString(long millisSecond) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
-        Date date = new Date(milSecond);
+        Date date = new Date(millisSecond);
         return format.format(date);
     }
 }

@@ -2,6 +2,7 @@ package com.example.ben.rainy_night.fragment.mine_frag.adapter;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,12 +12,14 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 import com.example.ben.rainy_night.widget.EnlargePictureDialog;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 
 import java.util.List;
 
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -27,8 +30,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SpaceAdapter extends BaseQuickAdapter<PostEntity, SpaceAdapter.ViewHolder> {
 
+    private UserEntity mEntity;
+    private String mCurrentUserName;
+
     public SpaceAdapter(@Nullable List<PostEntity> data) {
         super(R.layout.item_recycler_space, data);
+        mEntity = BmobUser.getCurrentUser(UserEntity.class);
+        if (mEntity != null) {
+            mCurrentUserName = mEntity.getNickName();
+        }
     }
 
     @Override
@@ -38,7 +48,11 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, SpaceAdapter.View
                 .placeholder(R.mipmap.ic_head)
                 .error(R.mipmap.ic_head)
                 .into(holder.civHead);
-        holder.tvNick.setText(item.getUser().getNickName());
+        if (TextUtils.equals(mCurrentUserName, item.getUser().getNickName())) {
+            holder.tvNick.setText("我");
+        } else {
+            holder.tvNick.setText(item.getUser().getNickName());
+        }
         holder.tvTime.setText(item.getCreatedAt());
         holder.tvContent.setText(item.getContent());
 
@@ -63,7 +77,11 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, SpaceAdapter.View
         private NineGridImageViewAdapter<BmobFile> mAdapter = new NineGridImageViewAdapter<BmobFile>() {
             @Override
             protected void onDisplayImage(Context context, ImageView imageView, BmobFile s) {
-                GlideApp.with(context).load(s.getFileUrl()).into(imageView);
+                GlideApp.with(context)
+                        .load(s.getFileUrl())
+                        .placeholder(R.mipmap.ic_transparent_picture)
+                        .error(R.mipmap.ic_transparent_picture)
+                        .into(imageView);
             }
 
             @Override

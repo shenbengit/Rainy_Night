@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg_rainy"
+    android:background="#E4E5E6"
     android:orientation="vertical"
     tools:context="com.example.ben.rainy_night.fragment.mine_frag.frag.space.SpaceFragment">
 

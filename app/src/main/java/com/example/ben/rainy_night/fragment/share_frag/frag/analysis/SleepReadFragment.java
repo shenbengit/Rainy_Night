@@ -11,7 +11,7 @@ import com.example.ben.rainy_night.fragment.share_frag.frag.ShareFragment;
 import com.example.ben.rainy_night.fragment.share_frag.presenter.SleepReadPresenterImpl;
 
 import butterknife.BindView;
-import me.yokeyword.fragmentation.SupportFragment;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
  * @author Ben
@@ -132,7 +132,7 @@ public class SleepReadFragment extends BaseFragment<SleepReadContract.Presenter>
      * @param fragment 要跳转的fragment
      */
     @Override
-    public void startBrotherFragment(SupportFragment fragment) {
+    public void startBrotherFragment(ISupportFragment fragment) {
         assert getParentFragment() != null;
         ((ShareFragment) getParentFragment()).startBrotherFragment(fragment);
     }

@@ -11,7 +11,7 @@ import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.home_frag.adapter.SleepMusicFragmentAdapter;
 
 import butterknife.BindView;
-import me.yokeyword.fragmentation.SupportFragment;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
  * @author Ben
@@ -83,7 +83,7 @@ public class SleepMusicFragment extends BaseFragment {
     /**
      * start other BrotherFragment
      */
-    public void startBrotherFragment(SupportFragment targetFragment) {
+    public void startBrotherFragment(ISupportFragment targetFragment) {
         start(targetFragment);
     }
 }

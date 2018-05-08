@@ -45,10 +45,10 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
 
     @Override
     public void initView() {
-        mBottomBar.addItem(new BottomBarTab(_mActivity, R.mipmap.ic_home, "安"))
-                .addItem(new BottomBarTab(_mActivity, R.mipmap.ic_night, "听"))
-                .addItem(new BottomBarTab(_mActivity, R.mipmap.ic_share, "说"))
-                .addItem(new BottomBarTab(_mActivity, R.mipmap.ic_mine, "我"));
+        mBottomBar.addItem(new BottomBarTab(_mActivity, R.mipmap.ic_home, "睡觉"))
+                .addItem(new BottomBarTab(_mActivity, R.mipmap.ic_night, "助眠"))
+                .addItem(new BottomBarTab(_mActivity, R.mipmap.ic_share, "分享"))
+                .addItem(new BottomBarTab(_mActivity, R.mipmap.ic_mine, "我的"));
 
         mBottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
             //BottomBar按键选择的时候
@@ -85,7 +85,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     /**
      * start other BrotherFragment
      */
-    public void startBrotherFragment(SupportFragment targetFragment) {
+    public void startBrotherFragment(ISupportFragment targetFragment) {
         start(targetFragment);
     }
 
@@ -93,7 +93,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
      * start other BrotherFragment
      * 回掉传值
      */
-    public void startBrotherFragmentForResult(SupportFragment targetFragment, int requestCode) {
+    public void startBrotherFragmentForResult(ISupportFragment targetFragment, int requestCode) {
         startForResult(targetFragment, requestCode);
     }
 

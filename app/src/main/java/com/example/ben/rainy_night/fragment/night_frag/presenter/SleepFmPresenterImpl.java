@@ -7,7 +7,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
-import com.lzx.musiclibrary.manager.MusicManager;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
@@ -126,24 +124,24 @@ public class SleepFmPresenterImpl implements SleepFmContract.Presenter, OnPlayer
         view.getRecycler().setAdapter(mAdapter);
 
         mViewNetError = LayoutInflater.from(view.getCon())
-                .inflate(R.layout.item_net_error, (ViewGroup) view.getRecycler().getParent(), false);
+                .inflate(R.layout.layout_net_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewNetError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
             new Handler(Looper.getMainLooper()).postDelayed(this::getAlbumsMediaList, 1000);
         });
 
         mViewLoading = LayoutInflater.from(view.getCon())
-                .inflate(R.layout.item_loading, (ViewGroup) view.getRecycler().getParent(), false);
+                .inflate(R.layout.layout_loading, (ViewGroup) view.getRecycler().getParent(), false);
 
         mViewDataError = LayoutInflater.from(view.getCon())
-                .inflate(R.layout.item_data_error, (ViewGroup) view.getRecycler().getParent(), false);
+                .inflate(R.layout.layout_data_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewDataError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
             new Handler(Looper.getMainLooper()).postDelayed(this::getAlbumsMediaList, 1000);
         });
 
         mViewNoMoreData = LayoutInflater.from(view.getCon())
-                .inflate(R.layout.item_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
+                .inflate(R.layout.layout_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
 
         view.getRecycler().setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

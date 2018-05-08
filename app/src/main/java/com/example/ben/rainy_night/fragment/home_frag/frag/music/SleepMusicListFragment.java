@@ -12,7 +12,7 @@ import com.example.ben.rainy_night.fragment.home_frag.presenter.SleepMusicListPr
 import com.example.ben.rainy_night.util.NetWorkUtil;
 
 import butterknife.BindView;
-import me.yokeyword.fragmentation.SupportFragment;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
  * @author Ben
@@ -141,7 +141,7 @@ public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.
     }
 
     @Override
-    public void startBrotherFragment(SupportFragment fragment) {
+    public void startBrotherFragment(ISupportFragment fragment) {
         assert (getParentFragment()) != null;
         ((SleepMusicFragment) getParentFragment()).startBrotherFragment(fragment);
     }

@@ -63,6 +63,7 @@
             android:id="@+id/nglv_images"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:imgGap="3dp"
             app:maxSize="6"
             app:showStyle="grid"

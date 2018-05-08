@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import com.example.ben.rainy_night.base.BasePresenter;
 import com.example.ben.rainy_night.base.BaseView;
 
-import me.yokeyword.fragmentation.SupportFragment;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
  * @author Ben
@@ -35,7 +35,7 @@ public interface SleepReadContract {
          *
          * @param fragment 要跳转的fragment
          */
-        void startBrotherFragment(SupportFragment fragment);
+        void startBrotherFragment(ISupportFragment fragment);
 
     }
 

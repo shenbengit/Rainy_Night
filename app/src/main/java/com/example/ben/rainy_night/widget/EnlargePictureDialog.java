@@ -233,7 +233,11 @@ public class EnlargePictureDialog extends RxDialog {
                 }
             } else if (mData.get(position) instanceof BmobFile) {
                 BmobFile file = (BmobFile) mData.get(position);
-                GlideApp.with(mContext).load(file.getFileUrl()).error(R.mipmap.img_picture_load_failed).into(img);
+                GlideApp.with(mContext)
+                        .load(file.getFileUrl())
+                        .placeholder(R.mipmap.img_picture_load_failed)
+                        .error(R.mipmap.img_picture_load_failed)
+                        .into(img);
                 if (!isCanDeletePicture) {
                     img.setOnLongClickListener(v -> {
                         savePicture(file.getFileUrl(), file.getFilename());

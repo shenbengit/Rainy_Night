@@ -67,10 +67,15 @@ public class Constant {
     public static final int DOLPHIN_NATURAL_MUSIC = 1;
     public static final int DOLPHIN_LIGHT_MUSIC = 2;
 
+    /**
+     * 其他变量
+     */
     public static final int DOLPHIN_HYPNOSIS = 27;
     public static final int DOLPHIN_BEFORE_SLEEP_AND_READ = 7;
     public static final int DOLPHIN_NICE_PEOPLE = 6;
     public static final int DOLPHIN_SAY_GOOG_NIGHT = 5;
+
+    public static final String ADD_POST_PICTURE = "ADD_POST_PICTURE";
 
     /**
      * 海豚睡眠 api接口
@@ -109,8 +114,8 @@ public class Constant {
     public static final String REQUEST_NICK_NAME = "nick_name";
     public static final String REQUEST_CHANGE_PASSWORD = "change_password";
     public static final String ADD_PICTURE = "add_picture";
-    public static final String REQUSET_POST_REFRESH="post_refresh";
-    public static final String REQUSET_POST_LOAD_MORE="post_load_more";
+    public static final String REQUSET_POST_REFRESH = "post_refresh";
+    public static final String REQUSET_POST_LOAD_MORE = "post_load_more";
 
     /**
      * 循环模式
