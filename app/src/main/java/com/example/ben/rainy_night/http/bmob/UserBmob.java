@@ -1,7 +1,7 @@
 package com.example.ben.rainy_night.http.bmob;
 
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
-import com.example.ben.rainy_night.fragment.event.OnUserEvent;
+import com.example.ben.rainy_night.event.OnUserEvent;
 import com.example.ben.rainy_night.manager.ThreadPoolManager;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;

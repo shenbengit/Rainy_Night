@@ -77,6 +77,13 @@ public class Constant {
 
     public static final String ADD_POST_PICTURE = "ADD_POST_PICTURE";
 
+    public static final String POST_COMMENT="POST_COMMENT";
+    public static final String POST_LIKES="POST_LIKES";
+
+    public static final String ACTION_ADD="ACTION_ADD";
+    public static final String ACTION_REMOVE="ACTION_REMOVE";
+    public static final String ACTION_QUERY="ACTION_QUERY";
+
     /**
      * 海豚睡眠 api接口
      * baseUrl

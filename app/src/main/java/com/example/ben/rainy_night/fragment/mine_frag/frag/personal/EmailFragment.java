@@ -9,7 +9,7 @@ import android.widget.Button;
 import com.chaychan.viewlib.PowerfulEditText;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
-import com.example.ben.rainy_night.fragment.event.OnUserEvent;
+import com.example.ben.rainy_night.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.EmailContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.EmailPresenterImpl;
 import com.example.ben.rainy_night.util.Constant;

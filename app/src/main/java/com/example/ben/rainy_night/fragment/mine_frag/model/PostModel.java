@@ -32,4 +32,47 @@ public interface PostModel {
      * @param createdAt 根据创建时间查询
      */
     void queryPost(String action, String createdAt);
+
+    /**
+     * 给某条帖子添加评论
+     *
+     * @param objectId 帖子的objectId
+     * @param content  评论帖子的内容
+     */
+    void addPostComment(String objectId, String content);
+
+    /**
+     * 删除帖子的评论
+     *
+     * @param objectId 评论的objectId
+     */
+    void removePostComment(String objectId);
+
+    /**
+     * 查询某条帖子的所有评论
+     *
+     * @param objectId 帖子的objectId
+     */
+    void queryPostComment(String objectId);
+
+    /**
+     * 给某条帖子“点赞”
+     *
+     * @param objectId 帖子的objectId
+     */
+    void addPostLikes(String objectId);
+
+    /**
+     * 给某条帖子取消“取消点赞”
+     *
+     * @param objectId 帖子的objectId
+     */
+    void removePostLikes(String objectId);
+
+    /**
+     * 查询喜欢某条帖子的人数
+     *
+     * @param objectId 帖子的objectId
+     */
+    void queryPostLikes(String objectId);
 }

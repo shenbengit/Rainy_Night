@@ -3,13 +3,12 @@ package com.example.ben.rainy_night.fragment.mine_frag.frag;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
-import com.example.ben.rainy_night.fragment.event.OnUserEvent;
+import com.example.ben.rainy_night.event.OnUserEvent;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.MineContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
@@ -21,8 +20,6 @@ import com.example.ben.rainy_night.fragment.mine_frag.presenter.MinePresenterImp
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
-import com.vondear.rxtools.RxActivityTool;
-import com.vondear.rxtools.activity.ActivityScanerCode;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

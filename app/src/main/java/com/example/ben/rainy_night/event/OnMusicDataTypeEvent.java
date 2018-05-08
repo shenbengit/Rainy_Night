@@ -1,4 +1,4 @@
-package com.example.ben.rainy_night.fragment.event;
+package com.example.ben.rainy_night.event;
 
 /**
  * @author Ben

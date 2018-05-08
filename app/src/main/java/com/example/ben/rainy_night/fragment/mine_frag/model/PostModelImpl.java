@@ -44,4 +44,65 @@ public class PostModelImpl implements PostModel {
     public void queryPost(String action, String createdAt) {
         PostBmob.getInstance().queryPost(action, createdAt);
     }
+
+    /**
+     * 给某条帖子添加评论
+     *
+     * @param objectId 帖子的objectId
+     * @param content  评论帖子的内容
+     */
+    @Override
+    public void addPostComment(String objectId, String content) {
+        PostBmob.getInstance().addPostComment(objectId, content);
+    }
+
+    /**
+     * 删除帖子的评论
+     *
+     * @param objectId 评论的objectId
+     */
+    @Override
+    public void removePostComment(String objectId) {
+        PostBmob.getInstance().removePostComment(objectId);
+    }
+
+    /**
+     * 查询某条帖子的所有评论
+     *
+     * @param objectId 帖子的objectId
+     */
+    @Override
+    public void queryPostComment(String objectId) {
+        PostBmob.getInstance().queryPostComment(objectId);
+    }
+
+    /**
+     * 给某条帖子“点赞”
+     *
+     * @param objectId 帖子的objectId
+     */
+    @Override
+    public void addPostLikes(String objectId) {
+        PostBmob.getInstance().addPostLikes(objectId);
+    }
+
+    /**
+     * 给某条帖子取消“取消点赞”
+     *
+     * @param objectId 帖子的objectId
+     */
+    @Override
+    public void removePostLikes(String objectId) {
+        PostBmob.getInstance().removePostLikes(objectId);
+    }
+
+    /**
+     * 查询喜欢某条帖子的人数
+     *
+     * @param objectId 帖子的objectId
+     */
+    @Override
+    public void queryPostLikes(String objectId) {
+        PostBmob.getInstance().queryPostLikes(objectId);
+    }
 }

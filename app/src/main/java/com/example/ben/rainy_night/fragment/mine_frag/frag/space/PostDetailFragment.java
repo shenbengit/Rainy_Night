@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
@@ -13,12 +12,18 @@ import android.widget.TextView;
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
+import com.example.ben.rainy_night.event.OnPostCommentEvent;
+import com.example.ben.rainy_night.event.OnPostLikesEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.PostDetailContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.PostDetailPresenterImpl;
 import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
 import com.example.ben.rainy_night.widget.EnlargePictureDialog;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -99,6 +104,8 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
+
         baseToolbar.setTitle("详情");
         initToolbarNav(baseToolbar);
 
@@ -133,6 +140,24 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
         return false;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
+    public void getPostComment(OnPostCommentEvent event) {
+        presenter.getPostComment(event);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
+    public void getPostLikes(OnPostLikesEvent event) {
+        presenter.getPostLikes(event);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
+
     @Override
     public boolean isNetworkAvailable() {
         return isNetAvailable();
@@ -151,5 +176,30 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
     @Override
     public void cancelDialog() {
 
+    }
+
+    @Override
+    public Context getCon() {
+        return _mActivity;
+    }
+
+    @Override
+    public SwipeRefreshLayout getSwipRefresh() {
+        return srlPostDetail;
+    }
+
+    @Override
+    public RecyclerView getRecy() {
+        return recyPostDetail;
+    }
+
+    @Override
+    public TextView getTextLikes() {
+        return tvPostDetailLikes;
+    }
+
+    @Override
+    public TextView getTextComment() {
+        return tvPostDetailComment;
     }
 }

@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
-import com.example.ben.rainy_night.fragment.event.OnActivityResultEvent;
+import com.example.ben.rainy_night.event.OnActivityResultEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.ScanerCodeContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.ScanerCodePresenterImpl;
 

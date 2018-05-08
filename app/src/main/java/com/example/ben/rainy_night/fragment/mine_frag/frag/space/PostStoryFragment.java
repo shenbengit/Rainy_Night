@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
-import com.example.ben.rainy_night.fragment.event.OnActivityResultEvent;
-import com.example.ben.rainy_night.fragment.event.OnPostEvent;
+import com.example.ben.rainy_night.event.OnActivityResultEvent;
+import com.example.ben.rainy_night.event.OnPostEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.PostStoryContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.PostStoryPresenterImpl;
 import com.example.ben.rainy_night.util.DialogLoadingUtil;

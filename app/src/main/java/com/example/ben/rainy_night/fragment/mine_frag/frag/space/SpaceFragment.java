@@ -9,7 +9,7 @@ import android.view.View;
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
-import com.example.ben.rainy_night.fragment.event.OnPostEvent;
+import com.example.ben.rainy_night.event.OnPostEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.SpaceContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.SpacePresenterImpl;
@@ -24,7 +24,6 @@ import butterknife.OnClick;
 import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.yokeyword.fragmentation.ISupportFragment;
-import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @author Ben

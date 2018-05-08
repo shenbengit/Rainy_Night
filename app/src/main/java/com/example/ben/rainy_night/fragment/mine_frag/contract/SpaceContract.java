@@ -6,10 +6,9 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.ben.rainy_night.base.BasePresenter;
 import com.example.ben.rainy_night.base.BaseView;
-import com.example.ben.rainy_night.fragment.event.OnPostEvent;
+import com.example.ben.rainy_night.event.OnPostEvent;
 
 import me.yokeyword.fragmentation.ISupportFragment;
-import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @author Ben
