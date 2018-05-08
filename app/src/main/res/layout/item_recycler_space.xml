@@ -22,7 +22,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/civ_item_space_head"
                 android:layout_width="50dp"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,6 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:imgGap="3dp"
+            app:maxSize="6"
             app:showStyle="grid"
             app:singleImgSize="300dp" />
 

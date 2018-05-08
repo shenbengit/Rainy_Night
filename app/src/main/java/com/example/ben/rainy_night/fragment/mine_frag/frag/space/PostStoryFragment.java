@@ -2,6 +2,7 @@ package com.example.ben.rainy_night.fragment.mine_frag.frag.space;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -9,7 +10,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.ben.rainy_night.R;
@@ -19,7 +19,6 @@ import com.example.ben.rainy_night.fragment.event.OnPostEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.PostStoryContract;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.PostStoryPresenterImpl;
 import com.example.ben.rainy_night.util.DialogLoadingUtil;
-import com.example.ben.rainy_night.widget.PostStoryGridView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -41,8 +40,8 @@ public class PostStoryFragment extends BaseFragment<PostStoryContract.Presenter>
     Toolbar postToolbar;
     @BindView(R.id.et_post_story)
     EditText etPostStory;
-    @BindView(R.id.gv_add_picture)
-    PostStoryGridView gvAddPicture;
+    @BindView(R.id.recy_post_picture)
+    RecyclerView recyPostPicture;
 
     @OnClick({R.id.tv_publish_post})
     public void viewOnClick(View view) {
@@ -172,63 +171,36 @@ public class PostStoryFragment extends BaseFragment<PostStoryContract.Presenter>
         hideSoftInput();
     }
 
-    /**
-     * 获取Activity
-     *
-     * @return
-     */
     @Override
     public FragmentActivity getFragAct() {
         return _mActivity;
     }
 
-    /**
-     * @return GridView
-     */
     @Override
-    public GridView getGridView() {
-        return gvAddPicture;
+    public RecyclerView getRecy() {
+        return recyPostPicture;
     }
 
-    /**
-     * @return EditText
-     */
     @Override
     public EditText getEditText() {
         return etPostStory;
     }
 
-    /**
-     * 当前网络是否可用
-     *
-     * @return true: 可用 false: 不可用
-     */
     @Override
     public boolean isNetworkAvailable() {
         return isNetAvailable();
     }
 
-    /**
-     * 显示Toast
-     *
-     * @param text
-     */
     @Override
     public void showToast(String text) {
         toastShow(text);
     }
 
-    /**
-     * 显示网络加载Dialog
-     */
     @Override
     public void showDialog() {
         mDialog.show();
     }
 
-    /**
-     * 关闭网络加载Dialog
-     */
     @Override
     public void cancelDialog() {
         mDialog.cancel();

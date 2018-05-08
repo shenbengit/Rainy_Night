@@ -224,6 +224,7 @@ public class EnlargePictureDialog extends RxDialog {
             ImageView img = view.findViewById(R.id.iv_item_enlarge_picture);
             if (mData.get(position) instanceof String) {
                 String url = (String) mData.get(position);
+                GlideApp.with(mContext).load(url).error(R.mipmap.img_picture_load_failed).into(img);
                 if (!isCanDeletePicture) {
                     img.setOnLongClickListener(v -> {
                         savePicture(url, null);
@@ -232,6 +233,7 @@ public class EnlargePictureDialog extends RxDialog {
                 }
             } else if (mData.get(position) instanceof BmobFile) {
                 BmobFile file = (BmobFile) mData.get(position);
+                GlideApp.with(mContext).load(file.getFileUrl()).error(R.mipmap.img_picture_load_failed).into(img);
                 if (!isCanDeletePicture) {
                     img.setOnLongClickListener(v -> {
                         savePicture(file.getFileUrl(), file.getFilename());
@@ -239,8 +241,6 @@ public class EnlargePictureDialog extends RxDialog {
                     });
                 }
             }
-
-
             container.addView(view);
             return view;
         }

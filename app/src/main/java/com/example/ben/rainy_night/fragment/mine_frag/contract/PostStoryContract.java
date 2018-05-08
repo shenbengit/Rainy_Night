@@ -2,6 +2,7 @@ package com.example.ben.rainy_night.fragment.mine_frag.contract;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.RecyclerView;
 import android.widget.EditText;
 import android.widget.GridView;
 
@@ -24,12 +25,16 @@ public interface PostStoryContract {
         FragmentActivity getFragAct();
 
         /**
-         * @return GridView
+         * 获取RecyclerView
+         *
+         * @return
          */
-        GridView getGridView();
+        RecyclerView getRecy();
 
         /**
-         * @return EditText
+         * 获取EditText
+         *
+         * @return
          */
         EditText getEditText();
     }

@@ -56,13 +56,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.example.ben.rainy_night.widget.PostStoryGridView
-            android:id="@+id/gv_add_picture"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recy_post_picture"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="20dp"
-            android:columnWidth="80dp"
-            android:numColumns="auto_fit"
-            android:verticalSpacing="10dp" />
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 </LinearLayout>

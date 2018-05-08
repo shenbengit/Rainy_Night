@@ -2,6 +2,7 @@ package com.example.ben.rainy_night.fragment.mine_frag.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
 
 import com.example.ben.rainy_night.fragment.mine_frag.adapter.PostStoryAdapter;
@@ -34,6 +35,7 @@ public class PostStoryPresenterImpl implements PostStoryContract.Presenter {
      * 选择帖子照片的路径集合
      */
     private List<String> mPictures;
+    private EnlargePictureDialog mDialog;
 
     public PostStoryPresenterImpl(PostStoryContract.View view) {
         this.view = view;
@@ -46,15 +48,20 @@ public class PostStoryPresenterImpl implements PostStoryContract.Presenter {
     @Override
     public void initGridView() {
         mPictures = new ArrayList<>();
-        mAdapter = new PostStoryAdapter(view.getFragAct());
-        view.getGridView().setAdapter(mAdapter);
-        view.getGridView().setOnItemClickListener((parent, v, position, id) -> {
-            if (position == parent.getChildCount() - 1) {
-                if (mPictures.size() == Constant.MAX_PICTURES) {
+        mAdapter = new PostStoryAdapter(mPictures);
+        GridLayoutManager manager = new GridLayoutManager(view.getFragAct(), 4);
+        view.getRecy().setLayoutManager(manager);
+        view.getRecy().setAdapter(mAdapter);
+
+        mPictures.add(Constant.ADD_POST_PICTURE);
+        mAdapter.setNewData(mPictures);
+
+        mAdapter.setOnItemClickListener((adapter, v, position) -> {
+            if (position == adapter.getData().size() - 1) {
+                if (!TextUtils.equals(Constant.ADD_POST_PICTURE, mPictures.get(position))) {
                     showEnlargePictureDialog(position);
                 } else {
-                    PictureSelectorUtil.initMultiConfig(view.getFragAct(),
-                            Constant.MAX_PICTURES - mPictures.size());
+                    PictureSelectorUtil.initMultiConfig(view.getFragAct(), Constant.MAX_PICTURES - mPictures.size() + 1);
                 }
             } else {
                 showEnlargePictureDialog(position);
@@ -62,13 +69,29 @@ public class PostStoryPresenterImpl implements PostStoryContract.Presenter {
         });
     }
 
+    /**
+     * 图片放大Dialog
+     *
+     * @param position
+     */
     private void showEnlargePictureDialog(int position) {
-        EnlargePictureDialog mDialog = new EnlargePictureDialog(view.getFragAct());
+        List<String> list = new ArrayList<>();
+        for (String path : mPictures) {
+            if (!TextUtils.equals(Constant.ADD_POST_PICTURE, path)) {
+                list.add(path);
+            }
+        }
+        if (mDialog == null) {
+            mDialog = new EnlargePictureDialog(view.getFragAct());
+        }
         mDialog.setIsDeleteListener(position1 -> {
             mPictures.remove(position1);
-            mAdapter.setData(mPictures);
+            if (!TextUtils.equals(mPictures.get(mPictures.size() - 1), Constant.ADD_POST_PICTURE)) {
+                mPictures.add(Constant.ADD_POST_PICTURE);
+            }
+            mAdapter.setNewData(mPictures);
         });
-        mDialog.setImageList(mPictures, position, true);
+        mDialog.setImageList(list, position, true);
         mDialog.setCanceledOnTouchOutside(false);
         mDialog.show();
     }
@@ -84,6 +107,7 @@ public class PostStoryPresenterImpl implements PostStoryContract.Presenter {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constant.REQUEST_IMAGE) {
             if (resultCode == Activity.RESULT_OK && data != null) {
+                mPictures.remove(mPictures.size() - 1);
                 //被压缩后的图片路径
                 //压缩后的图片路径
                 //把图片添加到将要上传的图片数组中
@@ -93,7 +117,10 @@ public class PostStoryPresenterImpl implements PostStoryContract.Presenter {
                     //把图片添加到将要上传的图片数组中
                     mPictures.add(compressPath);
                 });
-                mAdapter.setData(mPictures);
+                if (mPictures.size() < Constant.MAX_PICTURES) {
+                    mPictures.add(Constant.ADD_POST_PICTURE);
+                }
+                mAdapter.setNewData(mPictures);
             }
         }
     }
@@ -104,20 +131,27 @@ public class PostStoryPresenterImpl implements PostStoryContract.Presenter {
     @Override
     public void publishPost() {
         String content = view.getEditText().getText().toString().trim();
-
         if (!view.isNetworkAvailable()) {
             view.showToast("当前网络不可用");
             return;
         }
-
         UserEntity bean = BmobUser.getCurrentUser(UserEntity.class);
         view.showDialog();
-        if (mPictures.size() != 0) {
-            String[] paths = mPictures.toArray(new String[mPictures.size()]);
-            model.publishPostWithPicture(paths, content, bean);
-        } else {
-            model.publishPost(content, bean);
+
+        List<String> list = new ArrayList<>();
+        for (String path : mPictures) {
+            if (!TextUtils.equals(Constant.ADD_POST_PICTURE, path)) {
+                list.add(path);
+            }
         }
+        if (list.isEmpty()) {
+            model.publishPost(content, bean);
+        } else {
+            String[] paths = list.toArray(new String[list.size()]);
+            model.publishPostWithPicture(paths, content, bean);
+        }
+
+
     }
 
     /**
@@ -130,6 +164,7 @@ public class PostStoryPresenterImpl implements PostStoryContract.Presenter {
         view.cancelDialog();
         if (TextUtils.equals(message, Constant.OK)) {
             view.showToast("发表成功");
+            view.getFragAct().onBackPressed();
         } else {
             view.showToast(message);
         }
