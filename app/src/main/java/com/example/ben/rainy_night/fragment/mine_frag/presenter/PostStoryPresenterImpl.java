@@ -11,10 +11,12 @@ import com.example.ben.rainy_night.fragment.mine_frag.model.PostModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.PostModelImpl;
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 import com.example.ben.rainy_night.util.Constant;
+import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.PictureSelectorUtil;
 import com.example.ben.rainy_night.widget.EnlargePictureDialog;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.tools.PictureFileUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,15 +110,17 @@ public class PostStoryPresenterImpl implements PostStoryContract.Presenter {
         if (requestCode == Constant.REQUEST_IMAGE) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 mPictures.remove(mPictures.size() - 1);
-                //被压缩后的图片路径
-                //压缩后的图片路径
-                //把图片添加到将要上传的图片数组中
-                PictureSelector.obtainMultipleResult(data).stream().filter(LocalMedia::isCompressed).forEach(localMedia -> {
-                    //压缩后的图片路径
-                    String compressPath = localMedia.getCompressPath();
-                    //把图片添加到将要上传的图片数组中
-                    mPictures.add(compressPath);
-                });
+
+                List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                if (selectList == null || selectList.isEmpty()) {
+                    view.showToast("图片选取失败，请重试！");
+                    return;
+                }
+                for (LocalMedia media : selectList) {
+                    if (media.isCompressed()) {
+                        mPictures.add(media.getCompressPath());
+                    }
+                }
                 if (mPictures.size() < Constant.MAX_PICTURES) {
                     mPictures.add(Constant.ADD_POST_PICTURE);
                 }
@@ -164,6 +168,8 @@ public class PostStoryPresenterImpl implements PostStoryContract.Presenter {
         view.cancelDialog();
         if (TextUtils.equals(message, Constant.OK)) {
             view.showToast("发表成功");
+            //发表成功后清除预览缓存
+            PictureFileUtils.deleteCacheDirFile(view.getFragAct());
             view.getFragAct().onBackPressed();
         } else {
             view.showToast(message);

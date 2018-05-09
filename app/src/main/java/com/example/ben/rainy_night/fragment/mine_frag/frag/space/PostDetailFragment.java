@@ -1,11 +1,16 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag.space;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,9 +30,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.bmob.v3.datatype.BmobFile;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -61,6 +70,24 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
     NestedScrollView nsvPostDetail;
     @BindView(R.id.srl_post_detail)
     SwipeRefreshLayout srlPostDetail;
+    @BindView(R.id.et_post_detail_comment)
+    EditText etPostDetailComment;
+
+    @OnClick({R.id.btn_post_detail_send})
+    public void viewOnClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_post_detail_send:
+                if (TextUtils.isEmpty(etPostDetailComment.getText().toString().trim())){
+                    toastShow("请输入评论内容");
+                    return;
+                }
+
+                presenter.addPostComment(etPostDetailComment.getText().toString().trim());
+                break;
+            default:
+                break;
+        }
+    }
 
     private NineGridImageViewAdapter<BmobFile> mAdapter = new NineGridImageViewAdapter<BmobFile>() {
         @Override
@@ -80,7 +107,6 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
             mDialog.show();
         }
     };
-
 
     public static PostDetailFragment newInstance(PostEntity entity) {
         PostDetailFragment fragment = new PostDetailFragment();
@@ -113,26 +139,44 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
         if (bundle != null) {
             mEntity = (PostEntity) bundle.getSerializable(ENTITY);
         }
-
-        presenter.init();
     }
 
     @Override
     protected void initData() {
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onEnterAnimationEnd(Bundle savedInstanceState) {
+        super.onEnterAnimationEnd(savedInstanceState);
+        _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        assert mEntity != null;
+        presenter.init(mEntity.getObjectId());
+
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        String mDate = format.format(date);
         if (mEntity != null) {
             GlideApp.with(_mActivity)
                     .load(mEntity.getUser().getHeadimg().getFileUrl())
                     .placeholder(R.mipmap.ic_head)
                     .error(R.mipmap.ic_head)
                     .into(civPostDetailHead);
-            tvPostDetailNick.setText(mEntity.getUser().getNickName());
-            tvPostDetailTime.setText(mEntity.getCreatedAt());
+            if (TextUtils.equals(mUserEntity.getNickName(), mEntity.getUser().getNickName())) {
+                tvPostDetailNick.setText(R.string.mine);
+            } else {
+                tvPostDetailNick.setText(mEntity.getUser().getNickName());
+            }
+            if (TextUtils.equals(mDate, mEntity.getCreatedAt().substring(0, 10))) {
+                tvPostDetailTime.setText(getString(R.string.today) + "\t" + mEntity.getCreatedAt().substring(11, 16));
+            } else {
+                tvPostDetailTime.setText(mEntity.getCreatedAt().substring(5, 16));
+            }
             tvPostDetailContent.setText(mEntity.getContent());
             nglvPostDetailImages.setAdapter(mAdapter);
             nglvPostDetailImages.setImagesData(mEntity.getPictures());
         }
-
-
     }
 
     @Override
@@ -156,6 +200,8 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+        _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        hideSoftInput();
     }
 
     @Override

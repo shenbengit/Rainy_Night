@@ -1,15 +1,11 @@
 package com.example.ben.rainy_night.base;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 
 import com.example.ben.rainy_night.App;
-import com.example.ben.rainy_night.event.OnActivityResultEvent;
 import com.squareup.leakcanary.RefWatcher;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.ButterKnife;
 import me.yokeyword.fragmentation.SupportActivity;
@@ -32,16 +28,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
         setPresenter();
         initView();
         initData();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        /**
-         * 用EventBus向MyPersonalFragment传递onActivityResult()里返回的参数，
-         * 因为Fragment里无法执行onActivityResult()方法。
-         */
-        EventBus.getDefault().post(new OnActivityResultEvent(requestCode, resultCode, data));
     }
 
     @Override

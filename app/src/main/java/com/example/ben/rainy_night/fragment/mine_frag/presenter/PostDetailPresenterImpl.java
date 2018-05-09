@@ -20,17 +20,25 @@ public class PostDetailPresenterImpl implements PostDetailContract.Presenter {
     private PostDetailContract.View view;
     private PostModel model;
 
+    private String mObjectId;
+
     public PostDetailPresenterImpl(PostDetailContract.View view) {
         this.view = view;
         model = new PostModelImpl();
     }
 
     @Override
-    public void init() {
+    public void init(String objectId) {
+        mObjectId = objectId;
         LinearLayoutManager manager = new LinearLayoutManager(view.getCon());
-
-        view.getRecy().setNestedScrollingEnabled(false);
+        manager.setSmoothScrollbarEnabled(true);
+        manager.setAutoMeasureEnabled(true);
         view.getRecy().setLayoutManager(manager);
+        view.getRecy().setHasFixedSize(true);
+        view.getRecy().setNestedScrollingEnabled(false);
+
+        model.queryPostLikes(mObjectId);
+        model.queryPostComment(mObjectId);
     }
 
     @Override
@@ -89,5 +97,10 @@ public class PostDetailPresenterImpl implements PostDetailContract.Presenter {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void addPostComment(String comment) {
+        model.addPostComment(mObjectId, comment);
     }
 }

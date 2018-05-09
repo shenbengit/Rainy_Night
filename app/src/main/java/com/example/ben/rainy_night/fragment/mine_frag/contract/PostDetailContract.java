@@ -57,8 +57,10 @@ public interface PostDetailContract {
     interface Presenter extends BasePresenter {
         /**
          * 初始化
+         *
+         * @param objectId 帖子的objectId
          */
-        void init();
+        void init(String objectId);
 
         /**
          * 获得返回的评论结果
@@ -73,5 +75,12 @@ public interface PostDetailContract {
          * @param event
          */
         void getPostLikes(OnPostLikesEvent event);
+
+        /**
+         * 给帖子添加评论
+         *
+         * @param comment 评论内容
+         */
+        void addPostComment(String comment);
     }
 }

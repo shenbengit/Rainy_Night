@@ -66,10 +66,10 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     public void onSupportVisible() {
         super.onSupportVisible();
         if (isTransparentStatusBar()) {
-            mImmersionBar.transparentStatusBar().init();
+            mImmersionBar.keyboardEnable(true).navigationBarWithKitkatEnable(false).transparentStatusBar().init();
         } else {
             if (mStatusView != null) {
-                mImmersionBar.statusBarColor(R.color.colorPrimaryDark).init();
+                mImmersionBar.keyboardEnable(true).navigationBarWithKitkatEnable(false).statusBarColor(R.color.colorPrimaryDark).init();
             }
         }
     }

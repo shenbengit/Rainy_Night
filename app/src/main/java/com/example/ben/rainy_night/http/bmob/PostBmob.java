@@ -165,7 +165,7 @@ public class PostBmob {
             UserEntity user = BmobUser.getCurrentUser(UserEntity.class);
             PostEntity post = new PostEntity();
             post.setObjectId(objectId);
-            final CommentEntity comment = new CommentEntity();
+            CommentEntity comment = new CommentEntity();
             comment.setContent(content);
             comment.setPost(post);
             comment.setUser(user);

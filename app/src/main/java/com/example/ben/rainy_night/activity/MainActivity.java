@@ -1,14 +1,21 @@
 package com.example.ben.rainy_night.activity;
 
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.os.Handler;
 import android.provider.Settings;
+import android.view.WindowManager;
 
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseActivity;
+import com.example.ben.rainy_night.event.OnActivityResultEvent;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
+import com.example.ben.rainy_night.util.LoggerUtil;
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.barlibrary.OSUtils;
+import com.gyf.barlibrary.OnKeyboardListener;
+
+import org.greenrobot.eventbus.EventBus;
 
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
@@ -35,7 +42,8 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initView() {
         mImmersionBar = ImmersionBar.with(this);
-        mImmersionBar.keyboardEnable(true).navigationBarWithKitkatEnable(false).init();
+        mImmersionBar.init();
+
         //解决华为emui3.0与3.1手机手动隐藏底部导航栏时，导航栏背景色未被隐藏的问题
         if (OSUtils.isEMUI3_1()) {
             //第一种
@@ -56,6 +64,17 @@ public class MainActivity extends BaseActivity {
     @Override
     public FragmentAnimator onCreateFragmentAnimator() {
         return new DefaultHorizontalAnimator();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /**
+         * 用EventBus向MyPersonalFragment传递onActivityResult()里返回的参数，
+         * 因为Fragment里无法执行onActivityResult()方法。
+         */
+        EventBus.getDefault().post(new OnActivityResultEvent(requestCode, resultCode, data));
     }
 
     @Override

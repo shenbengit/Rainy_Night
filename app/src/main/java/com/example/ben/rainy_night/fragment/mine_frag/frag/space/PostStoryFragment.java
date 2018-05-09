@@ -152,7 +152,7 @@ public class PostStoryFragment extends BaseFragment<PostStoryContract.Presenter>
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
-    public void getResult(OnActivityResultEvent event) {
+    public void getActivityResult(OnActivityResultEvent event) {
         presenter.onActivityResult(event.getRequestCode(), event.getResultCode(), event.getData());
     }
 
@@ -168,6 +168,7 @@ public class PostStoryFragment extends BaseFragment<PostStoryContract.Presenter>
             EventBus.getDefault().unregister(this);
         }
         mDialog.cancel();
+        _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         hideSoftInput();
     }
 

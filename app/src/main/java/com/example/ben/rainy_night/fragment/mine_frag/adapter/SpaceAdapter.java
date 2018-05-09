@@ -1,5 +1,6 @@
 package com.example.ben.rainy_night.fragment.mine_frag.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -17,7 +18,10 @@ import com.example.ben.rainy_night.widget.EnlargePictureDialog;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -32,6 +36,7 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, SpaceAdapter.View
 
     private UserEntity mEntity;
     private String mCurrentUserName;
+    private String mDate;
 
     public SpaceAdapter(@Nullable List<PostEntity> data) {
         super(R.layout.item_recycler_space, data);
@@ -39,8 +44,12 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, SpaceAdapter.View
         if (mEntity != null) {
             mCurrentUserName = mEntity.getNickName();
         }
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        mDate = format.format(date);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void convert(SpaceAdapter.ViewHolder holder, PostEntity item) {
         GlideApp.with(mContext)
@@ -49,11 +58,15 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, SpaceAdapter.View
                 .error(R.mipmap.ic_head)
                 .into(holder.civHead);
         if (TextUtils.equals(mCurrentUserName, item.getUser().getNickName())) {
-            holder.tvNick.setText("我");
+            holder.tvNick.setText(R.string.mine);
         } else {
             holder.tvNick.setText(item.getUser().getNickName());
         }
-        holder.tvTime.setText(item.getCreatedAt());
+        if (TextUtils.equals(mDate, item.getCreatedAt().substring(0, 10))) {
+            holder.tvTime.setText(mContext.getString(R.string.today) + "\t" + item.getCreatedAt().substring(11, 16));
+        } else {
+            holder.tvTime.setText(item.getCreatedAt().substring(5, 16));
+        }
         holder.tvContent.setText(item.getContent());
 
         if (item.getPictures() == null) {

@@ -19,7 +19,6 @@ import com.example.ben.rainy_night.fragment.mine_frag.model.PostModel;
 import com.example.ben.rainy_night.fragment.mine_frag.model.PostModelImpl;
 import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
 import com.example.ben.rainy_night.util.Constant;
-import com.example.ben.rainy_night.util.LoggerUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -95,14 +94,13 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
             return;
         }
         mAdapter.setEmptyView(mViewLoading);
-
+        setRefreshing(true);
         onRefresh();
     }
 
     @Override
     public void getPostData(OnPostEvent event) {
         if (TextUtils.equals(event.getResult(), Constant.OK)) {
-            LoggerUtil.e("刷新动作: " + event.getAction());
             if (TextUtils.equals(event.getAction(), Constant.REQUSET_POST_REFRESH)) {
                 if (event.getList() == null || event.getList().isEmpty()) {
                     if (isLoadFirst) {
