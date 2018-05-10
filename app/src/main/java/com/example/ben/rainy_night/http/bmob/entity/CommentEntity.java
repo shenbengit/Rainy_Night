@@ -10,6 +10,7 @@ import cn.bmob.v3.BmobObject;
  */
 
 public class CommentEntity extends BmobObject {
+    private static final long serialVersionUID = -2315610793486760531L;
     /**
      * 评论内容
      */

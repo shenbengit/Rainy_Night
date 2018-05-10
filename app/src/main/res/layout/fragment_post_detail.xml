@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -88,22 +89,28 @@
                     android:layout_margin="10dp"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tv_post_detail_likes"
+                    <CheckBox
+                        android:id="@+id/cb_post_detail_likes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="7dp"
-                        android:drawableStart="@mipmap/ic_likes"
-                        android:gravity="center" />
+                        android:button="@drawable/likes_check_bg"
+                        android:paddingLeft="5dp"
+                        android:stateListAnimator="@anim/button_press"
+                        android:text="@string/zero"
+                        android:textColor="@color/color_hint_text"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
 
-                    <TextView
-                        android:id="@+id/tv_post_detail_comment"
+                    <CheckBox
+                        android:id="@+id/cb_post_detail_comment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:drawablePadding="7dp"
-                        android:drawableStart="@mipmap/ic_comment"
-                        android:gravity="center" />
+                        android:button="@drawable/comment_check_bg"
+                        android:paddingLeft="5dp"
+                        android:stateListAnimator="@anim/button_press"
+                        android:text="@string/zero"
+                        android:textColor="@color/color_hint_text"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
 
                 </LinearLayout>
 
@@ -112,12 +119,40 @@
                     android:layout_height="0.1dp"
                     android:background="@color/tab_unselect" />
 
+                <TextView
+                    android:id="@+id/tv_post_detail_comment_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="@string/excellent_comment"
+                    android:textColor="@color/colorTextContent" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/tab_unselect" />
+
+                <LinearLayout
+                    android:id="@+id/linear_no_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:gravity="center"
+                        android:text="@string/no_comment"
+                        android:textSize="17sp" />
+                </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recy_post_detail"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp">
 
                 </android.support.v7.widget.RecyclerView>
             </LinearLayout>

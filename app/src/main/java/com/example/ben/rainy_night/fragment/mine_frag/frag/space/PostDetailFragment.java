@@ -10,8 +10,11 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.ben.rainy_night.GlideApp;
@@ -20,11 +23,14 @@ import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.event.OnPostCommentEvent;
 import com.example.ben.rainy_night.event.OnPostLikesEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.PostDetailContract;
+import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.PostDetailPresenterImpl;
 import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
+import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 import com.example.ben.rainy_night.widget.EnlargePictureDialog;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
+import com.vondear.rxtools.view.dialog.RxDialogSure;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -36,9 +42,12 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import de.hdodenhof.circleimageview.CircleImageView;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
  * @author Ben
@@ -60,10 +69,14 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
     TextView tvPostDetailContent;
     @BindView(R.id.nglv_post_detail_images)
     NineGridImageView<BmobFile> nglvPostDetailImages;
-    @BindView(R.id.tv_post_detail_likes)
-    TextView tvPostDetailLikes;
-    @BindView(R.id.tv_post_detail_comment)
-    TextView tvPostDetailComment;
+    @BindView(R.id.cb_post_detail_likes)
+    CheckBox cbPostDetailLikes;
+    @BindView(R.id.cb_post_detail_comment)
+    CheckBox cbPostDetailComment;
+    @BindView(R.id.tv_post_detail_comment_list)
+    TextView tvPostDetailCommentList;
+    @BindView(R.id.linear_no_comment)
+    LinearLayout linearNoComment;
     @BindView(R.id.recy_post_detail)
     RecyclerView recyPostDetail;
     @BindView(R.id.nsv_post_detail)
@@ -73,21 +86,49 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
     @BindView(R.id.et_post_detail_comment)
     EditText etPostDetailComment;
 
+    @OnCheckedChanged({R.id.cb_post_detail_likes, R.id.cb_post_detail_comment})
+    public void viewOnCheckChanged(CompoundButton button, boolean isChecked) {
+        switch (button.getId()) {
+            case R.id.cb_post_detail_likes:
+                if (mUserEntity == null) {
+                    cbPostDetailLikes.setChecked(false);
+                    showLoginDialog();
+                    return;
+                }
+                presenter.setPostLikes(isChecked);
+                break;
+            case R.id.cb_post_detail_comment:
+                if (mUserEntity == null) {
+                    showLoginDialog();
+                    return;
+                }
+                showSoftInput(etPostDetailComment);
+                break;
+            default:
+                break;
+        }
+    }
+
     @OnClick({R.id.btn_post_detail_send})
     public void viewOnClick(View view) {
         switch (view.getId()) {
             case R.id.btn_post_detail_send:
-                if (TextUtils.isEmpty(etPostDetailComment.getText().toString().trim())){
-                    toastShow("请输入评论内容");
+                if (mUserEntity == null) {
+                    showLoginDialog();
                     return;
                 }
-
+                if (TextUtils.isEmpty(etPostDetailComment.getText().toString().trim())) {
+                    showLoginDialog();
+                    return;
+                }
                 presenter.addPostComment(etPostDetailComment.getText().toString().trim());
                 break;
             default:
                 break;
         }
     }
+
+    private RxDialogSure mDialog;
 
     private NineGridImageViewAdapter<BmobFile> mAdapter = new NineGridImageViewAdapter<BmobFile>() {
         @Override
@@ -117,6 +158,7 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
     }
 
     private PostEntity mEntity;
+    private boolean isFirstIn = true;
 
     @Override
     protected int getLayout() {
@@ -131,6 +173,11 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
+        //为SwipeRefreshLayout设置刷新时的颜色变化，最多可以设置4种
+        srlPostDetail.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         baseToolbar.setTitle("详情");
         initToolbarNav(baseToolbar);
@@ -146,14 +193,35 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
 
     }
 
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        mUserEntity = BmobUser.getCurrentUser(UserEntity.class);
+        presenter.getCurrentUser(mUserEntity);
+        if (!isFirstIn) {
+            loadPostDetail();
+            presenter.loadCommentData();
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onEnterAnimationEnd(Bundle savedInstanceState) {
         super.onEnterAnimationEnd(savedInstanceState);
         _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        loadPostDetail();
+        isFirstIn = false;
         assert mEntity != null;
         presenter.init(mEntity.getObjectId());
+        presenter.loadCommentData();
+    }
 
+    @Override
+    protected boolean isTransparentStatusBar() {
+        return false;
+    }
+
+    private void loadPostDetail() {
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         String mDate = format.format(date);
@@ -163,7 +231,7 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
                     .placeholder(R.mipmap.ic_head)
                     .error(R.mipmap.ic_head)
                     .into(civPostDetailHead);
-            if (TextUtils.equals(mUserEntity.getNickName(), mEntity.getUser().getNickName())) {
+            if (mUserEntity != null && TextUtils.equals(mUserEntity.getObjectId(), mEntity.getUser().getObjectId())) {
                 tvPostDetailNick.setText(R.string.mine);
             } else {
                 tvPostDetailNick.setText(mEntity.getUser().getNickName());
@@ -179,9 +247,19 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
         }
     }
 
-    @Override
-    protected boolean isTransparentStatusBar() {
-        return false;
+    private void showLoginDialog() {
+        if (mDialog == null) {
+            mDialog = new RxDialogSure(_mActivity);
+            mDialog.setTitle("提示");
+            mDialog.setContent("请先登录");
+            mDialog.setSureListener(v -> {
+                start(LoginFragment.newInstance());
+                mDialog.cancel();
+            });
+        }
+        if (!mDialog.isShowing()) {
+            mDialog.show();
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
@@ -230,7 +308,7 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
     }
 
     @Override
-    public SwipeRefreshLayout getSwipRefresh() {
+    public SwipeRefreshLayout getSwipeRefresh() {
         return srlPostDetail;
     }
 
@@ -240,12 +318,32 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
     }
 
     @Override
-    public TextView getTextLikes() {
-        return tvPostDetailLikes;
+    public CheckBox getCheckLikes() {
+        return cbPostDetailLikes;
     }
 
     @Override
-    public TextView getTextComment() {
-        return tvPostDetailComment;
+    public CheckBox getCheckComment() {
+        return cbPostDetailComment;
+    }
+
+    @Override
+    public TextView getTextCommentList() {
+        return tvPostDetailCommentList;
+    }
+
+    @Override
+    public LinearLayout getLinearNoComment() {
+        return linearNoComment;
+    }
+
+    @Override
+    public EditText getPostComment() {
+        return etPostDetailComment;
+    }
+
+    @Override
+    public void startBrotherFragment(ISupportFragment fragment) {
+        start(fragment);
     }
 }

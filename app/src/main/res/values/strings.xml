@@ -57,6 +57,9 @@
     <string name="send">发送</string>
     <string name="mine">我</string>
     <string name="today">今天</string>
+    <string name="zero">0</string>
+    <string name="no_comment"><![CDATA[空无一人快去,抢沙发吧 >o<!!]]></string>
+    <string name="excellent_comment">精彩评论</string>
 
     <string-array name="music_time">
         <item>0</item>

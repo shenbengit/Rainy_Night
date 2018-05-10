@@ -12,6 +12,7 @@ import cn.bmob.v3.datatype.BmobFile;
 
 public class UserEntity extends BmobUser {
 
+    private static final long serialVersionUID = 4490757709998655360L;
     /**
      * 设置昵称
      */

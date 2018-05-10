@@ -20,6 +20,7 @@ import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
 import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
+import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
 import com.lzy.okgo.OkGo;
@@ -47,7 +48,7 @@ public class SleepFmPresenterImpl implements SleepFmContract.Presenter, OnPlayer
     private int mAlbumsId;
     private String mCacheKey;
 
-    private int[] mPageRows = new int[]{ 87, 27,33, 99};
+    private int[] mPageRows = new int[]{87, 27, 33, 99};
     private int mPageRow;
 
     private int mFirstItemPosition;
@@ -163,7 +164,24 @@ public class SleepFmPresenterImpl implements SleepFmContract.Presenter, OnPlayer
             }
         });
 
-        mAdapter.setOnItemClickListener((adapter, view1, position) -> MusicActionManager.getInstance().start(mCacheKey, position));
+        mAdapter.setOnItemClickListener((adapter, v, position) -> {
+            MusicActionManager.getInstance().start(mCacheKey, position);
+            SleepFmEntity.DataBean.ListBeanX bean = mLists.get(position);
+            String musicName;
+            if (bean.getMediaName().contains("【海豚FM说晚安】")) {
+                musicName = bean.getMediaName().replace("【海豚FM说晚安】", "").trim();
+            } else if (bean.getMediaName().contains("【耐撕の人】")) {
+                musicName = bean.getMediaName().replace("【耐撕の人】", "").trim();
+            } else {
+                musicName = bean.getMediaName().trim();
+            }
+            SharedPreferencesUtil.getInstance(view.getCon().getApplicationContext())
+                    .putValue(Constant.LATEST_MUSIC_TYPE, mCacheKey);
+            SharedPreferencesUtil.getInstance(view.getCon().getApplicationContext())
+                    .putValue(Constant.LATEST_MUSIC_NAME, musicName);
+            SharedPreferencesUtil.getInstance(view.getCon().getApplicationContext())
+                    .putValue(Constant.LATEST_MUSIC_POSITION, position);
+        });
     }
 
     /**

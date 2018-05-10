@@ -1,6 +1,7 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag.space;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,8 @@ import com.example.ben.rainy_night.fragment.mine_frag.contract.SpaceContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.SpacePresenterImpl;
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
+import com.example.ben.rainy_night.util.LoggerUtil;
+import com.vondear.rxtools.view.dialog.RxDialogSure;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -49,14 +52,14 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
                 break;
             case R.id.civ_space_head:
                 if (mUserEntity == null) {
-                    start(LoginFragment.newInstance());
+                    showLoginDialog();
                 } else {
                     toastShow("个人空间暂未开放");
                 }
                 break;
             case R.id.fab_space:
                 if (mUserEntity == null) {
-                    start(LoginFragment.newInstance());
+                    showLoginDialog();
                 } else {
                     start(PostStoryFragment.newInstance());
                 }
@@ -65,6 +68,8 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
                 break;
         }
     }
+    private RxDialogSure mDialog;
+    private boolean isFirstIn = true;
 
     public static SpaceFragment newInstance() {
         return new SpaceFragment();
@@ -92,13 +97,11 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
-
         //为SwipeRefreshLayout设置刷新时的颜色变化，最多可以设置4种
         srlSpace.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
     }
 
     /**
@@ -131,8 +134,17 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
         } else {
             civSpaceHead.setImageResource(R.mipmap.ic_head);
         }
+        if (!isFirstIn) {
+            presenter.loadData();
+            LoggerUtil.e("onSupportVisible:加载帖子数据");
+        }
+    }
 
+    @Override
+    public void onEnterAnimationEnd(Bundle savedInstanceState) {
+        super.onEnterAnimationEnd(savedInstanceState);
         presenter.loadData();
+        isFirstIn = false;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
@@ -140,6 +152,20 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
         presenter.getPostData(event);
     }
 
+    private void showLoginDialog() {
+        if (mDialog == null) {
+            mDialog = new RxDialogSure(_mActivity);
+            mDialog.setTitle("提示");
+            mDialog.setContent("请先登录");
+            mDialog.setSureListener(v -> {
+                start(LoginFragment.newInstance());
+                mDialog.cancel();
+            });
+        }
+        if (!mDialog.isShowing()) {
+            mDialog.show();
+        }
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

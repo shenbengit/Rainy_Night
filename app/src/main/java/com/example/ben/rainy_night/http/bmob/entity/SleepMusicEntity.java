@@ -10,6 +10,7 @@ import cn.bmob.v3.BmobObject;
  */
 
 public class SleepMusicEntity extends BmobObject {
+    private static final long serialVersionUID = 4160780923373888455L;
     /**
      * 标题
      */

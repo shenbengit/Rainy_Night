@@ -44,7 +44,6 @@ public class SleepFmAdapter extends BaseQuickAdapter<SleepFmEntity.DataBean.List
         holder.tvTime.setText(RxTimeTool.formatTime((long) (item.getList().get(0).getDuration() * 1000)));
 
         if (MusicActionManager.getInstance().isCurrMusicIsPlayingMusic(holder.tvName.getText().toString())) {
-            LoggerUtil.e(MusicManager.get().getCurrPlayingMusic().getSongName());
             holder.tvName.setTextColor(mContext.getResources().getColor(R.color.color_fm_playing));
             holder.ivAnim.setVisibility(View.VISIBLE);
             holder.tvNumber.setVisibility(View.GONE);

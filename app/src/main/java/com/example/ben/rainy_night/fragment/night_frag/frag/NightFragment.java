@@ -76,17 +76,7 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
     public void viewOnClick(View view) {
         switch (view.getId()) {
             case R.id.ib_night_music_play:
-                if (isPlaying) {
-                    MusicActionManager.getInstance().pause();
-                    ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_play);
-                    ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_play);
-                    isPlaying = false;
-                } else {
-                    MusicActionManager.getInstance().resume();
-                    ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_pause);
-                    ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_pause);
-                    isPlaying = true;
-                }
+                musicPlayAction();
                 break;
             case R.id.ib_night_music_previous:
                 MusicActionManager.getInstance().startPrevious();
@@ -114,17 +104,7 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
                 setRemainTime(mPositionTime);
                 break;
             case R.id.ib_toolbar_play:
-                if (isPlaying) {
-                    MusicActionManager.getInstance().pause();
-                    ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_play);
-                    ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_play);
-                    isPlaying = false;
-                } else {
-                    MusicActionManager.getInstance().resume();
-                    ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_pause);
-                    ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_pause);
-                    isPlaying = true;
-                }
+                musicPlayAction();
                 break;
             case R.id.ib_toolbar_next:
                 MusicActionManager.getInstance().startNext();
@@ -142,6 +122,9 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
 
     private boolean isPlaying = false;
     private boolean isSingleCycle = false;
+    private String mMusicType;
+    private String mMusicName;
+    private int mMusicPosition;
 
     private int[] mRemainTimes = new int[]{R.mipmap.ic_time_zz, R.mipmap.ic_time_10, R.mipmap.ic_time_20, R.mipmap.ic_time_30};
     private int mPositionTime;
@@ -162,6 +145,12 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
 
     @Override
     public void initView() {
+        mMusicType = String.valueOf(SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(Constant.LATEST_MUSIC_TYPE, Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE));
+        mMusicName = String.valueOf(SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(Constant.LATEST_MUSIC_NAME, "《不情愿》「为你读诗」：李乃文（演员）"));
+        mMusicPosition = (int) SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(Constant.LATEST_MUSIC_POSITION, 0);
+        tvNightMusicName.setText(mMusicName);
+        tvToolbarMusicName.setText(mMusicName);
+
         mDrawable = (AnimationDrawable) ivNightMusicBg.getDrawable();
         tvNightMusicName.setSelected(true);
         tvToolbarMusicName.setSelected(true);
@@ -246,11 +235,32 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
         tabNight.setupWithViewPager(vpNight);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mManager.onRemoveUpdateProgressTask();
-        MusicActionManager.getInstance().removePlayerEventListener(this);
+    /**
+     * 控制音乐播放、暂停
+     */
+    private void musicPlayAction() {
+        if (MusicActionManager.getInstance().getCurrentMediaInfo() == null) {
+            if (!TextUtils.equals(MusicActionManager.getInstance().getCurrentMusicType(), mMusicType)) {
+                MusicActionManager.getInstance().setData(mMusicType);
+            }
+            MusicActionManager.getInstance().start(mMusicType, mMusicPosition);
+            ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_pause);
+            ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_pause);
+            isPlaying = true;
+            return;
+        }
+
+        if (isPlaying) {
+            MusicActionManager.getInstance().pause();
+            ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_play);
+            ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_play);
+            isPlaying = false;
+        } else {
+            MusicActionManager.getInstance().resume();
+            ibNightMusicPlay.setBackgroundResource(R.mipmap.ic_night_pause);
+            ibToolbarPlay.setBackgroundResource(R.mipmap.ic_night_pause);
+            isPlaying = true;
+        }
     }
 
     /**
@@ -306,6 +316,13 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
         long progress = MusicActionManager.getInstance().getProgress();
         sbNightProgress.setProgress((int) progress);
         tvNightNowTime.setText(RxTimeTool.formatTime((progress)));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mManager.onRemoveUpdateProgressTask();
+        MusicActionManager.getInstance().removePlayerEventListener(this);
     }
 
     @Override

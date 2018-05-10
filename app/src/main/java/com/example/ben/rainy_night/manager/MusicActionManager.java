@@ -289,7 +289,7 @@ public class MusicActionManager {
 
     public SongInfo getCurrentMediaInfo() {
         if (mListener != null) {
-            mListener.getCurrentMediaInfo();
+           return mListener.getCurrentMediaInfo();
         }
         return null;
     }

@@ -217,7 +217,8 @@ public class PostBmob {
             PostEntity post = new PostEntity();
             post.setObjectId(objectId);
             query.addWhereEqualTo("post", new BmobPointer(post));
-            query.include("user,post.author");
+            query.include("user,post");
+            query.order("-createdAt");
             query.findObjects(new FindListener<CommentEntity>() {
                 @Override
                 public void done(List<CommentEntity> list, BmobException e) {
@@ -301,9 +302,9 @@ public class PostBmob {
                 @Override
                 public void done(List<UserEntity> list, BmobException e) {
                     if (e == null) {
-                        EventBus.getDefault().post(new OnPostLikesEvent(Constant.ACTION_REMOVE, list, Constant.OK));
+                        EventBus.getDefault().post(new OnPostLikesEvent(Constant.ACTION_QUERY, list, Constant.OK));
                     } else {
-                        EventBus.getDefault().post(new OnPostLikesEvent(Constant.ACTION_REMOVE, e.getMessage() + ",ErrorCode: " + e.getErrorCode()));
+                        EventBus.getDefault().post(new OnPostLikesEvent(Constant.ACTION_QUERY, e.getMessage() + ",ErrorCode: " + e.getErrorCode()));
                     }
                 }
             });

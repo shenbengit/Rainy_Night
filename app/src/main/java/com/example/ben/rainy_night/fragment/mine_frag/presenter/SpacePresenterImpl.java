@@ -94,7 +94,9 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
             return;
         }
         mAdapter.setEmptyView(mViewLoading);
-        setRefreshing(true);
+        if (!mAdapter.isLoginUser()) {
+            mAdapter.setCurrentUser();
+        }
         onRefresh();
     }
 

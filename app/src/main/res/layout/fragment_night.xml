@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
+            android:stateListAnimator="@null"
             app:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.design.widget.CollapsingToolbarLayout
@@ -57,7 +58,6 @@
                             android:gravity="center"
                             android:marqueeRepeatLimit="marquee_forever"
                             android:singleLine="true"
-                            android:text="夏夜"
                             android:textColor="@color/colorWhite" />
 
                         <de.hdodenhof.circleimageview.CircleImageView
@@ -96,10 +96,11 @@
                             android:layout_toEndOf="@+id/civ_night_cover"
                             android:background="@null"
                             android:src="@mipmap/ic_night_next" />
+
                         <LinearLayout
-                            android:layout_below="@+id/civ_night_cover"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_below="@+id/civ_night_cover"
                             android:layout_marginTop="70dp"
                             android:orientation="horizontal">
 
@@ -232,7 +233,6 @@
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
-                android:text="夏夜"
                 android:textColor="@color/colorWhite" />
 
             <ImageButton

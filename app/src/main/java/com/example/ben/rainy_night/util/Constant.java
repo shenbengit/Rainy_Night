@@ -53,7 +53,16 @@ public class Constant {
     public static final String ACTION_FAVORITE = "com.lzx.nicemusic.android.Action_FAVORITE";
     public static final String ACTION_LYRICS = "com.lzx.nicemusic.android.Action_Lyrics";
 
+    /**
+     * 助眠界面相关，记录最近一次播放音乐的位置
+     */
+    public static final String LATEST_MUSIC_TYPE = "LATEST_MUSIC_TYPE";
+    public static final String LATEST_MUSIC_NAME = "LATEST_MUSIC_NAME";
+    public static final String LATEST_MUSIC_POSITION = "LATEST_MUSIC_POSITION";
 
+    /**
+     * 请求码
+     */
     public static final int REQUEST_IMAGE = 188;
     public static final int MAX_PICTURES = 6;
     public static final int REQUEST_POP = 99;
@@ -77,12 +86,12 @@ public class Constant {
 
     public static final String ADD_POST_PICTURE = "ADD_POST_PICTURE";
 
-    public static final String POST_COMMENT="POST_COMMENT";
-    public static final String POST_LIKES="POST_LIKES";
+    public static final String POST_COMMENT = "POST_COMMENT";
+    public static final String POST_LIKES = "POST_LIKES";
 
-    public static final String ACTION_ADD="ACTION_ADD";
-    public static final String ACTION_REMOVE="ACTION_REMOVE";
-    public static final String ACTION_QUERY="ACTION_QUERY";
+    public static final String ACTION_ADD = "ACTION_ADD";
+    public static final String ACTION_REMOVE = "ACTION_REMOVE";
+    public static final String ACTION_QUERY = "ACTION_QUERY";
 
     /**
      * 海豚睡眠 api接口
@@ -103,9 +112,9 @@ public class Constant {
     public static final String DOLPHIN_NATURAL_MUSIC_CACHE = "dolphin_music1";
     public static final String DOLPHIN_LIGHT_MUSIC_CACHE = "dolphin_music2";
 
-    public static final String DOLPHIN_HYPNOSIS_CACHE = "催眠ASMR";
     public static final String DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE = "睡前伴读";
     public static final String DOLPHIN_NICE_PEOPLE_CACHE = "耐撕の人";
+    public static final String DOLPHIN_HYPNOSIS_CACHE = "催眠ASMR";
     public static final String DOLPHIN_SAY_GOOG_NIGHT_CACHE = "说晚安";
 
     /**
