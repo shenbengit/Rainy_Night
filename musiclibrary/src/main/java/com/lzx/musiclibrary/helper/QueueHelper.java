@@ -3,11 +3,9 @@ package com.lzx.musiclibrary.helper;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.lzx.musiclibrary.aidl.model.SongInfo;
 import com.lzx.musiclibrary.playback.PlaybackManager;
-import com.lzx.musiclibrary.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +22,6 @@ public class QueueHelper {
     }
 
     private static MediaMetadataCompat getMediaMetadataCompat(SongInfo info) {
-        Log.e("QueueHelper", "getMediaMetadataCompat: "+info.getSongCover());
         MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
         builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, info.getSongId())
                 .putString("__SOURCE__", info.getSongUrl())
