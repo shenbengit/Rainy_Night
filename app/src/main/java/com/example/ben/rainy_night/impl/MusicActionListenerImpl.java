@@ -293,9 +293,6 @@ public class MusicActionListenerImpl implements MusicActionListener {
             if (playMode > 0) {
                 MusicManager.get().setPlayMode(playMode);
             }
-            for (SongInfo info: mListCurrent) {
-                Log.e("MusicActionListenerImpl", "start: "+info.getSongCover() );
-            }
             MusicManager.get().playMusic(mListCurrent, position);
         }
     }
