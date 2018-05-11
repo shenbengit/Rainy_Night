@@ -3,6 +3,7 @@ package com.lzx.musiclibrary.helper;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.lzx.musiclibrary.aidl.model.SongInfo;
 import com.lzx.musiclibrary.playback.PlaybackManager;
@@ -23,9 +24,9 @@ public class QueueHelper {
     }
 
     private static MediaMetadataCompat getMediaMetadataCompat(SongInfo info) {
+        Log.e("QueueHelper", "getMediaMetadataCompat: "+info.getSongCover());
         MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
-        builder
-                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, info.getSongId())
+        builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, info.getSongId())
                 .putString("__SOURCE__", info.getSongUrl())
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, info.getArtist())
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, info.getDuration())
@@ -34,8 +35,7 @@ public class QueueHelper {
                 .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, info.getTrackNumber())
                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, info.getSongCoverBitmap());
         if (info.getAlbumInfo() != null) {
-            builder
-                    .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, info.getAlbumInfo().getAlbumName())
+            builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, info.getAlbumInfo().getAlbumName())
                     .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, info.getAlbumInfo().getAlbumCover())
                     .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, info.getAlbumInfo().getSongCount());
         }

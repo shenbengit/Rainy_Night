@@ -293,6 +293,9 @@ public class MusicActionListenerImpl implements MusicActionListener {
             if (playMode > 0) {
                 MusicManager.get().setPlayMode(playMode);
             }
+            for (SongInfo info: mListCurrent) {
+                Log.e("MusicActionListenerImpl", "start: "+info.getSongCover() );
+            }
             MusicManager.get().playMusic(mListCurrent, position);
         }
     }
@@ -541,6 +544,7 @@ public class MusicActionListenerImpl implements MusicActionListener {
                 } else {
                     info.setSongName(bean.getMediaName());
                 }
+                info.setSongCover(Constant.MUSIC_SQUARE_COVER);
                 info.setFavorites(bean.getList().get(0).getCumulativeNum());
                 info.setSongId(String.valueOf(bean.getList().get(0).getMediaId()));
                 info.setDuration((long) (bean.getList().get(0).getDuration() * 1000));
@@ -567,6 +571,7 @@ public class MusicActionListenerImpl implements MusicActionListener {
                 for (MusicEntity.DataBean bean : beans) {
                     SongInfo info = new SongInfo();
                     info.setSongName(bean.getSceneName());
+                    info.setSongCover(Constant.MUSIC_SQUARE_COVER);
                     info.setSize(String.valueOf(bean.getAudioSize()));
                     info.setSongId(String.valueOf(bean.getSceneId()));
                     info.setSongUrl(URLDecoder.decode(bean.getAudioUrl()));
@@ -587,6 +592,7 @@ public class MusicActionListenerImpl implements MusicActionListener {
                     } else {
                         info.setSongName(bean.getMediaName());
                     }
+                    info.setSongCover(Constant.MUSIC_SQUARE_COVER);
                     info.setFavorites(bean.getList().get(0).getCumulativeNum());
                     info.setSongId(String.valueOf(bean.getList().get(0).getMediaId()));
                     info.setDuration((long) (bean.getList().get(0).getDuration() * 1000));

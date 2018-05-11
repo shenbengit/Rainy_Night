@@ -61,6 +61,11 @@ public class Constant {
     public static final String LATEST_MUSIC_POSITION = "LATEST_MUSIC_POSITION";
 
     /**
+     * 音乐专辑封面(方形)
+     */
+    public static final String MUSIC_SQUARE_COVER = "http://bmob-cdn-16440.b0.upaiyun.com/2018/05/11/f862f3204094069880c9046c0003006b.png";
+
+    /**
      * 请求码
      */
     public static final int REQUEST_IMAGE = 188;
