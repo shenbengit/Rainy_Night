@@ -1,4 +1,4 @@
-package com.example.ben.rainy_night.fragment.share_frag.presenter;
+package com.example.ben.rainy_night.fragment.home_frag.presenter;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -11,55 +11,52 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.ben.rainy_night.R;
-import com.example.ben.rainy_night.fragment.share_frag.adapter.SleepReadListAdapter;
-import com.example.ben.rainy_night.fragment.share_frag.contract.SleepReadContract;
-import com.example.ben.rainy_night.fragment.share_frag.frag.analysis.WebViewFragment;
+import com.example.ben.rainy_night.fragment.home_frag.adapter.SleepMusicListAdapter;
+import com.example.ben.rainy_night.fragment.home_frag.contract.SleepNaturalMusicContract;
+import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicVideoFragment;
 import com.example.ben.rainy_night.http.bmob.entity.SleepMusicEntity;
 import com.example.ben.rainy_night.http.bmob.model.SleepMusicModel;
 import com.example.ben.rainy_night.http.bmob.model.SleepMusicModelImpl;
-import com.example.ben.rainy_night.http.okgo.entity.SleepReadEntity;
+import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
+import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.GsonUtil;
-import com.example.ben.rainy_night.util.LoggerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Ben
- * @date 2018/4/22
+ * @date 2018/3/28
  */
 
-public class SleepReadPresenterImpl implements SleepReadContract.Presenter {
+public class SleepNaturalMusicPresenterImpl implements SleepNaturalMusicContract.Presenter {
 
-    private SleepReadContract.View view;
+    private SleepNaturalMusicContract.View view;
     private SleepMusicModel model;
-    private String mTitle;
-    private SleepReadEntity mEntity;
-    private SleepReadListAdapter mAdapter;
-    private List<SleepReadEntity.DataBean> mList;
-
+    private SleepMusicListAdapter mAdapter;
+    private List<MusicEntity.DataBean> mLists;
     private View mViewNetError;
     private View mViewDataError;
     private View mViewLoading;
     private View mViewNoMoreData;
 
-    public SleepReadPresenterImpl(SleepReadContract.View view) {
+    /**
+     * 音乐类型
+     */
+    private String mSceneType;
+
+    public SleepNaturalMusicPresenterImpl(SleepNaturalMusicContract.View view) {
         this.view = view;
         model = new SleepMusicModelImpl();
     }
 
-    /**
-     * 初始化
-     * * @param title 标题
-     *
-     * @param title
-     */
     @Override
-    public void init(String title) {
-        mTitle = title;
-        mList = new ArrayList<>();
-        mAdapter = new SleepReadListAdapter(mList);
+    public void initRecyclerView(String sceneType) {
+        mSceneType = sceneType;
+
+        mLists = new ArrayList<>();
+        mAdapter = new SleepMusicListAdapter(mLists);
         LinearLayoutManager manager = new LinearLayoutManager(view.getCon(),
                 LinearLayoutManager.VERTICAL, false);
         view.getRecycler().setItemAnimator(new DefaultItemAnimator());
@@ -71,7 +68,7 @@ public class SleepReadPresenterImpl implements SleepReadContract.Presenter {
                 .inflate(R.layout.layout_net_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewNetError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
-            new Handler(Looper.getMainLooper()).postDelayed(this::requsetSleepReadList, 1000);
+            new Handler(Looper.getMainLooper()).postDelayed(this::requsetMusic, 1000);
         });
 
         mViewLoading = LayoutInflater.from(view.getCon())
@@ -81,55 +78,44 @@ public class SleepReadPresenterImpl implements SleepReadContract.Presenter {
                 .inflate(R.layout.layout_data_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewDataError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
-            new Handler(Looper.getMainLooper()).postDelayed(this::requsetSleepReadList, 1000);
+            new Handler(Looper.getMainLooper()).postDelayed(this::requsetMusic, 1000);
         });
 
         mViewNoMoreData = LayoutInflater.from(view.getCon())
                 .inflate(R.layout.layout_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
 
-        mAdapter.setOnItemClickListener((adapter, v, position) -> view.startBrotherFragment(WebViewFragment.newInstance(mList.get(position).getArticleTitle(), mList.get(position).getArticleUrl())));
-
+        mAdapter.setOnItemClickListener((adapter, v, position) -> {
+            view.startBrotherFragment(SleepMusicVideoFragment.newInstance(position));
+        });
     }
 
-    /**
-     * 获取睡眠报告列表
-     */
     @Override
-    public void requsetSleepReadList() {
+    public void requsetMusic() {
         if (!view.isNetworkAvailable()) {
             mAdapter.setEmptyView(mViewNetError);
             return;
         }
-        if (TextUtils.isEmpty(mTitle)) {
-            LoggerUtil.e("SleepReadFragment 请传入标题");
+        if (TextUtils.isEmpty(mSceneType)) {
             mAdapter.setEmptyView(mViewDataError);
             return;
         }
         mAdapter.setEmptyView(mViewLoading);
-        model.querySleepMusic(mTitle);
+        model.querySleepMusic(mSceneType);
+
     }
 
-    /**
-     * 获取睡眠报告列表数据
-     *
-     * @param result 返回是否成功
-     * @param entity 数据
-     */
     @Override
-    public void getSleepReadListData(String result, SleepMusicEntity entity) {
+    public void getNaturalMusicData(String result, SleepMusicEntity entity) {
         if (TextUtils.equals(result, Constant.OK)) {
-            if (TextUtils.equals(entity.getTitle(), mTitle)) {
-                if (!TextUtils.isEmpty(entity.getJson())) {
-                    mList.clear();
-                    mEntity = GsonUtil.fromJson(entity.getJson(), SleepReadEntity.class);
-                    if (mEntity != null) {
-                        mList.addAll(mEntity.getData());
-                        if (mList.isEmpty()) {
-                            mAdapter.setEmptyView(mViewDataError);
-                            return;
-                        }
-                        mAdapter.setNewData(mList);
-                        mAdapter.addFooterView(mViewNoMoreData);
+            if (TextUtils.equals(entity.getTitle(), mSceneType)) {
+                MusicEntity bean = GsonUtil.fromJson(entity.getJson(), MusicEntity.class);
+                if (bean != null) {
+                    mLists.clear();
+                    mLists.addAll(bean.getData());
+                    if (!mLists.isEmpty()) {
+                        mAdapter.setNewData(mLists);
+                        MusicActionManager.getInstance().setData(mSceneType,bean);
+                        mAdapter.setFooterView(mViewNoMoreData);
                     } else {
                         mAdapter.setEmptyView(mViewDataError);
                     }
@@ -138,17 +124,8 @@ public class SleepReadPresenterImpl implements SleepReadContract.Presenter {
                 }
             }
         } else {
-            mAdapter.setEmptyView(mViewDataError);
             view.showToast(result);
+            mAdapter.setEmptyView(mViewDataError);
         }
-    }
-
-
-    /**
-     * 销毁操作
-     */
-    @Override
-    public void onDestroy() {
-
     }
 }

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.ben.rainy_night.base.BasePresenter;
 import com.example.ben.rainy_night.base.BaseView;
+import com.example.ben.rainy_night.http.bmob.entity.SleepMusicEntity;
 
 import me.yokeyword.fragmentation.ISupportFragment;
 
@@ -13,7 +14,7 @@ import me.yokeyword.fragmentation.ISupportFragment;
  * @date 2018/3/28
  */
 
-public interface SleepMusicListContract {
+public interface SleepLightMusicContract {
 
     interface View extends BaseView {
         /**
@@ -54,8 +55,16 @@ public interface SleepMusicListContract {
         void initRecyclerView(String sceneType);
 
         /**
-         * 获取音乐数据
+         * 请求音乐数据
          */
-        void getMusic();
+        void requsetMusic();
+
+        /**
+         * 获取轻音乐数据
+         *
+         * @param result 结果返回是否成功
+         * @param entity 数据
+         */
+        void getLightMusicData(String result, SleepMusicEntity entity);
     }
 }

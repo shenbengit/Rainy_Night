@@ -5,7 +5,14 @@ import com.devbrackets.android.exomedia.core.video.scale.ScaleType;
 import com.example.ben.rainy_night.GlideApp;
 import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicVideoContract;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
+import com.example.ben.rainy_night.manager.MusicActionManager;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.HttpProxyUtil;
+import com.example.ben.rainy_night.util.LoggerUtil;
+import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
+import com.lzx.musiclibrary.aidl.model.SongInfo;
+import com.lzy.okgo.cache.CacheEntity;
+import com.lzy.okgo.db.CacheManager;
 
 import java.net.URLDecoder;
 
@@ -14,22 +21,30 @@ import java.net.URLDecoder;
  * @date 2018/3/29
  */
 
-public class SleepMusicVideoPresenterImpl implements SleepMusicVideoContract.Presenter {
+public class SleepMusicVideoPresenterImpl implements SleepMusicVideoContract.Presenter, OnPlayerEventListener {
 
     private SleepMusicVideoContract.View view;
     private HttpProxyCacheServer mServer;
     private MusicEntity mEntity;
     private int mPosition;
+    private boolean isChanged = false;
 
     public SleepMusicVideoPresenterImpl(SleepMusicVideoContract.View view) {
         this.view = view;
     }
 
     @Override
-    public void initProxy(int position) {
+    public void init(int position) {
         mServer = HttpProxyUtil.getProxy(view.getCon().getApplicationContext());
         mPosition = position;
-        mEntity = view.getEntity();
+        CacheEntity<MusicEntity> cache = CacheManager.getInstance().get(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, MusicEntity.class);
+        if (cache != null) {
+            mEntity = cache.getData();
+        }
+        MusicActionManager.getInstance().addPlayerEventListener(this);
+        MusicActionManager.getInstance().setVolume(0.4f);
+        MusicActionManager.getInstance().setPlayMode(Constant.PLAY_IN_SINGLE_LOOP);
+        MusicActionManager.getInstance().setPlayList(Constant.DOLPHIN_NATURAL_MUSIC_CACHE);
     }
 
     @Override
@@ -38,22 +53,34 @@ public class SleepMusicVideoPresenterImpl implements SleepMusicVideoContract.Pre
     }
 
     @Override
-    public void resumeVideo() {
+    public void onSupportVisible() {
+        MusicActionManager.getInstance().pause();
+        if (isChanged) {
+            start(mPosition);
+            return;
+        }
         if (!view.getVideoView().isPlaying()) {
             view.getVideoView().start();
         }
     }
 
     @Override
-    public void pauseVideo() {
+    public void onSupportInVisible() {
         if (view.getVideoView().isPlaying()) {
             view.getVideoView().pause();
+        }
+        if (!MusicActionManager.getInstance().isCurrMusicIsPlayingMusic(mEntity.getData().get(mPosition).getSceneName())) {
+            MusicActionManager.getInstance().startWithIndex(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, mPosition);
+            MusicActionManager.getInstance().seekTo((int) view.getVideoView().getCurrentPosition());
+        } else {
+            MusicActionManager.getInstance().resume();
         }
     }
 
     @Override
-    public void stopVideo() {
+    public void onDestroy() {
         view.getVideoView().release();
+        MusicActionManager.getInstance().removePlayerEventListener(this);
     }
 
     @Override
@@ -62,6 +89,7 @@ public class SleepMusicVideoPresenterImpl implements SleepMusicVideoContract.Pre
             view.showToast("已经是第一个了哦");
             return;
         }
+        isChanged = false;
         view.getVideoView().stopPlayback();
         mPosition--;
         start(mPosition);
@@ -73,6 +101,7 @@ public class SleepMusicVideoPresenterImpl implements SleepMusicVideoContract.Pre
             view.showToast("已经是最后一个了哦");
             return;
         }
+        isChanged = false;
         view.getVideoView().stopPlayback();
         mPosition++;
         start(mPosition);
@@ -94,10 +123,48 @@ public class SleepMusicVideoPresenterImpl implements SleepMusicVideoContract.Pre
      * @param position
      */
     private void start(int position) {
+        if (view.getVideoView().isPlaying()) {
+            view.getVideoView().pause();
+        }
         view.getVideoView().setScaleType(ScaleType.FIT_XY);
         GlideApp.with(view.getCon()).load(mEntity.getData().get(position).getVideoPictureUrl()).into(view.getVideoView().getPreviewImageView());
         view.getVideoView().setVideoPath(getProxyUrl(mEntity.getData().get(position).getVideoUrl()));
         view.getVideoView().setRepeatMode(2);
         view.getVideoView().setOnPreparedListener(() -> view.getVideoView().start());
+
+        LoggerUtil.e(mEntity.getData().get(position).getVideoUrl());
+    }
+
+    @Override
+    public void onMusicSwitch(SongInfo music) {
+        if (MusicActionManager.getInstance().getCurrPlayingIndex() != mPosition) {
+            mPosition = MusicActionManager.getInstance().getCurrPlayingIndex();
+            isChanged = true;
+        }
+    }
+
+    @Override
+    public void onPlayerStart() {
+
+    }
+
+    @Override
+    public void onPlayerPause() {
+
+    }
+
+    @Override
+    public void onPlayCompletion() {
+
+    }
+
+    @Override
+    public void onError(String errorMsg) {
+
+    }
+
+    @Override
+    public void onAsyncLoading(boolean isFinishLoading) {
+
     }
 }

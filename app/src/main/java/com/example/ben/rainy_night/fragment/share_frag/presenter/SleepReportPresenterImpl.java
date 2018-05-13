@@ -2,7 +2,6 @@ package com.example.ben.rainy_night.fragment.share_frag.presenter;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -15,16 +14,15 @@ import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.fragment.share_frag.adapter.SleepReportListAdapter;
 import com.example.ben.rainy_night.fragment.share_frag.contract.SleepReportContract;
 import com.example.ben.rainy_night.http.bmob.entity.SleepMusicEntity;
+import com.example.ben.rainy_night.http.bmob.model.SleepMusicModel;
+import com.example.ben.rainy_night.http.bmob.model.SleepMusicModelImpl;
 import com.example.ben.rainy_night.http.okgo.entity.SleepReportEntity;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.GsonUtil;
 import com.example.ben.rainy_night.util.LoggerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 
 /**
  * @author Ben
@@ -33,9 +31,9 @@ import cn.bmob.v3.listener.FindListener;
 
 public class SleepReportPresenterImpl implements SleepReportContract.Presenter {
     private SleepReportContract.View view;
-
+    private SleepMusicModel model;
     private String mTitle;
-    private SleepMusicEntity mEntity;
+    private SleepReportEntity mEntity;
     private SleepReportListAdapter mAdapter;
     private List<SleepReportEntity.DataBean> mList;
 
@@ -44,34 +42,9 @@ public class SleepReportPresenterImpl implements SleepReportContract.Presenter {
     private View mViewLoading;
     private View mViewNoMoreData;
 
-    private Handler mHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-                    if (mEntity != null) {
-                        mList.clear();
-                        SleepReportEntity entity = GsonUtil.fromJson(mEntity.getJson(), SleepReportEntity.class);
-                        mList.addAll(entity.getData());
-                        if (mList.isEmpty()) {
-                            mAdapter.setEmptyView(mViewDataError);
-                            return;
-                        }
-                        mAdapter.setNewData(mList);
-                        mAdapter.addFooterView(mViewNoMoreData);
-                    } else {
-                        mAdapter.setEmptyView(mViewDataError);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
     public SleepReportPresenterImpl(SleepReportContract.View view) {
         this.view = view;
+        model = new SleepMusicModelImpl();
     }
 
 
@@ -96,7 +69,7 @@ public class SleepReportPresenterImpl implements SleepReportContract.Presenter {
                 .inflate(R.layout.layout_net_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewNetError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
-            new Handler(Looper.getMainLooper()).postDelayed(this::getSleepReportList, 1000);
+            new Handler(Looper.getMainLooper()).postDelayed(this::requsetSleepReportList, 1000);
         });
 
         mViewLoading = LayoutInflater.from(view.getCon())
@@ -110,7 +83,7 @@ public class SleepReportPresenterImpl implements SleepReportContract.Presenter {
 
         mViewDataError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
-            new Handler(Looper.getMainLooper()).postDelayed(this::getSleepReportList, 1000);
+            new Handler(Looper.getMainLooper()).postDelayed(this::requsetSleepReportList, 1000);
         });
     }
 
@@ -118,7 +91,7 @@ public class SleepReportPresenterImpl implements SleepReportContract.Presenter {
      * 获取睡眠报告列表
      */
     @Override
-    public void getSleepReportList() {
+    public void requsetSleepReportList() {
         if (!view.isNetworkAvailable()) {
             mAdapter.setEmptyView(mViewNetError);
             return;
@@ -130,22 +103,43 @@ public class SleepReportPresenterImpl implements SleepReportContract.Presenter {
             return;
         }
         mAdapter.setEmptyView(mViewLoading);
-        BmobQuery<SleepMusicEntity> query = new BmobQuery<>();
-        query.addWhereEqualTo("title", mTitle);
-        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
-        query.findObjects(new FindListener<SleepMusicEntity>() {
-            @Override
-            public void done(List<SleepMusicEntity> list, BmobException e) {
-                if (e == null) {
-                    if (!list.isEmpty()) {
-                        mEntity = list.get(0);
-                        mHandler.sendEmptyMessage(1);
+        model.querySleepMusic(mTitle);
+    }
+
+    /**
+     * 获取睡眠报告列表数据
+     *
+     * @param result 返回结果是否成功
+     * @param entity 数据
+     */
+    @Override
+    public void getSleepReportListData(String result, SleepMusicEntity entity) {
+        if (TextUtils.equals(result, Constant.OK)) {
+            if (TextUtils.equals(entity.getTitle(), mTitle)) {
+                if (!TextUtils.isEmpty(entity.getJson())) {
+                    mList.clear();
+                    mEntity = GsonUtil.fromJson(entity.getJson(), SleepReportEntity.class);
+                    if (mEntity != null) {
+                        mList.addAll(mEntity.getData());
+                        if (mList.isEmpty()) {
+                            mAdapter.setEmptyView(mViewDataError);
+                            return;
+                        }
+                        mAdapter.setNewData(mList);
+                        mAdapter.addFooterView(mViewNoMoreData);
+                    } else {
+                        mAdapter.addFooterView(mViewNoMoreData);
                     }
                 } else {
-                    LoggerUtil.e("SleepReportFragment: " + e.getMessage());
+                    mAdapter.setEmptyView(mViewDataError);
                 }
+            } else {
+                mAdapter.setEmptyView(mViewDataError);
             }
-        });
+        } else {
+            mAdapter.setEmptyView(mViewDataError);
+            view.showToast(result);
+        }
     }
 
     /**
@@ -153,6 +147,6 @@ public class SleepReportPresenterImpl implements SleepReportContract.Presenter {
      */
     @Override
     public void onDestroy() {
-        mHandler.removeMessages(1);
+
     }
 }

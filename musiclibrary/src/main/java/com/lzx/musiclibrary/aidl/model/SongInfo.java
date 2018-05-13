@@ -38,6 +38,12 @@ public class SongInfo implements Parcelable {
     private String publishTime = "";//发布时间
     private String description = ""; //音乐描述
     private String versions = ""; //版本
+    /**
+     * 追加
+     */
+    private String songPictureUrl = "";//音乐背景图片地址
+    private String videoUrl = "";//视频地址
+    private String videoPictureUrl = "";//视频预览图片地址
 
 
     private AlbumInfo albumInfo;  //专辑信息
@@ -248,7 +254,29 @@ public class SongInfo implements Parcelable {
         this.versions = versions;
     }
 
+    public String getSongPictureUrl() {
+        return songPictureUrl;
+    }
 
+    public void setSongPictureUrl(String songPictureUrl) {
+        this.songPictureUrl = songPictureUrl;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getVideoPictureUrl() {
+        return videoPictureUrl;
+    }
+
+    public void setVideoPictureUrl(String videoPictureUrl) {
+        this.videoPictureUrl = videoPictureUrl;
+    }
 
     public AlbumInfo getAlbumInfo() {
         return albumInfo;
@@ -306,6 +334,9 @@ public class SongInfo implements Parcelable {
         dest.writeString(this.publishTime);
         dest.writeString(this.description);
         dest.writeString(this.versions);
+        dest.writeString(this.songPictureUrl);
+        dest.writeString(this.videoUrl);
+        dest.writeString(this.videoPictureUrl);
         //dest.writeParcelable(this.metadataCompat, flags);
         dest.writeParcelable(this.albumInfo, flags);
         dest.writeParcelable(this.tempInfo, flags);
@@ -341,7 +372,10 @@ public class SongInfo implements Parcelable {
         this.publishTime = in.readString();
         this.description = in.readString();
         this.versions = in.readString();
-       // this.metadataCompat = in.readParcelable(MediaMetadataCompat.class.getClassLoader());
+        this.songPictureUrl = in.readString();
+        this.videoUrl = in.readString();
+        this.videoPictureUrl = in.readString();
+        // this.metadataCompat = in.readParcelable(MediaMetadataCompat.class.getClassLoader());
         this.albumInfo = in.readParcelable(AlbumInfo.class.getClassLoader());
         this.tempInfo = in.readParcelable(TempInfo.class.getClassLoader());
 
@@ -359,7 +393,7 @@ public class SongInfo implements Parcelable {
         }
     };
 
-    public SongInfo readFromParcel(Parcel source){
+    public SongInfo readFromParcel(Parcel source) {
         return new SongInfo(source);
     }
 }

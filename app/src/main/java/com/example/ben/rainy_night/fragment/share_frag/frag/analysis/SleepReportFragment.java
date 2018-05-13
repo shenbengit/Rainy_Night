@@ -6,8 +6,14 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
+import com.example.ben.rainy_night.event.OnSleepMusicEvent;
 import com.example.ben.rainy_night.fragment.share_frag.contract.SleepReportContract;
 import com.example.ben.rainy_night.fragment.share_frag.presenter.SleepReportPresenterImpl;
+import com.example.ben.rainy_night.util.LoggerUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
@@ -47,6 +53,7 @@ public class SleepReportFragment extends BaseFragment<SleepReportContract.Presen
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
             mTitle = bundle.getString(TITLE);
@@ -58,7 +65,7 @@ public class SleepReportFragment extends BaseFragment<SleepReportContract.Presen
 
     @Override
     protected void initData() {
-        presenter.getSleepReportList();
+        presenter.requsetSleepReportList();
     }
 
     @Override
@@ -66,10 +73,17 @@ public class SleepReportFragment extends BaseFragment<SleepReportContract.Presen
         return false;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
+    public void getSleepReportListData(OnSleepMusicEvent event) {
+        presenter.getSleepReportListData(event.getResult(), event.getEntity());
+    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
         presenter.onDestroy();
     }
 

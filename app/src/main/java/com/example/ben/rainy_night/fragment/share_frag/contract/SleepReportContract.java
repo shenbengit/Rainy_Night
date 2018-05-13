@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.ben.rainy_night.base.BasePresenter;
 import com.example.ben.rainy_night.base.BaseView;
+import com.example.ben.rainy_night.http.bmob.entity.SleepMusicEntity;
 
 /**
  * @author Ben
@@ -38,9 +39,18 @@ public interface SleepReportContract {
         void init(String title);
 
         /**
-         * 获取睡眠报告列表
+         * 请求睡眠报告列表
          */
-        void getSleepReportList();
+        void requsetSleepReportList();
+
+        /**
+         * 获取睡眠报告列表数据
+         *
+         * @param result 返回结果是否成功
+         * @param entity 数据
+         */
+        void getSleepReportListData(String result, SleepMusicEntity entity);
+
 
         /**
          * 销毁操作

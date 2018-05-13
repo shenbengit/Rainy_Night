@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.home_frag.adapter.SleepMusicFragmentAdapter;
+import com.example.ben.rainy_night.manager.MusicActionManager;
+import com.example.ben.rainy_night.util.Constant;
 
 import butterknife.BindView;
 import me.yokeyword.fragmentation.ISupportFragment;
@@ -76,7 +78,7 @@ public class SleepMusicFragment extends BaseFragment {
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
-        vpSleepMusic.setAdapter(new SleepMusicFragmentAdapter(getChildFragmentManager(), "自然音符", "轻音乐"));
+        vpSleepMusic.setAdapter(new SleepMusicFragmentAdapter(getChildFragmentManager(), Constant.DOLPHIN_NATURAL_MUSIC_CACHE, Constant.DOLPHIN_LIGHT_MUSIC_CACHE));
         tabSleepMusic.setupWithViewPager(vpSleepMusic);
     }
 
@@ -85,5 +87,11 @@ public class SleepMusicFragment extends BaseFragment {
      */
     public void startBrotherFragment(ISupportFragment targetFragment) {
         start(targetFragment);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        MusicActionManager.getInstance().stop();
     }
 }

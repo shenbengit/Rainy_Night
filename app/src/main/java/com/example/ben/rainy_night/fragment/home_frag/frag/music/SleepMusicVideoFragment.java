@@ -16,11 +16,7 @@ import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicVideoContract;
 import com.example.ben.rainy_night.fragment.home_frag.presenter.SleepMusicVideoPresenterImpl;
-import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.manager.MusicActionManager;
-import com.example.ben.rainy_night.util.Constant;
-import com.lzy.okgo.cache.CacheEntity;
-import com.lzy.okgo.db.CacheManager;
 import com.vondear.rxtools.view.RxSeekBar;
 
 import butterknife.BindView;
@@ -68,12 +64,12 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
                 if (!isPlaying) {
                     ibMusicIsPlay.setBackgroundResource(R.mipmap.music_pause);
                     MusicActionManager.getInstance().resume();
-                    presenter.resumeVideo();
+                    presenter.onSupportVisible();
                     isPlaying = true;
                 } else {
                     ibMusicIsPlay.setBackgroundResource(R.mipmap.music_start);
                     MusicActionManager.getInstance().pause();
-                    presenter.pauseVideo();
+                    presenter.onSupportVisible();
                     isPlaying = false;
                 }
                 mTimer.start();
@@ -132,8 +128,6 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
         fragment.setArguments(bundle);
         return fragment;
     }
-
-    private MusicEntity mEntity;
     private int mPosition;
     private CountDownTimer mTimer;
     private boolean isPlaying = true;
@@ -197,27 +191,21 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
 
     @Override
     protected void initData() {
-        MusicActionManager.getInstance().start(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, mPosition, Constant.PLAY_IN_SINGLE_LOOP, 30);
-        CacheEntity<MusicEntity> cache = CacheManager.getInstance().get(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, MusicEntity.class);
-        if (cache == null) {
-            toastShow("暂无数据");
-            return;
-        }
-        mEntity = cache.getData();
-        presenter.initProxy(mPosition);
+        presenter.init(mPosition);
         presenter.startVideo();
     }
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        presenter.resumeVideo();
+        presenter.onSupportVisible();
     }
 
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
-        presenter.pauseVideo();
+        presenter.onSupportVisible();
+
         mHandler.removeMessages(1);
         mHandler.removeMessages(2);
         if (mTimer != null) {
@@ -227,13 +215,12 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
 
     @Override
     public void onDestroyView() {
-        presenter.stopVideo();
+        presenter.onDestroy();
         super.onDestroyView();
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
         }
-        MusicActionManager.getInstance().stop();
     }
 
     @Override
@@ -269,15 +256,5 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
     @Override
     public VideoView getVideoView() {
         return video;
-    }
-
-    @Override
-    public LinearLayout getLinear() {
-        return linearMusic;
-    }
-
-    @Override
-    public MusicEntity getEntity() {
-        return mEntity;
     }
 }

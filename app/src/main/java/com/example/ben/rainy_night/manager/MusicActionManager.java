@@ -2,7 +2,6 @@ package com.example.ben.rainy_night.manager;
 
 import android.content.Context;
 
-import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
 import com.example.ben.rainy_night.impl.MusicActionListenerImpl;
 import com.example.ben.rainy_night.listener.MusicActionListener;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
@@ -57,9 +56,9 @@ public class MusicActionManager {
      * 获取播放音乐的数据
      *
      * @param key    key
-     * @param entity 音乐数据
+     * @param entity 音乐数据: MusicEntity、SleepFmEntity
      */
-    public void setData(String key, SleepFmEntity entity) {
+    public <T> void setData(String key, T entity) {
         if (mListener != null) {
             mListener.setData(key, entity);
         }
@@ -126,6 +125,29 @@ public class MusicActionManager {
     public void start(String musicType, int position, int playMode, int remainTime) {
         if (mListener != null) {
             mListener.start(musicType, position, playMode, remainTime);
+        }
+    }
+
+    /**
+     * 设置播放列表,索引默认为0
+     *
+     * @param musicType 当前播放的音乐的种类
+     */
+    public void setPlayList(String musicType) {
+        if (mListener != null) {
+            mListener.setPlayList(musicType);
+        }
+    }
+
+    /**
+     * 设置播放列表，并指定索引
+     *
+     * @param musicType 当前播放的音乐的种类
+     * @param index     索引
+     */
+    public void setPlayListWithIndex(String musicType, int index) {
+        if (mListener != null) {
+            mListener.setPlayListWithIndex(musicType, index);
         }
     }
 
@@ -221,6 +243,17 @@ public class MusicActionManager {
     }
 
     /**
+     * 设置播放音量
+     *
+     * @param audioVolume audioVolume 播放音量,范围: 0f ~ 1f
+     */
+    public void setVolume(float audioVolume) {
+        if (mListener != null) {
+            mListener.setVolume(audioVolume);
+        }
+    }
+
+    /**
      * 获取当前的播放状态
      */
 
@@ -289,7 +322,7 @@ public class MusicActionManager {
 
     public SongInfo getCurrentMediaInfo() {
         if (mListener != null) {
-           return mListener.getCurrentMediaInfo();
+            return mListener.getCurrentMediaInfo();
         }
         return null;
     }

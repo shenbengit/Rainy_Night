@@ -63,7 +63,7 @@ public class Constant {
     /**
      * 音乐专辑封面(方形)
      */
-    public static final String MUSIC_SQUARE_COVER = "http://bmob-cdn-16440.b0.upaiyun.com/2018/05/11/f862f3204094069880c9046c0003006b.png";
+    public static final String MUSIC_SQUARE_COVER = "http://bmob-cdn-16440.b0.upaiyun.com/2018/05/12/6cae2fba409874e180088143aa4928cb.png";
 
     /**
      * 请求码
@@ -114,9 +114,8 @@ public class Constant {
      */
     public static final String DOLPHIN_MUSIC_CACHE = "dolphin_music";
 
-    public static final String DOLPHIN_NATURAL_MUSIC_CACHE = "dolphin_music1";
-    public static final String DOLPHIN_LIGHT_MUSIC_CACHE = "dolphin_music2";
-
+    public static final String DOLPHIN_NATURAL_MUSIC_CACHE = "自然音符";
+    public static final String DOLPHIN_LIGHT_MUSIC_CACHE = "轻音乐";
     public static final String DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE = "睡前伴读";
     public static final String DOLPHIN_NICE_PEOPLE_CACHE = "耐撕の人";
     public static final String DOLPHIN_HYPNOSIS_CACHE = "催眠ASMR";

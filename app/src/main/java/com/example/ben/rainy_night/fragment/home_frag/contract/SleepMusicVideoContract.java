@@ -1,7 +1,6 @@
 package com.example.ben.rainy_night.fragment.home_frag.contract;
 
 import android.content.Context;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
@@ -30,29 +29,15 @@ public interface SleepMusicVideoContract {
          * @return
          */
         VideoView getVideoView();
-
-        /**
-         * 获取Linearlayout
-         *
-         * @return
-         */
-        LinearLayout getLinear();
-
-        /**
-         * 获取音频列表信息
-         *
-         * @return
-         */
-        MusicEntity getEntity();
     }
 
     interface Presenter extends BasePresenter {
         /**
          * 初始化音频播放代理
          *
-         * @param position        当前音频播放的位置
+         * @param position 当前音频播放的位置
          */
-        void initProxy(int position);
+        void init(int position);
 
         /**
          * 开始播放视频
@@ -60,19 +45,19 @@ public interface SleepMusicVideoContract {
         void startVideo();
 
         /**
-         * 继续播放视频
+         * fragment可见
          */
-        void resumeVideo();
+        void onSupportVisible();
 
         /**
-         * 暂停播放视频
+         * fragment不可见
          */
-        void pauseVideo();
+        void onSupportInVisible();
 
         /**
          * 停止播放视频
          */
-        void stopVideo();
+        void onDestroy();
 
         /**
          * 播放上一个

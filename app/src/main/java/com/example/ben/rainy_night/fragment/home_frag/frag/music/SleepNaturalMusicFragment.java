@@ -7,31 +7,34 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
-import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicListContract;
-import com.example.ben.rainy_night.fragment.home_frag.presenter.SleepMusicListPresenterImpl;
+import com.example.ben.rainy_night.event.OnSleepMusicEvent;
+import com.example.ben.rainy_night.fragment.home_frag.contract.SleepNaturalMusicContract;
+import com.example.ben.rainy_night.fragment.home_frag.presenter.SleepNaturalMusicPresenterImpl;
 import com.example.ben.rainy_night.util.NetWorkUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
+ *
  * @author Ben
- * @date 2018/3/28
+ * @date 2018/5/13
  */
 
-public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.Presenter> implements SleepMusicListContract.View {
+public class SleepNaturalMusicFragment extends BaseFragment<SleepNaturalMusicContract.Presenter> implements SleepNaturalMusicContract.View{
 
     private static final String SCENE_TYPE = "scene_type";
-
-    @BindView(R.id.recy_sleep_music_list)
-    RecyclerView recySleepMusicList;
-
-
+    @BindView(R.id.recy_sleep_natutal_music)
+    RecyclerView recySleepNaturalMusic;
     private String sceneType;
 
-    public static SleepMusicListFragment newInstance(String sceneType) {
+    public static SleepNaturalMusicFragment newInstance(String sceneType) {
         Bundle bundle = new Bundle();
-        SleepMusicListFragment fragment = new SleepMusicListFragment();
+        SleepNaturalMusicFragment fragment = new SleepNaturalMusicFragment();
         bundle.putString(SCENE_TYPE, sceneType);
         fragment.setArguments(bundle);
         return fragment;
@@ -42,7 +45,7 @@ public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.
      */
     @Override
     protected int getLayout() {
-        return R.layout.fragment_sleep_music_list;
+        return R.layout.fragment_natural_sleep_music;
     }
 
     /**
@@ -50,7 +53,7 @@ public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.
      */
     @Override
     protected void setPresenter() {
-        presenter = new SleepMusicListPresenterImpl(this);
+        presenter = new SleepNaturalMusicPresenterImpl(this);
     }
 
     /**
@@ -58,6 +61,7 @@ public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.
      */
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
             sceneType = bundle.getString(SCENE_TYPE);
@@ -70,7 +74,7 @@ public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.
      */
     @Override
     protected void initData() {
-
+        presenter.requsetMusic();
     }
 
     @Override
@@ -81,7 +85,20 @@ public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
-        presenter.getMusic();
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
+    public void getNaturalMusicData(OnSleepMusicEvent event) {
+        presenter.getNaturalMusicData(event.getResult(), event.getEntity());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     /**
@@ -127,7 +144,7 @@ public class SleepMusicListFragment extends BaseFragment<SleepMusicListContract.
      */
     @Override
     public RecyclerView getRecycler() {
-        return recySleepMusicList;
+        return recySleepNaturalMusic;
     }
 
     /**

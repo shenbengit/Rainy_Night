@@ -2,10 +2,8 @@ package com.example.ben.rainy_night.listener;
 
 import android.content.Context;
 
-import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
-import com.lzx.musiclibrary.manager.MusicManager;
 
 /**
  * @author Ben
@@ -33,7 +31,8 @@ public interface MusicActionListener {
      * @param key    key
      * @param entity 音乐数据
      */
-    void setData(String key, SleepFmEntity entity);
+    <T> void setData(String key, T entity);
+
 
     /**
      * 追加音乐数据
@@ -76,6 +75,21 @@ public interface MusicActionListener {
      * @param remainTime 剩余时间
      */
     void start(String musicType, int position, int playMode, long remainTime);
+
+    /**
+     * 设置播放列表,索引默认为0
+     *
+     * @param musicType 当前播放的音乐的种类
+     */
+    void setPlayList(String musicType);
+
+    /**
+     * 设置播放列表，并指定索引
+     *
+     * @param musicType 当前播放的音乐的种类
+     * @param index     索引
+     */
+    void setPlayListWithIndex(String musicType, int index);
 
     /**
      * 根据索引播放
@@ -127,9 +141,16 @@ public interface MusicActionListener {
     /**
      * 寻求指定的时间位置
      *
-     * @param position  播放的位置
+     * @param position 播放的位置
      */
     void seekTo(int position);
+
+    /**
+     * 设置播放音量
+     *
+     * @param audioVolume audioVolume 播放音量,范围: 0f ~ 1f
+     */
+    void setVolume(float audioVolume);
 
     /**
      * 获取当前的播放状态

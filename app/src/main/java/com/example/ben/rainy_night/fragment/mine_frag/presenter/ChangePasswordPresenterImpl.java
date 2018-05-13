@@ -3,8 +3,8 @@ package com.example.ben.rainy_night.fragment.mine_frag.presenter;
 import android.text.TextUtils;
 
 import com.example.ben.rainy_night.fragment.mine_frag.contract.ChangePasswordContract;
-import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
-import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
+import com.example.ben.rainy_night.http.bmob.model.UserModel;
+import com.example.ben.rainy_night.http.bmob.model.UserModelImpl;
 import com.example.ben.rainy_night.util.Constant;
 import com.vondear.rxtools.RxRegTool;
 

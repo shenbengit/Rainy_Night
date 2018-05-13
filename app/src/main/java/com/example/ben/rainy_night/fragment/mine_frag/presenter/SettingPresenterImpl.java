@@ -2,8 +2,8 @@ package com.example.ben.rainy_night.fragment.mine_frag.presenter;
 
 import com.example.ben.rainy_night.fragment.mine_frag.contract.SettingContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
-import com.example.ben.rainy_night.fragment.mine_frag.model.UserModel;
-import com.example.ben.rainy_night.fragment.mine_frag.model.UserModelImpl;
+import com.example.ben.rainy_night.http.bmob.model.UserModel;
+import com.example.ben.rainy_night.http.bmob.model.UserModelImpl;
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 import com.vondear.rxtools.view.dialog.RxDialogSureCancel;
 

@@ -1,15 +1,16 @@
-package com.example.ben.rainy_night.fragment.share_frag.frag.analysis;
+package com.example.ben.rainy_night.fragment.home_frag.frag.music;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.event.OnSleepMusicEvent;
-import com.example.ben.rainy_night.fragment.share_frag.contract.SleepReadContract;
-import com.example.ben.rainy_night.fragment.share_frag.frag.ShareFragment;
-import com.example.ben.rainy_night.fragment.share_frag.presenter.SleepReadPresenterImpl;
+import com.example.ben.rainy_night.fragment.home_frag.contract.SleepLightMusicContract;
+import com.example.ben.rainy_night.fragment.home_frag.presenter.SleepLightMusicPresenterImpl;
+import com.example.ben.rainy_night.util.NetWorkUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -20,49 +21,62 @@ import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
  * @author Ben
- * @date 2018/4/22
+ * @date 2018/3/28
  */
 
-public class SleepReadFragment extends BaseFragment<SleepReadContract.Presenter> implements SleepReadContract.View {
+public class SleepLightMusicFragment extends BaseFragment<SleepLightMusicContract.Presenter> implements SleepLightMusicContract.View {
 
-    private static final String TITLE = "title";
+    private static final String SCENE_TYPE = "scene_type";
 
-    @BindView(R.id.recy_sleep_read_list)
-    RecyclerView recySleepReadList;
+    @BindView(R.id.recy_sleep_light_music)
+    RecyclerView recySleepLightMusic;
 
-    public static SleepReadFragment newInstance(String title) {
-        SleepReadFragment fragment = new SleepReadFragment();
+
+    private String sceneType;
+
+    public static SleepLightMusicFragment newInstance(String sceneType) {
         Bundle bundle = new Bundle();
-        bundle.putString(TITLE, title);
+        SleepLightMusicFragment fragment = new SleepLightMusicFragment();
+        bundle.putString(SCENE_TYPE, sceneType);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    private String mTitle;
-
+    /**
+     * @return 返回界面layout
+     */
     @Override
     protected int getLayout() {
-        return R.layout.fragment_sleep_read;
+        return R.layout.fragment_light_sleep_music;
     }
 
+    /**
+     * 设置presenter
+     */
     @Override
     protected void setPresenter() {
-        presenter = new SleepReadPresenterImpl(this);
+        presenter = new SleepLightMusicPresenterImpl(this);
     }
 
+    /**
+     * 初始化界面
+     */
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mTitle = bundle.getString(TITLE);
+            sceneType = bundle.getString(SCENE_TYPE);
         }
-        presenter.init(mTitle);
+        presenter.initRecyclerView(sceneType);
     }
 
+    /**
+     * 初始化数据
+     */
     @Override
     protected void initData() {
-        presenter.requsetSleepReadList();
+        presenter.requsetMusic();
     }
 
     @Override
@@ -70,9 +84,15 @@ public class SleepReadFragment extends BaseFragment<SleepReadContract.Presenter>
         return false;
     }
 
+    @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
+
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
-    public void getReadListData(OnSleepMusicEvent event) {
-        presenter.getSleepReadListData(event.getResult(), event.getEntity());
+    public void getLightMusicData(OnSleepMusicEvent event) {
+        presenter.getLightMusicData(event.getResult(), event.getEntity());
     }
 
     @Override
@@ -81,7 +101,6 @@ public class SleepReadFragment extends BaseFragment<SleepReadContract.Presenter>
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
-        presenter.onDestroy();
     }
 
     /**
@@ -121,6 +140,16 @@ public class SleepReadFragment extends BaseFragment<SleepReadContract.Presenter>
     }
 
     /**
+     * 获取RecyclerView
+     *
+     * @return
+     */
+    @Override
+    public RecyclerView getRecycler() {
+        return recySleepLightMusic;
+    }
+
+    /**
      * 获取Context
      *
      * @return
@@ -130,24 +159,14 @@ public class SleepReadFragment extends BaseFragment<SleepReadContract.Presenter>
         return _mActivity;
     }
 
-    /**
-     * 获取RecyclerView
-     *
-     * @return
-     */
-    @Override
-    public RecyclerView getRecycler() {
-        return recySleepReadList;
-    }
-
-    /**
-     * 从兄弟fragment进行跳转
-     *
-     * @param fragment 要跳转的fragment
-     */
     @Override
     public void startBrotherFragment(ISupportFragment fragment) {
-        assert getParentFragment() != null;
-        ((ShareFragment) getParentFragment()).startBrotherFragment(fragment);
+        assert (getParentFragment()) != null;
+        ((SleepMusicFragment) getParentFragment()).startBrotherFragment(fragment);
+    }
+
+    @Override
+    public int getAPNType() {
+        return NetWorkUtil.getInstance().getAPNType(_mActivity.getApplicationContext());
     }
 }

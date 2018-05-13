@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepMusicListFragment;
-import com.example.ben.rainy_night.util.Constant;
+import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepLightMusicFragment;
+import com.example.ben.rainy_night.fragment.home_frag.frag.music.SleepNaturalMusicFragment;
 
 /**
  * @author Ben
@@ -25,9 +25,9 @@ public class SleepMusicFragmentAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return SleepMusicListFragment.newInstance(String.valueOf(Constant.DOLPHIN_NATURAL_MUSIC));
+            return SleepNaturalMusicFragment.newInstance(mTitles[0]);
         } else if (position == 1) {
-            return SleepMusicListFragment.newInstance(String.valueOf(Constant.DOLPHIN_LIGHT_MUSIC));
+            return SleepLightMusicFragment.newInstance(mTitles[1]);
         }
         return null;
     }

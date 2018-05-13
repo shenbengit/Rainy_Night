@@ -2,7 +2,6 @@ package com.example.ben.rainy_night.impl;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.http.okgo.entity.SleepFmEntity;
@@ -137,23 +136,31 @@ public class MusicActionListenerImpl implements MusicActionListener {
      * @param entity 音乐数据
      */
     @Override
-    public void setData(String key, SleepFmEntity entity) {
+    public <T> void setData(String key, T entity) {
         switch (key) {
+            case Constant.DOLPHIN_NATURAL_MUSIC_CACHE:
+                mListNatural.clear();
+                mListNatural.addAll(getMusicList(key, entity));
+                break;
+            case Constant.DOLPHIN_LIGHT_MUSIC_CACHE:
+                mListLight.clear();
+                mListLight.addAll(getMusicList(key, entity));
+                break;
             case Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE:
                 mListRead.clear();
-                mListRead.addAll(getMusicList(entity));
+                mListRead.addAll(getMusicList(key, entity));
                 break;
             case Constant.DOLPHIN_NICE_PEOPLE_CACHE:
                 mListNice.clear();
-                mListNice.addAll(getMusicList(entity));
+                mListNice.addAll(getMusicList(key, entity));
                 break;
             case Constant.DOLPHIN_HYPNOSIS_CACHE:
                 mListHypnosis.clear();
-                mListHypnosis.addAll(getMusicList(entity));
+                mListHypnosis.addAll(getMusicList(key, entity));
                 break;
             case Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE:
                 mListNight.clear();
-                mListNight.addAll(getMusicList(entity));
+                mListNight.addAll(getMusicList(key, entity));
                 break;
             default:
                 LoggerUtil.e("MusicActionListenerImpl: setData()音乐类型错误，key: " + key);
@@ -161,20 +168,26 @@ public class MusicActionListenerImpl implements MusicActionListener {
         }
     }
 
+    /**
+     * 追加音乐数据
+     *
+     * @param key    key
+     * @param object 追加的音乐数据
+     */
     @Override
     public <T> void addData(String key, T object) {
         switch (key) {
             case Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE:
-                mListRead.addAll(getMusicList(object));
+                mListRead.addAll(getMusicList(key, object));
                 break;
             case Constant.DOLPHIN_NICE_PEOPLE_CACHE:
-                mListNice.addAll(getMusicList(object));
+                mListNice.addAll(getMusicList(key, object));
                 break;
             case Constant.DOLPHIN_HYPNOSIS_CACHE:
-                mListHypnosis.addAll(getMusicList(object));
+                mListHypnosis.addAll(getMusicList(key, object));
                 break;
             case Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE:
-                mListNight.addAll(getMusicList(object));
+                mListNight.addAll(getMusicList(key, object));
                 break;
             default:
                 LoggerUtil.e("MusicActionListenerImpl: addData()音乐类型错误，key: " + key);
@@ -233,56 +246,7 @@ public class MusicActionListenerImpl implements MusicActionListener {
             MusicManager.get().playMusicByIndex(position);
             return;
         }
-        mMusicType = musicType;
-        mListCurrent.clear();
-        switch (mMusicType) {
-            case Constant.DOLPHIN_NATURAL_MUSIC_CACHE:
-                if (mListNatural.isEmpty()) {
-                    LoggerUtil.e("MusicActionListenerImpl:自然音乐数据为空");
-                    return;
-                }
-                setCurrentMusicList(mListNatural);
-                break;
-            case Constant.DOLPHIN_LIGHT_MUSIC_CACHE:
-                if (mListLight.isEmpty()) {
-                    LoggerUtil.e("MusicActionListenerImpl:轻音乐数据为空");
-                    return;
-                }
-                setCurrentMusicList(mListLight);
-                break;
-            case Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE:
-                if (mListRead.isEmpty()) {
-                    LoggerUtil.e("MusicActionListenerImpl:睡前伴读数据为空");
-                    return;
-                }
-                setCurrentMusicList(mListRead);
-                break;
-            case Constant.DOLPHIN_NICE_PEOPLE_CACHE:
-                if (mListNice.isEmpty()) {
-                    LoggerUtil.e("MusicActionListenerImpl:耐撕の人数据为空");
-                    return;
-                }
-                setCurrentMusicList(mListNice);
-                break;
-            case Constant.DOLPHIN_HYPNOSIS_CACHE:
-                if (mListHypnosis.isEmpty()) {
-                    LoggerUtil.e("MusicActionListenerImpl:催眠ASMR数据为空");
-                    return;
-                }
-                setCurrentMusicList(mListHypnosis);
-                break;
-            case Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE:
-                if (mListNight.isEmpty()) {
-                    LoggerUtil.e("MusicActionListenerImpl:说晚安数据为空");
-                    return;
-                }
-                setCurrentMusicList(mListNight);
-                break;
-            default:
-                LoggerUtil.e("MusicActionListenerImpl: start()音乐类型错误，" + musicType);
-                break;
-        }
-
+        setCurrentMusicList(musicType);
         if (!mListCurrent.isEmpty()) {
             if (MusicManager.isPlaying()) {
                 MusicManager.get().stopMusic();
@@ -294,6 +258,30 @@ public class MusicActionListenerImpl implements MusicActionListener {
                 MusicManager.get().setPlayMode(playMode);
             }
             MusicManager.get().playMusic(mListCurrent, position);
+        }
+    }
+
+    /**
+     * 设置播放列表,索引默认为0
+     *
+     * @param musicType 当前播放的音乐的种类
+     */
+    @Override
+    public void setPlayList(String musicType) {
+        setPlayListWithIndex(musicType, 0);
+    }
+
+    /**
+     * 设置播放列表，并指定索引
+     *
+     * @param musicType 当前播放的音乐的种类
+     * @param index     索引
+     */
+    @Override
+    public void setPlayListWithIndex(String musicType, int index) {
+        setCurrentMusicList(musicType);
+        if (!mListCurrent.isEmpty()) {
+            MusicManager.get().setPlayListWithIndex(mListCurrent, index);
         }
     }
 
@@ -388,6 +376,16 @@ public class MusicActionListenerImpl implements MusicActionListener {
     @Override
     public void seekTo(int position) {
         MusicManager.get().seekTo(position);
+    }
+
+    /**
+     * 设置播放音量
+     *
+     * @param audioVolume audioVolume 播放音量,范围: 0f ~ 1f
+     */
+    @Override
+    public void setVolume(float audioVolume) {
+        MusicManager.get().setVolume(audioVolume);
     }
 
     /**
@@ -510,8 +508,15 @@ public class MusicActionListenerImpl implements MusicActionListener {
             for (MusicEntity.DataBean bean : beans) {
                 SongInfo info = new SongInfo();
                 info.setSongName(bean.getSceneName());
-                info.setSize(String.valueOf(bean.getAudioSize()));
                 info.setSongId(String.valueOf(bean.getSceneId()));
+                if (TextUtils.equals(cacheKey, Constant.DOLPHIN_NATURAL_MUSIC_CACHE)) {
+                    info.setVideoUrl(URLDecoder.decode(bean.getVideoUrl()));
+                    info.setVideoPictureUrl(URLDecoder.decode(bean.getVideoPictureUrl()));
+                } else if (TextUtils.equals(cacheKey, Constant.DOLPHIN_LIGHT_MUSIC_CACHE)) {
+                    info.setSongPictureUrl(URLDecoder.decode(bean.getAudioPictureUrl()));
+                }
+                info.setSongCover(Constant.MUSIC_SQUARE_COVER);
+                info.setSize(String.valueOf(bean.getAudioSize()));
                 info.setSongUrl(URLDecoder.decode(bean.getAudioUrl()));
                 info.setDownloadUrl(URLDecoder.decode(bean.getAudioUrl()));
                 lists.add(info);
@@ -556,10 +561,11 @@ public class MusicActionListenerImpl implements MusicActionListener {
     /**
      * 获取电台音乐
      *
+     * @param key    key
      * @param object 音乐数据
      * @return
      */
-    private <T> List<SongInfo> getMusicList(T object) {
+    private <T> List<SongInfo> getMusicList(String key, T object) {
         List<SongInfo> lists = new ArrayList<>();
         if (object instanceof MusicEntity) {
             MusicEntity entity = (MusicEntity) object;
@@ -568,9 +574,15 @@ public class MusicActionListenerImpl implements MusicActionListener {
                 for (MusicEntity.DataBean bean : beans) {
                     SongInfo info = new SongInfo();
                     info.setSongName(bean.getSceneName());
+                    info.setSongId(String.valueOf(bean.getSceneId()));
+                    if (TextUtils.equals(key, Constant.DOLPHIN_NATURAL_MUSIC_CACHE)) {
+                        info.setVideoUrl(URLDecoder.decode(bean.getVideoUrl()));
+                        info.setVideoPictureUrl(URLDecoder.decode(bean.getVideoUrl()));
+                    } else if (TextUtils.equals(key, Constant.DOLPHIN_LIGHT_MUSIC_CACHE)) {
+                        info.setSongPictureUrl(URLDecoder.decode(bean.getAudioPictureUrl()));
+                    }
                     info.setSongCover(Constant.MUSIC_SQUARE_COVER);
                     info.setSize(String.valueOf(bean.getAudioSize()));
-                    info.setSongId(String.valueOf(bean.getSceneId()));
                     info.setSongUrl(URLDecoder.decode(bean.getAudioUrl()));
                     info.setDownloadUrl(URLDecoder.decode(bean.getAudioUrl()));
                     lists.add(info);
@@ -605,9 +617,57 @@ public class MusicActionListenerImpl implements MusicActionListener {
     /**
      * 获取当前播放的音乐集合
      *
-     * @param list
+     * @param musicType
      */
-    private void setCurrentMusicList(List<SongInfo> list) {
-        mListCurrent.addAll(list);
+    private void setCurrentMusicList(String musicType) {
+        mMusicType = musicType;
+        mListCurrent.clear();
+        switch (mMusicType) {
+            case Constant.DOLPHIN_NATURAL_MUSIC_CACHE:
+                if (mListNatural.isEmpty()) {
+                    LoggerUtil.e("MusicActionListenerImpl:自然音乐数据为空");
+                    return;
+                }
+                mListCurrent.addAll(mListNatural);
+                break;
+            case Constant.DOLPHIN_LIGHT_MUSIC_CACHE:
+                if (mListLight.isEmpty()) {
+                    LoggerUtil.e("MusicActionListenerImpl:轻音乐数据为空");
+                    return;
+                }
+                mListCurrent.addAll(mListLight);
+                break;
+            case Constant.DOLPHIN_BEFORE_SLEEP_AND_READ_CACHE:
+                if (mListRead.isEmpty()) {
+                    LoggerUtil.e("MusicActionListenerImpl:睡前伴读数据为空");
+                    return;
+                }
+                mListCurrent.addAll(mListRead);
+                break;
+            case Constant.DOLPHIN_NICE_PEOPLE_CACHE:
+                if (mListNice.isEmpty()) {
+                    LoggerUtil.e("MusicActionListenerImpl:耐撕の人数据为空");
+                    return;
+                }
+                mListCurrent.addAll(mListNice);
+                break;
+            case Constant.DOLPHIN_HYPNOSIS_CACHE:
+                if (mListHypnosis.isEmpty()) {
+                    LoggerUtil.e("MusicActionListenerImpl:催眠ASMR数据为空");
+                    return;
+                }
+                mListCurrent.addAll(mListHypnosis);
+                break;
+            case Constant.DOLPHIN_SAY_GOOG_NIGHT_CACHE:
+                if (mListNight.isEmpty()) {
+                    LoggerUtil.e("MusicActionListenerImpl:说晚安数据为空");
+                    return;
+                }
+                mListCurrent.addAll(mListNight);
+                break;
+            default:
+                LoggerUtil.e("MusicActionListenerImpl: start()音乐类型错误，" + musicType);
+                break;
+        }
     }
 }

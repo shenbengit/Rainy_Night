@@ -20,6 +20,8 @@ import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
+import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
+import com.lzx.musiclibrary.aidl.model.SongInfo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.db.CacheManager;
 import com.vondear.rxtools.view.RxSeekBar;
@@ -33,7 +35,7 @@ import butterknife.OnTouch;
  * @date 2018/3/29
  */
 
-public class SleepMusicAudioFragment extends BaseFragment {
+public class SleepMusicAudioFragment extends BaseFragment implements OnPlayerEventListener {
 
     private static final String POSITION = "position";
 
@@ -62,6 +64,8 @@ public class SleepMusicAudioFragment extends BaseFragment {
                 break;
             case R.id.ib_music_previous:
                 mTimer.cancel();
+                mPosition--;
+                loadPicture();
                 MusicActionManager.getInstance().startPrevious();
                 mTimer.start();
                 break;
@@ -82,6 +86,8 @@ public class SleepMusicAudioFragment extends BaseFragment {
                 break;
             case R.id.ib_music_next:
                 mTimer.cancel();
+                mPosition++;
+                loadPicture();
                 MusicActionManager.getInstance().startNext();
                 mTimer.start();
                 break;
@@ -242,6 +248,7 @@ public class SleepMusicAudioFragment extends BaseFragment {
         };
         mTimer.start();
         rsbMusicTime.setValue(30);
+        MusicActionManager.getInstance().addPlayerEventListener(this);
     }
 
     @Override
@@ -254,26 +261,33 @@ public class SleepMusicAudioFragment extends BaseFragment {
         }
         mEntity = cache.getData();
         MusicActionManager.getInstance().start(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, mPosition, Constant.PLAY_IN_SINGLE_LOOP, 30);
-        GlideApp.with(_mActivity).load(mEntity.getData().get(mPosition).getAudioPictureUrl()).into(ivSleepMusicAudioPicture);
     }
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
         if (!isScrolled) {
-            new Handler().postDelayed(() -> {
-                mImageWidth = ivSleepMusicAudioPicture.getWidth();
-                if (mImageWidth != 0) {
-                    mScrollWidth = mImageWidth - mWindowWidth;
-                    if (mScrollWidth > 0) {
-                        mHandler.sendEmptyMessage(1);
-                        isScrolled = true;
-                    }
-                }
-            }, 1500);
+            loadPicture();
         } else {
             mHandler.sendEmptyMessage(1);
         }
+    }
+
+    /**
+     * 加载图片
+     */
+    private void loadPicture() {
+        GlideApp.with(_mActivity).load(mEntity.getData().get(mPosition).getAudioPictureUrl()).into(ivSleepMusicAudioPicture);
+        new Handler().postDelayed(() -> {
+            mImageWidth = ivSleepMusicAudioPicture.getWidth();
+            if (mImageWidth != 0) {
+                mScrollWidth = mImageWidth - mWindowWidth;
+                if (mScrollWidth > 0) {
+                    mHandler.sendEmptyMessage(1);
+                    isScrolled = true;
+                }
+            }
+        }, 1500);
     }
 
     @Override
@@ -294,7 +308,8 @@ public class SleepMusicAudioFragment extends BaseFragment {
             mTimer.cancel();
             mTimer = null;
         }
-        MusicActionManager.getInstance().stop();
+        MusicActionManager.getInstance().removePlayerEventListener(this);
+
     }
 
     @Override
@@ -302,4 +317,36 @@ public class SleepMusicAudioFragment extends BaseFragment {
         return true;
     }
 
+    @Override
+    public void onMusicSwitch(SongInfo music) {
+        if (MusicActionManager.getInstance().getCurrPlayingIndex() != mPosition) {
+            mPosition = MusicActionManager.getInstance().getCurrPlayingIndex();
+            isScrolled = false;
+        }
+    }
+
+    @Override
+    public void onPlayerStart() {
+
+    }
+
+    @Override
+    public void onPlayerPause() {
+
+    }
+
+    @Override
+    public void onPlayCompletion() {
+
+    }
+
+    @Override
+    public void onError(String errorMsg) {
+
+    }
+
+    @Override
+    public void onAsyncLoading(boolean isFinishLoading) {
+
+    }
 }

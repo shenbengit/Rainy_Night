@@ -15,8 +15,8 @@ import com.example.ben.rainy_night.event.OnPostEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.adapter.SpaceAdapter;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.SpaceContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.space.PostDetailFragment;
-import com.example.ben.rainy_night.fragment.mine_frag.model.PostModel;
-import com.example.ben.rainy_night.fragment.mine_frag.model.PostModelImpl;
+import com.example.ben.rainy_night.http.bmob.model.PostModel;
+import com.example.ben.rainy_night.http.bmob.model.PostModelImpl;
 import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
 import com.example.ben.rainy_night.util.Constant;
 

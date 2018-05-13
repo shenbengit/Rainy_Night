@@ -1,5 +1,7 @@
 package com.example.ben.rainy_night.http.bmob.entity;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 
 /**
@@ -9,7 +11,7 @@ import cn.bmob.v3.BmobObject;
  * @date 2018/4/22
  */
 
-public class SleepMusicEntity extends BmobObject {
+public class SleepMusicEntity extends BmobObject implements Serializable{
     private static final long serialVersionUID = 4160780923373888455L;
     /**
      * 标题

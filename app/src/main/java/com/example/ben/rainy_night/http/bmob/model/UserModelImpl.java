@@ -1,4 +1,4 @@
-package com.example.ben.rainy_night.fragment.mine_frag.model;
+package com.example.ben.rainy_night.http.bmob.model;
 
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 import com.example.ben.rainy_night.http.bmob.UserBmob;

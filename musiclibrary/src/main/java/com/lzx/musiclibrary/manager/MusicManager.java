@@ -1,5 +1,6 @@
 package com.lzx.musiclibrary.manager;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -40,13 +41,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MusicManager implements IPlayControl {
 
-    public static final int MSG_MUSIC_CHANGE = 0;
-    public static final int MSG_PLAYER_START = 1;
-    public static final int MSG_PLAYER_PAUSE = 2;
-    public static final int MSG_PLAY_COMPLETION = 3;
-    public static final int MSG_PLAYER_ERROR = 4;
-    public static final int MSG_BUFFERING = 5;
-    public static final int MSG_TIMER_FINISH = 6;
+    private static final int MSG_MUSIC_CHANGE = 0;
+    private static final int MSG_PLAYER_START = 1;
+    private static final int MSG_PLAYER_PAUSE = 2;
+    private static final int MSG_PLAY_COMPLETION = 3;
+    private static final int MSG_PLAYER_ERROR = 4;
+    private static final int MSG_BUFFERING = 5;
+    private static final int MSG_TIMER_FINISH = 6;
 
     private Context mContext;
     private boolean isUseMediaPlayer = false;
@@ -65,6 +66,7 @@ public class MusicManager implements IPlayControl {
 
     private static final byte[] sLock = new byte[0];
 
+    @SuppressLint("StaticFieldLeak")
     private static volatile MusicManager sInstance;
 
     public static MusicManager get() {
