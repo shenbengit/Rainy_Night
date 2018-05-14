@@ -68,7 +68,7 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
                 .inflate(R.layout.layout_net_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewNetError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
-            new Handler(Looper.getMainLooper()).postDelayed(this::loadData, 1000);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> loadData(false), 1000);
         });
 
         mViewLoading = LayoutInflater.from(view.getCon())
@@ -78,7 +78,7 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
                 .inflate(R.layout.layout_data_error, (ViewGroup) view.getRecycler().getParent(), false);
         mViewDataError.setOnClickListener(v -> {
             mAdapter.setEmptyView(mViewLoading);
-            new Handler(Looper.getMainLooper()).postDelayed(this::loadData, 1000);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> loadData(false), 1000);
         });
 
         mViewNoMoreData = LayoutInflater.from(view.getCon())
@@ -88,7 +88,7 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
     }
 
     @Override
-    public void loadData() {
+    public void loadData(boolean isFromPostStory) {
         if (!view.isNetworkAvailable()) {
             mAdapter.setEmptyView(mViewNetError);
             return;
@@ -97,6 +97,11 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
         if (!mAdapter.isLoginUser()) {
             mAdapter.setCurrentUser();
         }
+        if (isFromPostStory && !mAdapter.getData().isEmpty()) {
+            view.getRecycler().smoothScrollToPosition(0);
+            setRefreshing(true);
+        }
+
         onRefresh();
     }
 

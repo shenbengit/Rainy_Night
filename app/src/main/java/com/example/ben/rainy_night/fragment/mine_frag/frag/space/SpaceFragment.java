@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.example.ben.rainy_night.GlideApp;
@@ -15,6 +16,7 @@ import com.example.ben.rainy_night.fragment.mine_frag.contract.SpaceContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.SpacePresenterImpl;
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
 import com.vondear.rxtools.view.dialog.RxDialogSure;
 
@@ -61,15 +63,15 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
                 if (mUserEntity == null) {
                     showLoginDialog();
                 } else {
-                    start(PostStoryFragment.newInstance());
+                    startForResult(PostStoryFragment.newInstance(), Constant.POST_SROTY);
                 }
                 break;
             default:
                 break;
         }
     }
+
     private RxDialogSure mDialog;
-    private boolean isFirstIn = true;
 
     public static SpaceFragment newInstance() {
         return new SpaceFragment();
@@ -134,17 +136,22 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
         } else {
             civSpaceHead.setImageResource(R.mipmap.ic_head);
         }
-        if (!isFirstIn) {
-            presenter.loadData();
-            LoggerUtil.e("onSupportVisible:加载帖子数据");
-        }
     }
 
     @Override
     public void onEnterAnimationEnd(Bundle savedInstanceState) {
         super.onEnterAnimationEnd(savedInstanceState);
-        presenter.loadData();
-        isFirstIn = false;
+        presenter.loadData(false);
+    }
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+        if (requestCode == Constant.POST_SROTY && resultCode == RESULT_OK && data != null) {
+            if (TextUtils.equals(data.getString("发表成功"), "发表成功")) {
+                presenter.loadData(true);
+            }
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100)
@@ -166,6 +173,7 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
             mDialog.show();
         }
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -69,8 +69,12 @@ public class Constant {
      * 请求码
      */
     public static final int REQUEST_IMAGE = 188;
-    public static final int MAX_PICTURES = 6;
     public static final int REQUEST_POP = 99;
+    public static final int POST_SROTY = 101;
+    /**
+     * 帖子最大选择图片数
+     */
+    public static final int MAX_PICTURES = 6;
 
     /**
      * 海豚睡眠相关

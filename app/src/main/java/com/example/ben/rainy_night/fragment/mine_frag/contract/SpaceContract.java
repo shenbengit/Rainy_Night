@@ -55,8 +55,9 @@ public interface SpaceContract {
 
         /**
          * 加载数据
+         * @param isFromPostStory 是否是从发表帖子fragment 提示更新
          */
-        void loadData();
+        void loadData(boolean isFromPostStory);
 
         /**
          * 获取帖子数据

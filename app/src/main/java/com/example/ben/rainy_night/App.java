@@ -123,8 +123,6 @@ public class App extends Application {
             MusicManager.get()
                     .setContext(this)
                     .setCacheConfig(cacheConfig)
-//                    .setNotificationCreater(creater)
-                    .giveUpAudioFocusManager()
                     .init();
         }
 

@@ -86,6 +86,8 @@ public class FocusAndLockManager {
                 case AudioManager.AUDIOFOCUS_LOSS:
                     mCurrentAudioFocusState = AUDIO_NO_FOCUS_NO_DUCK;
                     break;
+                default:
+                    break;
             }
 
             if (mListener != null) {

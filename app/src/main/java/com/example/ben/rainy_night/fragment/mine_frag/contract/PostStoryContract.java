@@ -1,6 +1,8 @@
 package com.example.ben.rainy_night.fragment.mine_frag.contract;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.widget.EditText;
@@ -37,6 +39,14 @@ public interface PostStoryContract {
          * @return
          */
         EditText getEditText();
+
+        /**
+         * 类似 {@link Activity#setResult(int, Intent)}
+         *
+         * @param resultCode
+         * @param bundle
+         */
+        void setFragResult(int resultCode, Bundle bundle);
     }
 
     interface Presenter extends BasePresenter {

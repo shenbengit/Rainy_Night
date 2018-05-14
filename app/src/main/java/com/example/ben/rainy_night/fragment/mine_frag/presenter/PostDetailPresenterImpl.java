@@ -81,7 +81,6 @@ public class PostDetailPresenterImpl implements PostDetailContract.Presenter, Sw
     @Override
     public void getPostComment(OnPostCommentEvent event) {
         setRefreshing(false);
-        LoggerUtil.e("评论操作： " + event.getAction());
         switch (event.getAction()) {
             case Constant.ACTION_ADD:
                 if (TextUtils.equals(event.getResult(), Constant.OK)) {

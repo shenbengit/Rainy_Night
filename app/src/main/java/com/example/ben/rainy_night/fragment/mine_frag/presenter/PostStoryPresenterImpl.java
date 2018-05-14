@@ -2,6 +2,7 @@ package com.example.ben.rainy_night.fragment.mine_frag.presenter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
 
@@ -169,6 +170,9 @@ public class PostStoryPresenterImpl implements PostStoryContract.Presenter {
             view.showToast("发表成功");
             //发表成功后清除预览缓存
             PictureFileUtils.deleteCacheDirFile(view.getFragAct());
+            Bundle bundle = new Bundle();
+            bundle.putString("发表成功", "发表成功");
+            view.setFragResult(-1, bundle);
             view.getFragAct().onBackPressed();
         } else {
             view.showToast(message);

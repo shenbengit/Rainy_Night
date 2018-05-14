@@ -144,6 +144,7 @@ public class PostStoryFragment extends BaseFragment<PostStoryContract.Presenter>
         // 入场动画结束后执行  优化,防动画卡顿
         _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         presenter.initGridView();
+
     }
 
     /**
@@ -185,6 +186,11 @@ public class PostStoryFragment extends BaseFragment<PostStoryContract.Presenter>
     @Override
     public EditText getEditText() {
         return etPostStory;
+    }
+
+    @Override
+    public void setFragResult(int resultCode, Bundle bundle) {
+        setFragmentResult(resultCode, bundle);
     }
 
     @Override
