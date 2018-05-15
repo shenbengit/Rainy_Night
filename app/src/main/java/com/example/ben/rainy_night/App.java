@@ -1,9 +1,7 @@
 package com.example.ben.rainy_night;
 
 import android.app.Application;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
@@ -14,7 +12,6 @@ import com.example.ben.rainy_night.util.LoggerUtil;
 import com.lzx.musiclibrary.cache.CacheConfig;
 import com.lzx.musiclibrary.cache.CacheUtils;
 import com.lzx.musiclibrary.manager.MusicManager;
-import com.lzx.musiclibrary.notification.NotificationCreater;
 import com.lzx.musiclibrary.utils.BaseUtil;
 import com.lzy.okserver.OkDownload;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -77,7 +74,7 @@ public class App extends Application {
                 .install();
 
         //OkGo初始化
-        OkGoFactory.init(this);
+        OkGoFactory.getInstance().init(this);
 
         //Bmob初始化
         BmobConfig config = new BmobConfig.Builder(this)

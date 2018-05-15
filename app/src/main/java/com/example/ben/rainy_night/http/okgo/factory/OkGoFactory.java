@@ -15,6 +15,8 @@ import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import okhttp3.OkHttpClient;
 
 /**
@@ -24,12 +26,14 @@ import okhttp3.OkHttpClient;
 
 public class OkGoFactory {
 
+    private CompositeDisposable mDisposable;
+
     public static OkGoFactory getInstance() {
         return Holder.FACTORY;
     }
 
     private OkGoFactory() {
-
+        mDisposable = new CompositeDisposable();
     }
 
     private static final class Holder {
@@ -41,7 +45,7 @@ public class OkGoFactory {
      *
      * @param application
      */
-    public static void init(Application application) {
+    public void init(Application application) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor("OkGo");
         interceptor.setPrintLevel(HttpLoggingInterceptor.Level.BASIC);
         interceptor.setColorLevel(Level.INFO);
@@ -64,5 +68,14 @@ public class OkGoFactory {
                 .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)
                 .setRetryCount(3);
     }
+
+    public void addDisposable(Disposable disposable) {
+        mDisposable.add(disposable);
+    }
+
+    public void dispose() {
+        mDisposable.dispose();
+    }
+
 
 }

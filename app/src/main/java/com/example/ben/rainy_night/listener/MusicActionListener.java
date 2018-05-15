@@ -5,6 +5,8 @@ import android.content.Context;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
 
+import java.io.IOException;
+
 /**
  * @author Ben
  * @date 2018/4/7
@@ -194,6 +196,26 @@ public interface MusicActionListener {
      * @return
      */
     SongInfo getCurrentMediaInfo();
+
+    /**
+     * 获取缓存路径
+     *
+     * @return 路径
+     */
+    String getCacheFilePath();
+
+    /**
+     * 获取缓存目录的文件大小
+     *
+     * @return 文件大小, 单位为:B
+     * @throws IOException
+     */
+    long getCachedFileSize() throws IOException;
+
+    /**
+     * 清除已经缓存的音乐
+     */
+    void clearCachedFile();
 
     /**
      * 判断当前的音乐是不是正在播放的音乐

@@ -15,6 +15,8 @@ import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginF
 import com.example.ben.rainy_night.fragment.mine_frag.frag.personal.MyPersonalFragment;
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.SettingPresenterImpl;
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
+import com.example.ben.rainy_night.manager.MusicActionManager;
+import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 import butterknife.BindView;
@@ -120,7 +122,7 @@ public class SettingFragment extends BaseFragment<SettingContract.Presenter> imp
      */
     @Override
     protected void initData() {
-
+        LoggerUtil.e("音乐缓存大小：" + MusicActionManager.getInstance().getCachedFileSize());
     }
 
     /**

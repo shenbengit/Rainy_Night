@@ -875,6 +875,16 @@ public class MusicManager implements IPlayControl {
         }
     }
 
+    /**
+     * 获取缓存路径
+     *
+     * @return 路径
+     */
+    public String getCacheFilePath() {
+        return !TextUtils.isEmpty(mCacheConfig.getCachePath())
+                ? mCacheConfig.getCachePath() : CacheUtils.getDefaultSongCacheDir().getAbsolutePath();
+    }
+
     @Override
     public void registerPlayerEventListener(IOnPlayerEventListener listener) {
         //Do nothing

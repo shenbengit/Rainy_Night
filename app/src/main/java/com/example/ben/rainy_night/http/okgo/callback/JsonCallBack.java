@@ -22,7 +22,7 @@ public abstract class JsonCallBack<T> extends AbsCallback<T> {
         this.mType = mType;
     }
 
-    public JsonCallBack(Class<T> mClass) {
+    protected JsonCallBack(Class<T> mClass) {
         this.mClass = mClass;
     }
 

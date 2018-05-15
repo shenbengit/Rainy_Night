@@ -11,10 +11,13 @@ import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.ToastUtil;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
+import com.lzx.musiclibrary.cache.CacheConfig;
 import com.lzx.musiclibrary.manager.MusicManager;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.db.CacheManager;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -446,6 +449,65 @@ public class MusicActionListenerImpl implements MusicActionListener {
         return MusicManager.get().getCurrPlayingMusic();
     }
 
+    @Override
+    public String getCacheFilePath() {
+        return MusicManager.get().getCacheFilePath();
+    }
+
+    /**
+     * 获取缓存目录的文件大小
+     *
+     * @return 文件大小, 单位为:B
+     * @throws IOException
+     */
+    @Override
+    public long getCachedFileSize() throws IOException {
+        long size = 0;
+        File mFile = new File(getCacheFilePath());
+        if (mFile.exists()) {
+            if (mFile.isDirectory()) {
+                File[] list = mFile.listFiles();
+                for (File file : list) {
+                    if (file.isDirectory()) {
+                        size = size + getDirectorySize(file);
+                    } else if (file.isFile()) {
+                        size = size + getFileSize(file);
+                    }
+                }
+            } else {
+                size = mFile.length();
+            }
+        } else {
+            LoggerUtil.e("音乐缓存目录不存在，重新创建目录");
+            mFile.mkdir();
+        }
+        return size;
+    }
+
+    /**
+     * 清除已经缓存的音乐
+     */
+    @Override
+    public void clearCachedFile() {
+        File mFile = new File(getCacheFilePath());
+        if (mFile.exists()) {
+            if (mFile.isDirectory()) {
+                File[] list = mFile.listFiles();
+                for (File file : list) {
+                    if (file.isDirectory()) {
+                        deleteDirectory(file);
+                    } else if (file.isFile()) {
+                        file.delete();
+                    }
+                }
+            } else {
+                mFile.delete();
+            }
+        } else {
+            LoggerUtil.e("清除缓存音乐目录不存在");
+        }
+    }
+
     /**
      * 判断当前的音乐是不是正在播放的音乐
      *
@@ -668,6 +730,55 @@ public class MusicActionListenerImpl implements MusicActionListener {
             default:
                 LoggerUtil.e("MusicActionListenerImpl: start()音乐类型错误，" + musicType);
                 break;
+        }
+    }
+
+    /**
+     * 获取文件夹大小
+     *
+     * @param file
+     * @return
+     */
+    private long getDirectorySize(File file) {
+        long size = 0;
+        File[] mFile = file.listFiles();
+        for (File f : mFile) {
+            if (f.isDirectory()) {
+                size = size + getDirectorySize(f);
+            } else if (f.isFile()) {
+                size = size + getFileSize(f);
+            }
+        }
+        return size;
+    }
+
+    /**
+     * 获取文件大小
+     *
+     * @param file
+     * @return
+     */
+    private long getFileSize(File file) {
+        long size = 0;
+        if (file.exists()) {
+            size = file.length();
+        }
+        return size;
+    }
+
+    /**
+     * 删除目录文件
+     *
+     * @param file
+     */
+    private void deleteDirectory(File file) {
+        File[] list = file.listFiles();
+        for (File f : list) {
+            if (f.isDirectory()) {
+                deleteDirectory(f);
+            } else if (f.isFile()) {
+                f.delete();
+            }
         }
     }
 }

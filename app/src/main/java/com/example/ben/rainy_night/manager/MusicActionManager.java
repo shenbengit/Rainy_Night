@@ -7,6 +7,8 @@ import com.example.ben.rainy_night.listener.MusicActionListener;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
 
+import java.io.IOException;
+
 /**
  * 音乐播放工具类
  *
@@ -82,10 +84,7 @@ public class MusicActionManager {
      * @return
      */
     public String getCurrentMusicType() {
-        if (mListener != null) {
-            return mListener.getCurrentMusicType();
-        }
-        return null;
+        return mListener != null ? mListener.getCurrentMusicType() : null;
     }
 
 
@@ -258,10 +257,7 @@ public class MusicActionManager {
      */
 
     public int getState() {
-        if (mListener != null) {
-            return mListener.getState();
-        }
-        return 0;
+        return mListener != null ? mListener.getState() : 0;
     }
 
     /**
@@ -270,10 +266,7 @@ public class MusicActionManager {
      * @return
      */
     public int getPlayMode() {
-        if (mListener != null) {
-            return mListener.getPlayMode();
-        }
-        return 0;
+        return mListener != null ? mListener.getPlayMode() : 0;
     }
 
     /**
@@ -283,10 +276,7 @@ public class MusicActionManager {
      */
 
     public boolean isPlaying() {
-        if (mListener != null) {
-            return mListener.isPlaying();
-        }
-        return false;
+        return mListener != null && mListener.isPlaying();
     }
 
     /**
@@ -295,10 +285,7 @@ public class MusicActionManager {
      * @return
      */
     public long getProgress() {
-        if (mListener != null) {
-            return mListener.getProgress();
-        }
-        return 0;
+        return mListener != null ? mListener.getProgress() : 0;
     }
 
     /**
@@ -308,10 +295,7 @@ public class MusicActionManager {
      */
 
     public int getCurrPlayingIndex() {
-        if (mListener != null) {
-            return mListener.getCurrPlayingIndex();
-        }
-        return -1;
+        return mListener != null ? mListener.getCurrPlayingIndex() : -1;
     }
 
     /**
@@ -321,10 +305,36 @@ public class MusicActionManager {
      */
 
     public SongInfo getCurrentMediaInfo() {
-        if (mListener != null) {
-            return mListener.getCurrentMediaInfo();
+        return mListener != null ? mListener.getCurrentMediaInfo() : null;
+    }
+
+    public String getCacheFilePath() {
+        return mListener != null ? mListener.getCacheFilePath() : null;
+    }
+
+    /**
+     * 获取缓存目录的文件大小
+     *
+     * @return 文件大小, 单位为:B
+     */
+    public long getCachedFileSize() {
+        try {
+            return mListener != null ? mListener.getCachedFileSize() : 0;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
         }
-        return null;
+    }
+
+    /**
+     * 清除已经缓存的音乐
+     *
+     * @return 清除是否成功
+     */
+    public void clearCachedFile() {
+        if (mListener != null) {
+            mListener.clearCachedFile();
+        }
     }
 
     /**
@@ -334,10 +344,7 @@ public class MusicActionManager {
      * @return
      */
     public boolean isCurrMusicIsPlayingMusic(String musicName) {
-        if (mListener != null) {
-            return mListener.isCurrMusicIsPlayingMusic(musicName);
-        }
-        return false;
+        return mListener != null && mListener.isCurrMusicIsPlayingMusic(musicName);
     }
 
     /**
@@ -347,10 +354,7 @@ public class MusicActionManager {
      */
 
     public int getDuration() {
-        if (mListener != null) {
-            mListener.getDuration();
-        }
-        return 0;
+        return mListener != null ? mListener.getDuration() : 0;
     }
 
     /**
