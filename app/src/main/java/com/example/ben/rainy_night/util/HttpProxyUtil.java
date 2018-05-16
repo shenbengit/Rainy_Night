@@ -28,12 +28,12 @@ public class HttpProxyUtil {
     private static HttpProxyCacheServer newProxy(Context context) {
         return new HttpProxyCacheServer.Builder(context)
                 .cacheDirectory(getVideoCacheDir(Environment.getExternalStorageDirectory().getPath() + "/RainyNight/Video/"))
-                .maxCacheSize(30)
-                .maxCacheSize(1024 * 1024 * 100)
+                .maxCacheFilesCount(20)
+                .maxCacheSize(1024 * 1024 * 200)
                 .build();
     }
 
-    public static File getVideoCacheDir(String path) {
+    private static File getVideoCacheDir(String path) {
         File filePath = new File(path);
         if (!filePath.exists()) {
             filePath.mkdirs();
