@@ -21,6 +21,8 @@ import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.GsonUtil;
+import com.example.ben.rainy_night.util.LoggerUtil;
+import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,11 +112,12 @@ public class SleepNaturalMusicPresenterImpl implements SleepNaturalMusicContract
             if (TextUtils.equals(entity.getTitle(), mSceneType)) {
                 MusicEntity bean = GsonUtil.fromJson(entity.getJson(), MusicEntity.class);
                 if (bean != null) {
+                    SharedPreferencesUtil.getInstance(view.getCon().getApplicationContext()).putValue(mSceneType, entity.getJson());
                     mLists.clear();
                     mLists.addAll(bean.getData());
                     if (!mLists.isEmpty()) {
                         mAdapter.setNewData(mLists);
-                        MusicActionManager.getInstance().setData(mSceneType,bean);
+                        MusicActionManager.getInstance().setData(mSceneType, bean);
                         mAdapter.setFooterView(mViewNoMoreData);
                     } else {
                         mAdapter.setEmptyView(mViewDataError);

@@ -1,7 +1,6 @@
 package com.example.ben.rainy_night.util;
 
 import android.content.Context;
-import android.os.Environment;
 
 import com.danikula.videocache.HttpProxyCacheServer;
 
@@ -27,7 +26,7 @@ public class HttpProxyUtil {
 
     private static HttpProxyCacheServer newProxy(Context context) {
         return new HttpProxyCacheServer.Builder(context)
-                .cacheDirectory(getVideoCacheDir(Environment.getExternalStorageDirectory().getPath() + "/RainyNight/Video/"))
+                .cacheDirectory(getVideoCacheDir(Constant.VIDEO_CACHE_PATH))
                 .maxCacheFilesCount(20)
                 .maxCacheSize(1024 * 1024 * 200)
                 .build();

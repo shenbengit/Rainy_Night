@@ -7,8 +7,10 @@ import com.example.ben.rainy_night.fragment.home_frag.contract.SleepMusicVideoCo
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
+import com.example.ben.rainy_night.util.GsonUtil;
 import com.example.ben.rainy_night.util.HttpProxyUtil;
 import com.example.ben.rainy_night.util.LoggerUtil;
+import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
 import com.lzy.okgo.cache.CacheEntity;
@@ -37,10 +39,7 @@ public class SleepMusicVideoPresenterImpl implements SleepMusicVideoContract.Pre
     public void init(int position) {
         mServer = HttpProxyUtil.getProxy(view.getCon().getApplicationContext());
         mPosition = position;
-        CacheEntity<MusicEntity> cache = CacheManager.getInstance().get(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, MusicEntity.class);
-        if (cache != null) {
-            mEntity = cache.getData();
-        }
+        mEntity = GsonUtil.fromJson(String.valueOf(SharedPreferencesUtil.getInstance(view.getCon().getApplicationContext()).getValue(Constant.DOLPHIN_NATURAL_MUSIC_CACHE, "")), MusicEntity.class);
         MusicActionManager.getInstance().addPlayerEventListener(this);
         MusicActionManager.getInstance().setVolume(0.4f);
         MusicActionManager.getInstance().setPlayMode(Constant.PLAY_IN_SINGLE_LOOP);

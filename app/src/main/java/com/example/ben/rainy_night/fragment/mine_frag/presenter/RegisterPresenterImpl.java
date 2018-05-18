@@ -127,6 +127,7 @@ public class RegisterPresenterImpl implements RegisterContract.Presenter {
         view.cancelDialog();
         if (TextUtils.equals(Constant.OK, message)) {
             view.showToast("注册成功");
+            view.goBack();
         } else {
             view.showToast(message);
         }
@@ -152,7 +153,7 @@ public class RegisterPresenterImpl implements RegisterContract.Presenter {
         String name = view.getEditName().getText().toString().trim();
         String regex_name = "[A-Za-z0-9_\\u4e00-\\u9fa5]{3,8}";
         if (!RxRegTool.isMatch(regex_name, name)) {
-            view.showToast("用户名格式不正确!");
+            view.showToast("请输入3~8位英文、数字、汉字!");
             return false;
         }
 

@@ -20,6 +20,8 @@ import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
+import com.example.ben.rainy_night.util.GsonUtil;
+import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
 import com.lzy.okgo.cache.CacheEntity;
@@ -253,13 +255,7 @@ public class SleepMusicAudioFragment extends BaseFragment implements OnPlayerEve
 
     @Override
     protected void initData() {
-        CacheEntity<MusicEntity> cache = CacheManager.getInstance()
-                .get(Constant.DOLPHIN_MUSIC_CACHE + Constant.DOLPHIN_LIGHT_MUSIC, MusicEntity.class);
-        if (cache == null) {
-            toastShow("暂无数据");
-            return;
-        }
-        mEntity = cache.getData();
+        mEntity = GsonUtil.fromJson(String.valueOf(SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, "")), MusicEntity.class);
         MusicActionManager.getInstance().start(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, mPosition, Constant.PLAY_IN_SINGLE_LOOP, 30);
     }
 

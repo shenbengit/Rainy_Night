@@ -8,9 +8,9 @@ import android.text.TextUtils;
 
 import com.example.ben.rainy_night.http.okgo.factory.OkGoFactory;
 import com.example.ben.rainy_night.manager.MusicActionManager;
+import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
 import com.lzx.musiclibrary.cache.CacheConfig;
-import com.lzx.musiclibrary.cache.CacheUtils;
 import com.lzx.musiclibrary.manager.MusicManager;
 import com.lzx.musiclibrary.utils.BaseUtil;
 import com.lzy.okserver.OkDownload;
@@ -114,7 +114,7 @@ public class App extends Application {
             //边播边存配置
             CacheConfig cacheConfig = new CacheConfig.Builder()
                     .setOpenCacheWhenPlaying(true)
-                    .setCachePath(CacheUtils.getStorageDirectoryPath() + "/RainyNight/Music/")
+                    .setCachePath(Constant.MUSIC_CACHE_PATH)
                     .build();
 
             MusicManager.get()

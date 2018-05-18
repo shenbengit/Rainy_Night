@@ -40,11 +40,11 @@ public interface SpaceContract {
         RecyclerView getRecycler();
 
         /**
-         * 从兄弟fragment进行跳转
+         *  类似startActivityForResult()
          *
          * @param fragment 要跳转的fragment
          */
-        void startBrotherFragment(ISupportFragment fragment);
+        void startFragmentForResult(ISupportFragment fragment);
     }
 
     interface Presenter extends BasePresenter {
@@ -55,9 +55,15 @@ public interface SpaceContract {
 
         /**
          * 加载数据
+         *
          * @param isFromPostStory 是否是从发表帖子fragment 提示更新
          */
         void loadData(boolean isFromPostStory);
+
+        /**
+         * 数据发生变化，提醒Adapter更新
+         */
+        void notifyDataSetChanged();
 
         /**
          * 获取帖子数据

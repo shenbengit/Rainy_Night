@@ -27,6 +27,7 @@ import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginF
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.PostDetailPresenterImpl;
 import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
+import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.widget.EnlargePictureDialog;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
@@ -88,6 +89,9 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
 
     @OnCheckedChanged({R.id.cb_post_detail_likes, R.id.cb_post_detail_comment})
     public void viewOnCheckChanged(CompoundButton button, boolean isChecked) {
+        if (!button.isPressed()) {
+            return;
+        }
         switch (button.getId()) {
             case R.id.cb_post_detail_likes:
                 if (mUserEntity == null) {
@@ -159,6 +163,8 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
 
     private PostEntity mEntity;
     private boolean isFirstIn = true;
+    private boolean isLoginUser = true;
+    private boolean isUserDataChanged = false;
 
     @Override
     protected int getLayout() {
@@ -197,6 +203,12 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
     public void onSupportVisible() {
         super.onSupportVisible();
         mUserEntity = BmobUser.getCurrentUser(UserEntity.class);
+        if (mUserEntity == null) {
+            isLoginUser = false;
+        }
+        if (!isLoginUser && mUserEntity != null) {
+            isUserDataChanged = true;
+        }
         presenter.getCurrentUser(mUserEntity);
         if (!isFirstIn) {
             loadPostDetail();
@@ -278,8 +290,15 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+        if (isUserDataChanged) {
+            Bundle bundle = new Bundle();
+            bundle.putString("用户登录", "用户登录");
+            setFragmentResult(RESULT_OK, bundle);
+        }
+
         _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         hideSoftInput();
+
     }
 
     @Override

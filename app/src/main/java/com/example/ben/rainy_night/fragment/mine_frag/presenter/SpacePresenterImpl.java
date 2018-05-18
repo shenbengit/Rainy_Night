@@ -19,6 +19,7 @@ import com.example.ben.rainy_night.http.bmob.model.PostModel;
 import com.example.ben.rainy_night.http.bmob.model.PostModelImpl;
 import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
 import com.example.ben.rainy_night.util.Constant;
+import com.example.ben.rainy_night.util.LoggerUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
         mViewNoMoreData = LayoutInflater.from(view.getCon())
                 .inflate(R.layout.layout_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
 
-        mAdapter.setOnItemClickListener((adapter, v, position) -> view.startBrotherFragment(PostDetailFragment.newInstance(mList.get(position))));
+        mAdapter.setOnItemClickListener((adapter, v, position) -> view.startFragmentForResult(PostDetailFragment.newInstance(mList.get(position))));
     }
 
     @Override
@@ -97,12 +98,23 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
         if (!mAdapter.isLoginUser()) {
             mAdapter.setCurrentUser();
         }
-        if (isFromPostStory && !mAdapter.getData().isEmpty()) {
-            view.getRecycler().smoothScrollToPosition(0);
+        if (isFromPostStory) {
             setRefreshing(true);
+            if (!mAdapter.getData().isEmpty()) {
+                view.getRecycler().smoothScrollToPosition(0);
+            }
         }
+        new Handler(Looper.getMainLooper()).postDelayed(() -> onRefresh(), 1000);
+    }
 
-        onRefresh();
+    @Override
+    public void notifyDataSetChanged() {
+        if (mAdapter != null) {
+            if (!mAdapter.isLoginUser()) {
+                mAdapter.setCurrentUser();
+            }
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

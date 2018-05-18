@@ -150,7 +150,11 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
         if (requestCode == Constant.POST_SROTY && resultCode == RESULT_OK && data != null) {
             if (TextUtils.equals(data.getString("发表成功"), "发表成功")) {
                 presenter.loadData(true);
+                LoggerUtil.e("从发表帖子Fragment返回");
             }
+        }else if (requestCode == Constant.USER_LOGIN && resultCode == RESULT_OK && data != null){
+            presenter.notifyDataSetChanged();
+            LoggerUtil.e("从查看帖子详情Fragment返回");
         }
     }
 
@@ -218,8 +222,8 @@ public class SpaceFragment extends BaseFragment<SpaceContract.Presenter> impleme
     }
 
     @Override
-    public void startBrotherFragment(ISupportFragment fragment) {
-        start(fragment);
+    public void startFragmentForResult(ISupportFragment fragment) {
+        startForResult(fragment,Constant.USER_LOGIN);
     }
 
 }

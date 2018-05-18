@@ -1,5 +1,7 @@
 package com.example.ben.rainy_night.util;
 
+import com.lzx.musiclibrary.cache.CacheUtils;
+
 /**
  * 常量
  *
@@ -8,6 +10,14 @@ package com.example.ben.rainy_night.util;
  */
 
 public class Constant {
+    /**
+     * 视频缓存路径
+     */
+    public static final String VIDEO_CACHE_PATH = CacheUtils.getStorageDirectoryPath() + "/RainyNight/Video/";
+    /**
+     * 音乐缓存路径
+     */
+    public static final String MUSIC_CACHE_PATH = CacheUtils.getStorageDirectoryPath() + "/RainyNight/Music/";
 
     /**
      * 用户objectId
@@ -71,6 +81,7 @@ public class Constant {
     public static final int REQUEST_IMAGE = 188;
     public static final int REQUEST_POP = 99;
     public static final int POST_SROTY = 101;
+    public static final int USER_LOGIN = 102;
     /**
      * 帖子最大选择图片数
      */

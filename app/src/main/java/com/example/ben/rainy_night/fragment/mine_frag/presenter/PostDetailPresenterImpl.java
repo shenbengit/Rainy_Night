@@ -125,7 +125,6 @@ public class PostDetailPresenterImpl implements PostDetailContract.Presenter, Sw
     @Override
     public void getPostLikes(OnPostLikesEvent event) {
         setRefreshing(false);
-        LoggerUtil.e("点赞操作： " + event.getAction());
         switch (event.getAction()) {
             case Constant.ACTION_ADD:
                 if (TextUtils.equals(event.getResult(), Constant.OK)) {
@@ -180,7 +179,6 @@ public class PostDetailPresenterImpl implements PostDetailContract.Presenter, Sw
 
     @Override
     public void setPostLikes(boolean isLikes) {
-        LoggerUtil.e("setPostLikes: " + isLikes);
         if (!TextUtils.isEmpty(isCanQueryData())) {
             view.showToast(isCanQueryData());
             return;

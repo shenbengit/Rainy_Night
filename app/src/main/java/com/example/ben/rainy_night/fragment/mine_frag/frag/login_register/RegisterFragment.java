@@ -231,6 +231,11 @@ public class RegisterFragment extends BaseFragment<RegisterContract.Presenter> i
         return pictureCode;
     }
 
+    @Override
+    public void goBack() {
+        _mActivity.onBackPressed();
+    }
+
     /**
      * 当前网络是否可用
      *

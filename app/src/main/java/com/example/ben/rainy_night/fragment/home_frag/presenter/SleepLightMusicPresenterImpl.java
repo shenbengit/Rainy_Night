@@ -21,6 +21,7 @@ import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.GsonUtil;
+import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +110,7 @@ public class SleepLightMusicPresenterImpl implements SleepLightMusicContract.Pre
             if (TextUtils.equals(entity.getTitle(), mSceneType)) {
                 MusicEntity bean = GsonUtil.fromJson(entity.getJson(), MusicEntity.class);
                 if (bean != null) {
+                    SharedPreferencesUtil.getInstance(view.getCon().getApplicationContext()).putValue(mSceneType, entity.getJson());
                     mLists.clear();
                     mLists.addAll(bean.getData());
                     if (!mLists.isEmpty()) {

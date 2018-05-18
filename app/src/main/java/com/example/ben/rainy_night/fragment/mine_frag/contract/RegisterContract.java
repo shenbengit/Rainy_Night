@@ -8,7 +8,6 @@ import com.example.ben.rainy_night.base.BaseView;
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
 
 /**
- *
  * @author Ben
  * @date 2018/3/22
  */
@@ -55,6 +54,11 @@ public interface RegisterContract {
          * @return
          */
         String getStringPictureCode();
+
+        /**
+         * 注册成功返回
+         */
+        void goBack();
     }
 
     interface Presenter extends BasePresenter {
