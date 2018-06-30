@@ -19,9 +19,11 @@ import com.example.ben.rainy_night.base.BaseFragment;
 import com.example.ben.rainy_night.fragment.night_frag.adapter.SleepFmFragmentAdapter;
 import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
+import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
+import com.lzx.musiclibrary.manager.MusicManager;
 import com.lzx.musiclibrary.manager.TimerTaskManager;
 import com.vondear.rxtools.RxTimeTool;
 
@@ -79,9 +81,21 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
                 musicPlayAction();
                 break;
             case R.id.ib_night_music_previous:
+                if (TextUtils.isEmpty(MusicActionManager.getInstance().getCurrentMusicType()) ||
+                        TextUtils.equals(MusicActionManager.getInstance().getCurrentMusicType(), Constant.DOLPHIN_NATURAL_MUSIC_CACHE) ||
+                        TextUtils.equals(MusicActionManager.getInstance().getCurrentMusicType(), Constant.DOLPHIN_LIGHT_MUSIC_CACHE)) {
+                    toastShow("请先播放当前界面的音乐");
+                    return;
+                }
                 MusicActionManager.getInstance().startPrevious();
                 break;
             case R.id.ib_night_music_next:
+                if (TextUtils.isEmpty(MusicActionManager.getInstance().getCurrentMusicType()) ||
+                        TextUtils.equals(MusicActionManager.getInstance().getCurrentMusicType(), Constant.DOLPHIN_NATURAL_MUSIC_CACHE) ||
+                        TextUtils.equals(MusicActionManager.getInstance().getCurrentMusicType(), Constant.DOLPHIN_LIGHT_MUSIC_CACHE)) {
+                    toastShow("请先播放当前界面的音乐");
+                    return;
+                }
                 MusicActionManager.getInstance().startNext();
                 break;
             case R.id.ib_cycle_mode:
@@ -107,6 +121,12 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
                 musicPlayAction();
                 break;
             case R.id.ib_toolbar_next:
+                if (TextUtils.isEmpty(MusicActionManager.getInstance().getCurrentMusicType()) ||
+                        TextUtils.equals(MusicActionManager.getInstance().getCurrentMusicType(), Constant.DOLPHIN_NATURAL_MUSIC_CACHE) ||
+                        TextUtils.equals(MusicActionManager.getInstance().getCurrentMusicType(), Constant.DOLPHIN_LIGHT_MUSIC_CACHE)) {
+                    toastShow("请先播放当前界面的音乐");
+                    return;
+                }
                 MusicActionManager.getInstance().startNext();
                 break;
             default:
@@ -278,6 +298,7 @@ public class NightFragment extends BaseFragment implements OnPlayerEventListener
             MusicActionManager.getInstance().setPlayMode(Constant.PLAY_IN_LIST_LOOP);
             SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).putValue(Constant.CYCLE_MODE, Constant.LIST_CYCLE);
         }
+        LoggerUtil.e("循环模式："+ MusicManager.get().getPlayMode());
     }
 
     /**

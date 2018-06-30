@@ -21,6 +21,11 @@ public class QueueHelper {
         return getMediaMetadataCompat(info);
     }
 
+    /**
+     * 添加歌曲信息
+     * @param info 歌曲详细信息
+     * @return
+     */
     private static MediaMetadataCompat getMediaMetadataCompat(SongInfo info) {
         MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
         builder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, info.getSongId())

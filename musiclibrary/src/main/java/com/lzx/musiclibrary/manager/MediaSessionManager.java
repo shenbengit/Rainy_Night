@@ -25,13 +25,15 @@ public class MediaSessionManager {
         mContext = context;
         ComponentName mediaButtonReceiver = new ComponentName(mContext, RemoteControlReceiver.class);
         mMediaSession = new MediaSessionCompat(mContext, TAG, mediaButtonReceiver, null);
+        //表示支持按键信息类型
         mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS | MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
+        //设计监听回调
         mMediaSession.setCallback(playbackManager.getMediaSessionCallback());
+        //必须设置为true，这样才能接收各种信息
         mMediaSession.setActive(true);
     }
 
     public void updateMetaData(MediaMetadataCompat metadataCompat) {
-
         mMediaSession.setMetadata(metadataCompat);
     }
 

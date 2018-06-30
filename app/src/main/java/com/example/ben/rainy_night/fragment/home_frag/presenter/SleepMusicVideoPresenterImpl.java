@@ -117,7 +117,7 @@ public class SleepMusicVideoPresenterImpl implements SleepMusicVideoContract.Pre
     }
 
     /**
-     * 播放
+     * 视频播放
      *
      * @param position
      */
@@ -128,10 +128,9 @@ public class SleepMusicVideoPresenterImpl implements SleepMusicVideoContract.Pre
         view.getVideoView().setScaleType(ScaleType.FIT_XY);
         GlideApp.with(view.getCon()).load(mEntity.getData().get(position).getVideoPictureUrl()).into(view.getVideoView().getPreviewImageView());
         view.getVideoView().setVideoPath(getProxyUrl(mEntity.getData().get(position).getVideoUrl()));
+        //循环模式 ：单曲循环
         view.getVideoView().setRepeatMode(2);
         view.getVideoView().setOnPreparedListener(() -> view.getVideoView().start());
-
-        LoggerUtil.e(mEntity.getData().get(position).getVideoUrl());
     }
 
     @Override

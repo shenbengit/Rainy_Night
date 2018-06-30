@@ -11,7 +11,6 @@ import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.ToastUtil;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
-import com.lzx.musiclibrary.cache.CacheConfig;
 import com.lzx.musiclibrary.manager.MusicManager;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.db.CacheManager;
@@ -62,7 +61,7 @@ public class MusicActionListenerImpl implements MusicActionListener {
     /**
      * 当前播放音乐的种类
      */
-    private String mMusicType;
+    private String mMusicType = null;
 
     private MusicActionListenerImpl() {
         mListCurrent = new ArrayList<>();

@@ -36,8 +36,8 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
-            Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getLayout(), container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
@@ -66,7 +66,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     public void onSupportVisible() {
         super.onSupportVisible();
         if (isTransparentStatusBar()) {
-            mImmersionBar.keyboardEnable(true).navigationBarWithKitkatEnable(false).transparentStatusBar().init();
+            mImmersionBar.keyboardEnable(true).navigationBarWithKitkatEnable(false).transparentBar().init();
         } else {
             if (mStatusView != null) {
                 mImmersionBar.keyboardEnable(true).navigationBarWithKitkatEnable(false).statusBarColor(R.color.colorPrimaryDark).init();

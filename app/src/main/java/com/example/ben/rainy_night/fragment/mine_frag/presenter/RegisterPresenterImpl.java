@@ -96,7 +96,7 @@ public class RegisterPresenterImpl implements RegisterContract.Presenter {
             view.showToast("当前网络不可用");
             return;
         }
-
+        //手机验证码验证
         BmobSMS.verifySmsCode(view.getEditPhone().getText().toString().trim(),
                 view.getEditPhoneCode().getText().toString().trim(),
                 new UpdateListener() {

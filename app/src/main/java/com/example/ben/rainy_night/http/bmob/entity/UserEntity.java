@@ -1,5 +1,7 @@
 package com.example.ben.rainy_night.http.bmob.entity;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 
@@ -10,7 +12,7 @@ import cn.bmob.v3.datatype.BmobFile;
  * @date 2018/1/15
  */
 
-public class UserEntity extends BmobUser {
+public class UserEntity extends BmobUser implements Serializable{
 
     private static final long serialVersionUID = 4490757709998655360L;
     /**

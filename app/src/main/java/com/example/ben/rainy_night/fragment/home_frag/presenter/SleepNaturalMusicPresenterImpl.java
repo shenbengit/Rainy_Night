@@ -87,6 +87,9 @@ public class SleepNaturalMusicPresenterImpl implements SleepNaturalMusicContract
                 .inflate(R.layout.layout_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
 
         mAdapter.setOnItemClickListener((adapter, v, position) -> {
+            if (MusicActionManager.getInstance().isPlaying()){
+                MusicActionManager.getInstance().pause();
+            }
             view.startBrotherFragment(SleepMusicVideoFragment.newInstance(position));
         });
     }

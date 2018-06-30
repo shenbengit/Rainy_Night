@@ -10,6 +10,7 @@ import com.example.ben.rainy_night.R;
 import com.example.ben.rainy_night.base.BaseActivity;
 import com.example.ben.rainy_night.event.OnActivityResultEvent;
 import com.example.ben.rainy_night.fragment.main_frag.frag.MainFragment;
+import com.example.ben.rainy_night.fragment.main_frag.frag.SplashFragment;
 import com.example.ben.rainy_night.util.LoggerUtil;
 import com.gyf.barlibrary.ImmersionBar;
 import com.gyf.barlibrary.OSUtils;
@@ -47,8 +48,8 @@ public class MainActivity extends BaseActivity {
         //解决华为emui3.0与3.1手机手动隐藏底部导航栏时，导航栏背景色未被隐藏的问题
         if (OSUtils.isEMUI3_1()) {
             //第一种
-            getContentResolver().registerContentObserver(Settings.System.getUriFor
-                    (NAVIGATIONBAR_IS_MIN), true, mNavigationStatusObserver);
+            getContentResolver().registerContentObserver(Settings.System.
+                    getUriFor(NAVIGATIONBAR_IS_MIN), true, mNavigationStatusObserver);
             //第二种,禁止对导航栏的设置
             //mImmersionBar.navigationBarEnable(false).init();
         }
@@ -57,7 +58,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initData() {
         if (findFragment(MainFragment.class) == null) {
-            loadRootFragment(R.id.frame_main, MainFragment.newInstance());
+            loadRootFragment(R.id.frame_main, SplashFragment.newInstance());
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -21,11 +22,10 @@ import com.example.ben.rainy_night.http.okgo.entity.MusicEntity;
 import com.example.ben.rainy_night.manager.MusicActionManager;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.GsonUtil;
+import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.util.SharedPreferencesUtil;
 import com.lzx.musiclibrary.aidl.listener.OnPlayerEventListener;
 import com.lzx.musiclibrary.aidl.model.SongInfo;
-import com.lzy.okgo.cache.CacheEntity;
-import com.lzy.okgo.db.CacheManager;
 import com.vondear.rxtools.view.RxSeekBar;
 
 import butterknife.BindView;
@@ -66,9 +66,11 @@ public class SleepMusicAudioFragment extends BaseFragment implements OnPlayerEve
                 break;
             case R.id.ib_music_previous:
                 mTimer.cancel();
-                mPosition--;
-                loadPicture();
                 MusicActionManager.getInstance().startPrevious();
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    mPosition=MusicActionManager.getInstance().getCurrPlayingIndex();
+                    loadPicture();
+                },500);
                 mTimer.start();
                 break;
             case R.id.ib_music_isPlay:
@@ -88,9 +90,11 @@ public class SleepMusicAudioFragment extends BaseFragment implements OnPlayerEve
                 break;
             case R.id.ib_music_next:
                 mTimer.cancel();
-                mPosition++;
-                loadPicture();
                 MusicActionManager.getInstance().startNext();
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    mPosition=MusicActionManager.getInstance().getCurrPlayingIndex();
+                    loadPicture();
+                },500);
                 mTimer.start();
                 break;
             default:
@@ -169,11 +173,26 @@ public class SleepMusicAudioFragment extends BaseFragment implements OnPlayerEve
      * 是否正在滚动
      */
     private boolean isScrolled;
-
+    /**
+     * 是否正在播放
+     */
     private boolean isPlaying;
-    private CountDownTimer mTimer;
+    /**
+     * 对用户是否可见
+     */
+    private boolean isVisible;
 
-    private long mCurrentTime = -1;
+    /**
+     * 隐藏音乐播放功能布局
+     */
+    private CountDownTimer mTimer;
+    /**
+     * 设置音乐定时播放功能
+     */
+    private CountDownTimer mRemainTimer;
+
+    private long mRemainTime = -1;
+    private int index;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -201,13 +220,42 @@ public class SleepMusicAudioFragment extends BaseFragment implements OnPlayerEve
                     break;
                 case 3:
                     float[] values = rsbMusicTime.getCurrentRange();
-                    if (mCurrentTime == (long) values[0]) {
+                    if (mRemainTime == (long) values[0]) {
                         return;
                     }
-                    mCurrentTime = (long) values[0];
-                    if (mCurrentTime != -1) {
+                    mRemainTime = (long) values[0];
+                    if (mRemainTime != -1) {
                         //设置定时时间
-                        MusicActionManager.getInstance().setRemainTime(mCurrentTime);
+                        if (mRemainTimer != null) {
+                            mRemainTimer.cancel();
+                            mRemainTimer = null;
+                        }
+                        mRemainTimer = new CountDownTimer(mRemainTime * 60 * 1000, 1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                index++;
+                                if (index == 60) {
+                                    mRemainTime--;
+                                    if (isVisible) {
+                                        rsbMusicTime.setValue(mRemainTime);
+                                    }
+                                    index = 0;
+                                }
+                                if (mRemainTime < 0) {
+                                    mRemainTime = 0;
+                                }
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                mRemainTime = 0;
+                                if (isVisible) {
+                                    rsbMusicTime.setValue(0);
+                                }
+                                MusicActionManager.getInstance().pause();
+                            }
+                        };
+                        mRemainTimer.start();
                     }
                     break;
                 default:
@@ -228,6 +276,7 @@ public class SleepMusicAudioFragment extends BaseFragment implements OnPlayerEve
 
     @Override
     protected void initView() {
+        //获取屏幕宽度
         Resources resources = this.getResources();
         DisplayMetrics dm = resources.getDisplayMetrics();
         mWindowWidth = dm.widthPixels;
@@ -248,25 +297,28 @@ public class SleepMusicAudioFragment extends BaseFragment implements OnPlayerEve
                 mHandler.sendEmptyMessage(2);
             }
         };
-        mTimer.start();
         rsbMusicTime.setValue(30);
+        mHandler.sendEmptyMessage(3);
         MusicActionManager.getInstance().addPlayerEventListener(this);
     }
 
     @Override
     protected void initData() {
         mEntity = GsonUtil.fromJson(String.valueOf(SharedPreferencesUtil.getInstance(_mActivity.getApplicationContext()).getValue(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, "")), MusicEntity.class);
-        MusicActionManager.getInstance().start(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, mPosition, Constant.PLAY_IN_SINGLE_LOOP, 30);
+        MusicActionManager.getInstance().start(Constant.DOLPHIN_LIGHT_MUSIC_CACHE, mPosition, Constant.PLAY_IN_SINGLE_LOOP);
     }
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        isVisible = true;
         if (!isScrolled) {
             loadPicture();
         } else {
             mHandler.sendEmptyMessage(1);
         }
+        rsbMusicTime.setValue(mRemainTime);
+        mTimer.start();
     }
 
     /**
@@ -275,10 +327,13 @@ public class SleepMusicAudioFragment extends BaseFragment implements OnPlayerEve
     private void loadPicture() {
         GlideApp.with(_mActivity).load(mEntity.getData().get(mPosition).getAudioPictureUrl()).into(ivSleepMusicAudioPicture);
         new Handler().postDelayed(() -> {
+            //图片宽度
             mImageWidth = ivSleepMusicAudioPicture.getWidth();
             if (mImageWidth != 0) {
+                //平移长度
                 mScrollWidth = mImageWidth - mWindowWidth;
                 if (mScrollWidth > 0) {
+                    mScroll = 0;
                     mHandler.sendEmptyMessage(1);
                     isScrolled = true;
                 }
@@ -289,6 +344,7 @@ public class SleepMusicAudioFragment extends BaseFragment implements OnPlayerEve
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+        isVisible = false;
         mHandler.removeMessages(1);
         mHandler.removeMessages(2);
         mHandler.removeMessages(3);
@@ -304,6 +360,11 @@ public class SleepMusicAudioFragment extends BaseFragment implements OnPlayerEve
             mTimer.cancel();
             mTimer = null;
         }
+        if (mRemainTimer != null) {
+            mRemainTimer.cancel();
+            mRemainTimer = null;
+        }
+        MusicActionManager.getInstance().stop();
         MusicActionManager.getInstance().removePlayerEventListener(this);
 
     }

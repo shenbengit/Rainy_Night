@@ -51,7 +51,7 @@ public class SettingPresenterImpl implements SettingContract.Presenter {
      */
     @Override
     public void aboutUs() {
-
+        view.showToast("功能暂未开放");
     }
 
     /**

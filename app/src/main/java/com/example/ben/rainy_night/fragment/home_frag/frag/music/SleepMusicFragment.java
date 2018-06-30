@@ -88,10 +88,4 @@ public class SleepMusicFragment extends BaseFragment {
     public void startBrotherFragment(ISupportFragment targetFragment) {
         start(targetFragment);
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        MusicActionManager.getInstance().stop();
-    }
 }

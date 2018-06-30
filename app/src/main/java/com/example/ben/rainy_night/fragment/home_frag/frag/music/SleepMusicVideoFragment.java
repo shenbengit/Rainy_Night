@@ -55,7 +55,6 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
                 break;
             case R.id.ib_music_previous:
                 mTimer.cancel();
-                MusicActionManager.getInstance().startPrevious();
                 presenter.startPrevious();
                 mTimer.start();
                 break;
@@ -76,7 +75,6 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
                 break;
             case R.id.ib_music_next:
                 mTimer.cancel();
-                MusicActionManager.getInstance().startNext();
                 presenter.startNext();
                 mTimer.start();
                 break;
@@ -128,10 +126,23 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
         fragment.setArguments(bundle);
         return fragment;
     }
+
     private int mPosition;
+    /**
+     * 对用户是否可见
+     */
+    private boolean isVisible;
+    /**
+     * 隐藏音乐播放功能布局
+     */
     private CountDownTimer mTimer;
+    /**
+     * 设置音乐定时播放功能
+     */
+    private CountDownTimer mRemainTimer;
     private boolean isPlaying = true;
-    private long mCurrentTime = -1;
+    private long mRemainTime = -1;
+    private int index;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -143,13 +154,42 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
                     break;
                 case 2:
                     float[] values = rsbMusicTime.getCurrentRange();
-                    if (mCurrentTime == (long) values[0]) {
+                    if (mRemainTime == (long) values[0]) {
                         return;
                     }
-                    mCurrentTime = (long) values[0];
-                    if (mCurrentTime != -1) {
+                    mRemainTime = (long) values[0];
+                    if (mRemainTime != -1) {
                         //设置定时时间
-                        MusicActionManager.getInstance().setRemainTime(mCurrentTime);
+                        if (mRemainTimer != null) {
+                            mRemainTimer.cancel();
+                            mRemainTimer = null;
+                        }
+                        mRemainTimer = new CountDownTimer(mRemainTime * 60 * 1000, 1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                index++;
+                                if (index == 60) {
+                                    mRemainTime--;
+                                    if (isVisible) {
+                                        rsbMusicTime.setValue(mRemainTime);
+                                    }
+                                    index = 0;
+                                }
+                                if (mRemainTime < 0) {
+                                    mRemainTime = 0;
+                                }
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                mRemainTime = 0;
+                                if (isVisible) {
+                                    rsbMusicTime.setValue(0);
+                                }
+                                MusicActionManager.getInstance().pause();
+                            }
+                        };
+                        mRemainTimer.start();
                     }
                     break;
                 default:
@@ -185,8 +225,8 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
                 mHandler.sendEmptyMessage(1);
             }
         };
-        mTimer.start();
         rsbMusicTime.setValue(30);
+        mHandler.sendEmptyMessage(2);
     }
 
     @Override
@@ -198,12 +238,16 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        isVisible = true;
+        rsbMusicTime.setValue(mRemainTime);
         presenter.onSupportVisible();
+        mTimer.start();
     }
 
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+        isVisible = false;
         presenter.onSupportVisible();
 
         mHandler.removeMessages(1);
@@ -221,6 +265,7 @@ public class SleepMusicVideoFragment extends BaseFragment<SleepMusicVideoContrac
             mTimer.cancel();
             mTimer = null;
         }
+        MusicActionManager.getInstance().stop();
     }
 
     @Override

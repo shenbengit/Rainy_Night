@@ -56,7 +56,7 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
                 start(RegisterFragment.newInstance());
                 break;
             case R.id.tv_forget_password:
-
+                start(ForgotPasswordFragment.newInstance());
                 break;
             default:
                 break;

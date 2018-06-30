@@ -1,6 +1,5 @@
 package com.example.ben.rainy_night.fragment.mine_frag.frag.setting;
 
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.widget.ImageView;

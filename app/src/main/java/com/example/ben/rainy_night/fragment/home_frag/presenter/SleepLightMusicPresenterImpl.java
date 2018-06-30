@@ -86,6 +86,9 @@ public class SleepLightMusicPresenterImpl implements SleepLightMusicContract.Pre
                 .inflate(R.layout.layout_no_more_data, (ViewGroup) view.getRecycler().getParent(), false);
 
         mAdapter.setOnItemClickListener((adapter, v, position) -> {
+            if (MusicActionManager.getInstance().isPlaying()){
+                MusicActionManager.getInstance().pause();
+            }
             view.startBrotherFragment(SleepMusicAudioFragment.newInstance(position));
         });
     }

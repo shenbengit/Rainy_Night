@@ -151,12 +151,15 @@ public class PlaybackManager implements Playback.Callback {
         switch (mPlayMode.getCurrPlayMode()) {
             //单曲循环
             case PlayMode.PLAY_IN_SINGLE_LOOP:
-                if (mQueueManager.skipQueuePosition(0)) {
-                    //重新设置id，否则不会重新播
-                    mPlayback.setCurrentMediaId("");
+//                if (mQueueManager.skipQueuePosition(0)) {
+//                    //重新设置id，否则不会重新播
+//                    mPlayback.setCurrentMediaId("");
+//                    handlePlayRequest();
+//                } else {
+//                    handleStopRequest(null);
+//                }
+                if (mQueueManager.skipQueuePosition(amount)) {
                     handlePlayRequest();
-                } else {
-                    handleStopRequest(null);
                 }
                 break;
             //随机播放
@@ -359,12 +362,11 @@ public class PlaybackManager implements Playback.Callback {
     }
 
     /**
-     * 媒体操作
+     * 初始化回调，用于监听锁屏界面上的按钮事件
      */
     private class MediaSessionCallback extends MediaSessionCompat.Callback {
         @Override
         public void onPlay() {
-
             handlePlayRequest();
         }
 

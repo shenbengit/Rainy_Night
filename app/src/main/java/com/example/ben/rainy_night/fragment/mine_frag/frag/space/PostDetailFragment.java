@@ -233,6 +233,9 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
         return false;
     }
 
+    /**
+     * 帖子详情
+     */
     private void loadPostDetail() {
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);

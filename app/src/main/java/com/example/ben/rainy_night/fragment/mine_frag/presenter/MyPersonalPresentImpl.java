@@ -98,6 +98,7 @@ public class MyPersonalPresentImpl implements MyPersonalContract.Presenter {
      * 更新用户信息
      */
     @Override
+
     public void updateUser() {
         if (!view.isNetworkAvailable()) {
             view.showToast("当前网络不可用");

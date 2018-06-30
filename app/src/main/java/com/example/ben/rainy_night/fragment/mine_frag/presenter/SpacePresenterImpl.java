@@ -15,9 +15,9 @@ import com.example.ben.rainy_night.event.OnPostEvent;
 import com.example.ben.rainy_night.fragment.mine_frag.adapter.SpaceAdapter;
 import com.example.ben.rainy_night.fragment.mine_frag.contract.SpaceContract;
 import com.example.ben.rainy_night.fragment.mine_frag.frag.space.PostDetailFragment;
+import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
 import com.example.ben.rainy_night.http.bmob.model.PostModel;
 import com.example.ben.rainy_night.http.bmob.model.PostModelImpl;
-import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
 import com.example.ben.rainy_night.util.Constant;
 import com.example.ben.rainy_night.util.LoggerUtil;
 
@@ -104,7 +104,7 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
                 view.getRecycler().smoothScrollToPosition(0);
             }
         }
-        new Handler(Looper.getMainLooper()).postDelayed(() -> onRefresh(), 1000);
+        new Handler(Looper.getMainLooper()).postDelayed(this::onRefresh, 1000);
     }
 
     @Override
@@ -117,6 +117,11 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
         }
     }
 
+    /**
+     * 获取到的帖子数据
+     *
+     * @param event
+     */
     @Override
     public void getPostData(OnPostEvent event) {
         if (TextUtils.equals(event.getResult(), Constant.OK)) {
@@ -142,7 +147,7 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
                 } else {
                     mTimeLoadMore = event.getList().get(event.getList().size() - 1).getCreatedAt();
                     mList.addAll(event.getList());
-                    mAdapter.addData(mList);
+                    mAdapter.notifyItemRangeInserted(mList.size(),event.getList().size());
                     mAdapter.loadMoreComplete();
                 }
             }
@@ -160,6 +165,9 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
         }
     }
 
+    /**
+     * 下拉刷新
+     */
     @Override
     public void onRefresh() {
         mAdapter.setEnableLoadMore(false);
@@ -167,6 +175,9 @@ public class SpacePresenterImpl implements SpaceContract.Presenter, SwipeRefresh
         model.queryPost(Constant.REQUSET_POST_REFRESH, mTimeRefresh);
     }
 
+    /**
+     * 上拉加载
+     */
     @Override
     public void onLoadMoreRequested() {
         model.queryPost(Constant.REQUSET_POST_LOAD_MORE, mTimeLoadMore);

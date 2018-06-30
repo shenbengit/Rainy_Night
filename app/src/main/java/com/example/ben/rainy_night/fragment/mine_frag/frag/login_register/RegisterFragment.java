@@ -164,10 +164,10 @@ public class RegisterFragment extends BaseFragment<RegisterContract.Presenter> i
 
     @Override
     public void onDestroyView() {
+        presenter.cancel();
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
         hideSoftInput();
-        presenter.cancel();
         mDialog.cancel();
     }
 
