@@ -3,4 +3,4 @@
 
 以下为项目效果图：
 
-![锁屏页](https://github.com/shenbengit/Rainy_Night/blob/master/image-folder/%E9%94%81%E5%B1%8F%E5%8A%9F%E8%83%BD.png)
+![image](https://github.com/shenbengit/Rainy_Night/blob/master/image-folder/demo.gif)
