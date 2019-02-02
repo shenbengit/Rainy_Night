@@ -27,7 +27,6 @@ import com.example.ben.rainy_night.fragment.mine_frag.frag.login_register.LoginF
 import com.example.ben.rainy_night.fragment.mine_frag.presenter.PostDetailPresenterImpl;
 import com.example.ben.rainy_night.http.bmob.entity.PostEntity;
 import com.example.ben.rainy_night.http.bmob.entity.UserEntity;
-import com.example.ben.rainy_night.util.LoggerUtil;
 import com.example.ben.rainy_night.widget.EnlargePictureDialog;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
@@ -241,11 +240,17 @@ public class PostDetailFragment extends BaseFragment<PostDetailContract.Presente
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         String mDate = format.format(date);
         if (mEntity != null) {
-            GlideApp.with(_mActivity)
-                    .load(mEntity.getUser().getHeadimg().getFileUrl())
-                    .placeholder(R.mipmap.ic_head)
-                    .error(R.mipmap.ic_head)
-                    .into(civPostDetailHead);
+            if (mEntity.getUser().getHeadimg() == null
+                    || TextUtils.isEmpty(mEntity.getUser().getHeadimg().getFileUrl())) {
+                civPostDetailHead.setImageResource(R.mipmap.ic_head);
+            } else {
+                GlideApp.with(_mActivity)
+                        .load(mEntity.getUser().getHeadimg().getFileUrl())
+                        .placeholder(R.mipmap.ic_head)
+                        .error(R.mipmap.ic_head)
+                        .into(civPostDetailHead);
+            }
+
             if (mUserEntity != null && TextUtils.equals(mUserEntity.getObjectId(), mEntity.getUser().getObjectId())) {
                 tvPostDetailNick.setText(R.string.mine);
             } else {

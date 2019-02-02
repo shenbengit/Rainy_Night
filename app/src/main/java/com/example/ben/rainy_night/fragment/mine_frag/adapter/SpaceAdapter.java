@@ -71,11 +71,17 @@ public class SpaceAdapter extends BaseQuickAdapter<PostEntity, SpaceAdapter.View
     @SuppressLint("SetTextI18n")
     @Override
     protected void convert(SpaceAdapter.ViewHolder holder, PostEntity item) {
-        GlideApp.with(mContext)
-                .load(item.getUser().getHeadimg().getFileUrl())
-                .placeholder(R.mipmap.ic_head)
-                .error(R.mipmap.ic_head)
-                .into(holder.civHead);
+        if (item.getUser().getHeadimg() == null
+                || TextUtils.isEmpty(item.getUser().getHeadimg().getFileUrl())) {
+            holder.setImageResource(R.id.civ_item_space_head, R.mipmap.ic_head);
+        } else {
+            GlideApp.with(mContext)
+                    .load(item.getUser().getHeadimg().getFileUrl())
+                    .placeholder(R.mipmap.ic_head)
+                    .error(R.mipmap.ic_head)
+                    .into(holder.civHead);
+        }
+
         if (mEntity != null && TextUtils.equals(mCurrentUser, item.getUser().getObjectId())) {
             holder.tvNick.setText(R.string.mine);
         } else {
