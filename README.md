@@ -3,4 +3,4 @@
 
 以下为项目效果图：
 
-![image](https://github.com/shenbengit/Rainy_Night/blob/master/image-folder/%E9%A1%B9%E7%9B%AE%E6%95%88%E6%9E%9C.gif)
+![img](https://github.com/shenbengit/Rainy_Night/blob/master/image-folder/%E9%A1%B9%E7%9B%AE%E6%95%88%E6%9E%9C.gif)
